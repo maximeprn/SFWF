@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { BlobDefs } from "@/components/ui/BlobDefs";
 import { SiteShell } from "@/components/chrome/SiteShell";
+import { DYE_TEXTURE, LOADER_SEAL } from "@/content/photos";
 import { FESTIVAL_DATES, SITE } from "@/content/site";
 import "./globals.css";
 
@@ -51,7 +52,7 @@ export const viewport: Viewport = {
  * the content behind it. Content is still fully server-rendered — this only affects
  * opacity, so crawlers and reader modes are unaffected.
  */
-const NO_FLASH = `try{if(!sessionStorage.getItem('sfwf-entered'))document.documentElement.classList.add('sfwf-loading')}catch(e){}`;
+const NO_FLASH = `try{if(!sessionStorage.getItem('sfwf-entered')){document.documentElement.classList.add('sfwf-loading');var l=document.createElement('link');l.rel='preload';l.as='image';l.href='${LOADER_SEAL}';l.fetchPriority='high';document.head.appendChild(l)}}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -64,6 +65,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <head>
+        {/* The dye is the first thing on screen on every route, and nothing in the markup
+            reveals it — it's fetched from JS as a WebGL texture. Without this the browser
+            can't discover it until the bundle has parsed. `crossOrigin` has to match the
+            request dyeFlow makes, or the preload lands in a separate cache entry and the
+            image is fetched twice. */}
+        <link
+          rel="preload"
+          as="image"
+          href={DYE_TEXTURE}
+          crossOrigin="anonymous"
+          fetchPriority="high"
+        />
+        {/* The seal is preloaded from the script below instead of here, because it is only
+            rendered for a visitor who hasn't entered yet. */}
         <script dangerouslySetInnerHTML={{ __html: NO_FLASH }} />
       </head>
       <body>
