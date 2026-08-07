@@ -22,8 +22,18 @@ bloom strength 100%`.
 **The nav mechanic runs on window scroll, not an inner scroller.** The prototype ran the whole
 app inside one `overflow-y: auto` div and drove the nav from its `scrollTop`. On a real site an
 inner scroller breaks iOS URL-bar collapse, anchor links and browser scroll restoration, so
-`useNavReveal` reimplements the same state machine against `window.scrollY`. The logic is 1:1 —
-glue in, ride out 1:1, lock back in when a section edge crosses the viewport top.
+`useNavReveal` works against `window.scrollY`.
+
+**The reserved-gap mechanic is superseded: the band returns on upward travel.** `NAV-BAND.md`
+held the band out until the next section boundary crossed the viewport top — "reading up never
+yanks it back mid-paragraph". On phones that read as the nav failing to return, and the gap
+measurement it required (anchor positions, re-measured on every layout change) was the buggy
+part. At the festival's request the band now hides riding down, 1:1 with the finger, and comes
+back the moment upward travel passes a small intent threshold (8px, so the wobble at the end of
+a fling cannot flicker it). The one eased move is that return. The reserved `NAV_H` gaps at the
+top of sections stay as layout rhythm; nothing reads `data-nav-anchor` any more. The travel
+guards survive unchanged — clamped positions against rubber-band overscroll, and the quiet
+window through URL-bar sweeps — because they are what make travel readable on iOS at all.
 
 **The fade-under-the-band mask is carried over, re-anchored for window scroll.** `NAV-BAND.md`
 specifies it as a `mask-image` on the scroller — a mask and not a scrim, so the dye behind

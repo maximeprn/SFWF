@@ -4,13 +4,10 @@ import { PHOTOS } from "@/content/photos";
 /**
  * Last year's reel. It reads as images, not as a list — captions live in the lightbox, on
  * tap. A horizontal scroller on a phone, a four-up row once there's a column to fill.
- *
- * data-nav-anchor: this section reserves its own NAV_H gap, so reading up into it brings
- * the nav band back.
  */
 export function PhotoReel() {
   return (
-    <section data-nav-anchor style={{ paddingTop: 68 }}>
+    <section style={{ paddingTop: 68 }}>
       <p
         style={{
           margin: "0 var(--gutter) 12px",

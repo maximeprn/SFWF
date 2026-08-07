@@ -77,8 +77,8 @@ function Chain({
  * The purpose story. Ships open rather than folded behind a button: it is the strongest
  * argument the festival makes, and hiding it behind a tap cost more than it saved.
  *
- * data-nav-anchor reserves the nav's gap at the top, so reading up into the story brings
- * the band back.
+ * The nav-height top padding stays as breathing room — it was once the band's reserved
+ * gap, but the band now returns on upward travel, not at section boundaries.
  */
 export function PurposeSection() {
   const root = useRef<HTMLElement>(null);
@@ -88,7 +88,6 @@ export function PurposeSection() {
     <section
       ref={root}
       className="purpose"
-      data-nav-anchor
       style={{ padding: "var(--nav-h) var(--gutter) 0" }}
     >
       <div style={{ textShadow: "var(--text-shadow-on-dye)", maxWidth: "var(--prose)" }}>

@@ -1,5 +1,48 @@
 import { describe, expect, it } from "vitest";
-import { NAV_H, contentMask } from "@/lib/useNavReveal";
+import { NAV_H, advance, contentMask } from "@/lib/useNavReveal";
+
+/**
+ * The band mechanic: fixed chrome that hides riding down and returns the moment upward
+ * travel reads as intent. Mirrors the hook's caller contract — the caller commits the
+ * returned offset back onto the state.
+ */
+describe("the band mechanic", () => {
+  const fresh = () => ({ o: 0, y: 0, up: 0 });
+  const step = (s: { o: number; y: number; up: number }, y: number) => {
+    const next = advance(s, y);
+    if (next) s.o = next.offset;
+    return next;
+  };
+
+  it("rides out 1:1 reading down, and stays out", () => {
+    const s = fresh();
+    expect(step(s, 40)).toEqual({ offset: -40, snap: false });
+    expect(step(s, 200)).toEqual({ offset: -NAV_H, snap: false });
+    expect(step(s, 400)).toBeNull(); // already out — reading on costs nothing
+  });
+
+  it("returns, eased, as soon as upward travel reads as intent", () => {
+    const s = fresh();
+    step(s, 400);
+    expect(step(s, 396)).toBeNull(); // 4px — momentum jitter, hold
+    expect(step(s, 388)).toEqual({ offset: 0, snap: true }); // 12px accumulated — return
+  });
+
+  it("forgets upward intent when the reader turns back down", () => {
+    const s = fresh();
+    step(s, 400);
+    step(s, 394); // 6px up — under the threshold
+    step(s, 420); // down again — the accumulator resets
+    expect(step(s, 414)).toBeNull(); // a fresh 6px is still under it
+    expect(step(s, 405)).toEqual({ offset: 0, snap: true });
+  });
+
+  it("holds without travel", () => {
+    const s = fresh();
+    step(s, 300);
+    expect(advance(s, 300)).toBeNull();
+  });
+});
 
 /**
  * The fade under the nav band hangs from the top of the viewport, wherever the reader is.
