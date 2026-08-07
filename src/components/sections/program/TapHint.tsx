@@ -20,7 +20,7 @@ import { useEffect, useRef, useState } from "react";
  * margin beside the bubble — a wider mark has to be shifted left to stay on screen, and
  * that walks it straight into the day heading above.
  */
-const HINT_REACH = 83;
+const HINT_REACH = 78;
 const EDGE_MARGIN = 12;
 
 export function TapHint() {
@@ -80,7 +80,7 @@ export function TapHint() {
       <div
         style={{
           position: "absolute",
-          left: 17,
+          left: 20,
           top: -27,
           animation: armed ? "hintJab 5s cubic-bezier(.4,.2,.3,1) 1.15s infinite" : "none",
         }}
@@ -119,7 +119,10 @@ export function TapHint() {
       <div
         style={{
           position: "absolute",
-          left: 20,
+          /* Lines the label's right edge up with the arrow's, so the mark reads as one
+             gesture. This stays under HINT_REACH, which the arrow already sets — raising
+             that instead would only make the clamp drag the whole mark back left. */
+          left: 34,
           top: 22,
           display: "flex",
           flexDirection: "column",
