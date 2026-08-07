@@ -11,7 +11,13 @@ export interface NavReveal {
   readonly offset: number;
   /** True only for the one eased move — a fast flick that jumps a whole gap. */
   readonly snap: boolean;
+  /** Scroll position this offset was read at. The content mask needs it — see below. */
+  readonly y: number;
 }
+
+/** The fade: cut for the band's height less 8px, then ramping back over 42px. */
+const MASK_HEAD = 8;
+const MASK_TAIL = 34;
 
 type State = { o: number; y: number; mode: "in" | "out" };
 
@@ -50,8 +56,8 @@ function scrollTop(): number {
   return Math.max(0, Math.min(window.scrollY, max));
 }
 
-/** One frame of the mechanic. Returns the new state of the band, or null to hold. */
-function advance(s: State, gaps: number[], y: number): NavReveal | null {
+/** One frame of the mechanic. Returns the band's new offset, or null to hold it. */
+function advance(s: State, gaps: number[], y: number): { offset: number; snap: boolean } | null {
   const yPrev = s.y;
   const d = y - yPrev;
   s.y = y;
@@ -87,6 +93,34 @@ function advance(s: State, gaps: number[], y: number): NavReveal | null {
 }
 
 /**
+ * The content fade — page copy cut for the band's height and ramping back over 42px, so
+ * text evaporates a few pixels before the mark instead of sliding under it.
+ *
+ * A mask, not a scrim. It removes the content's own alpha and paints nothing of its own,
+ * so the dye carries through the gap at full strength. A gradient overlay would have to
+ * pick a flat colour to stand in for a moving photograph, and would separate from it the
+ * moment the dye shifted.
+ *
+ * The spec anchors this to a scroller whose box is the viewport. This site scrolls the
+ * window instead — deliberately, since an inner scroller breaks iOS URL-bar collapse — so
+ * `main`'s box starts at the top of the document, not of the viewport, and every stop
+ * carries the scroll position to compensate. That is also why the mask is dropped outright
+ * once the band is out: recomputing it costs a repaint of the masked layer, and the band
+ * is only ever on screen for NAV_H of travel around a reserved gap.
+ */
+export function contentMask(nav: NavReveal): string | undefined {
+  const band = NAV_H + nav.offset; // the band's visible height right now, NAV_H → 0
+  if (band <= 2) return undefined;
+  const clear = nav.y + Math.max(0, band - MASK_HEAD);
+  const opaque = nav.y + band + MASK_TAIL;
+  /* Above the viewport top the mask stays opaque — nothing up there should be cut. */
+  return (
+    `linear-gradient(to bottom,#000 0px,#000 ${nav.y}px,` +
+    `rgba(0,0,0,0) ${nav.y}px,rgba(0,0,0,0) ${clear}px,#000 ${opaque}px)`
+  );
+}
+
+/**
  * The nav lives in reserved space: NAV_H of empty room at the top of the page and at the
  * top of every [data-nav-anchor] section. Once it is in, it is sticky — reading up never
  * slides it away. Reading down pushes it out 1:1 with the section it belongs to, and it
@@ -103,7 +137,7 @@ function advance(s: State, gaps: number[], y: number): NavReveal | null {
  * on a phone. Both are now absorbed rather than read.
  */
 export function useNavReveal(): NavReveal {
-  const [nav, setNav] = useState<NavReveal>({ offset: 0, snap: false });
+  const [nav, setNav] = useState<NavReveal>({ offset: 0, snap: false, y: 0 });
   const state = useRef<State>({ o: 0, y: 0, mode: "in" });
   const gaps = useRef<number[]>([]);
   const pathname = usePathname();
@@ -117,8 +151,7 @@ export function useNavReveal(): NavReveal {
     s.y = scrollTop();
     s.mode = "in";
     gaps.current = measureGaps();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setNav({ offset: 0, snap: false });
+    setNav({ offset: 0, snap: false, y: s.y });
   }, [pathname]);
 
   useEffect(() => {
@@ -139,7 +172,9 @@ export function useNavReveal(): NavReveal {
       const next = advance(s, gaps.current, y);
       if (!next || next.offset === s.o) return;
       s.o = next.offset;
-      setNav(next);
+      /* The mask is derived from the offset and the position it was read at, so both
+         travel together in one commit — the fade can never lag the band by a frame. */
+      setNav({ ...next, y });
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(frame);

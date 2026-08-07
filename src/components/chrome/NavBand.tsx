@@ -75,7 +75,9 @@ export function NavBand({
         zIndex: 60,
         pointerEvents: "none",
         transform: `translateY(${offset}px)`,
-        transition: nav.snap ? "transform .36s cubic-bezier(.2,.7,.2,1)" : "none",
+        /* The lock-in reading up is the only animated move in the mechanic. Everything
+           else is pixel-tracked to the finger and must have no transition, or it lags. */
+        transition: nav.snap ? "transform .26s cubic-bezier(.4,0,.2,1)" : "none",
       }}
     >
       <div

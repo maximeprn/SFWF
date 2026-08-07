@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { BloomLayer } from "@/components/background/BloomLayer";
 import { LightboxProvider } from "@/components/ui/LightboxProvider";
-import { NAV_H, useNavReveal } from "@/lib/useNavReveal";
+import { NAV_H, contentMask, useNavReveal } from "@/lib/useNavReveal";
 import { Footer } from "./Footer";
 import { ENTER_TOTAL_MS, Loader } from "./Loader";
 import { Menu } from "./Menu";
@@ -14,6 +14,9 @@ export const ENTERED_KEY = "sfwf-entered";
 
 export function SiteShell({ children }: { readonly children: ReactNode }) {
   const nav = useNavReveal();
+  /* Undefined once the band is out, which drops the mask rather than paying for a no-op
+     composite on every frame of the scrolling the reader spends most of their time doing. */
+  const mask = contentMask(nav);
   const [menuOpen, setMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [leaving, setLeaving] = useState(false);
@@ -54,7 +57,12 @@ export function SiteShell({ children }: { readonly children: ReactNode }) {
     <LightboxProvider>
       <BloomLayer loading={loading} />
 
-      {/* The dye stays put; only the page content fades when the menu opens. */}
+      {/* The dye stays put; only the page content fades when the menu opens.
+
+          The mask is what lets the mark float with no plate behind it: copy dissolves a
+          few pixels before reaching it while the dye continues through the gap at full
+          strength. Both spellings are required — Safari, iOS included, still needs the
+          prefixed one, and setting only the plain property does nothing there. */}
       <main
         style={{
           position: "relative",
@@ -63,6 +71,8 @@ export function SiteShell({ children }: { readonly children: ReactNode }) {
           opacity: menuOpen ? 0 : 1,
           transition: "opacity .34s ease",
           pointerEvents: menuOpen ? "none" : "auto",
+          WebkitMaskImage: mask,
+          maskImage: mask,
         }}
       >
         <div style={{ maxWidth: "var(--column)", margin: "0 auto" }}>{children}</div>

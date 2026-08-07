@@ -25,11 +25,15 @@ inner scroller breaks iOS URL-bar collapse, anchor links and browser scroll rest
 `useNavReveal` reimplements the same state machine against `window.scrollY`. The logic is 1:1 —
 glue in, ride out 1:1, lock back in when a section edge crosses the viewport top.
 
-**The prototype's fade-under-the-band mask is not carried over.** It masked its inner scroller so
-copy faded before reaching the nav. There is no equivalent that works on a window-scrolled page
-without repainting the full document height every frame. The nav's own text-shadow and the
-frosted burger carry legibility instead. If this matters, the fix is a second fixed dye canvas
-behind the band, not a mask.
+**The fade-under-the-band mask is carried over, re-anchored for window scroll.** `NAV-BAND.md`
+specifies it as a `mask-image` on the scroller — a mask and not a scrim, so the dye behind
+carries through at full strength rather than being flattened by a wash of some flat colour
+picked to stand in for a moving photograph. The spec's scroller has the viewport for a box, and
+ours is the window, so `main`'s box starts at the top of the document instead: every gradient
+stop carries the scroll position to compensate, and the mask is dropped outright once the band
+is out. That last part is what keeps the cost off the scrolling readers actually do — the band
+is only on screen for NAV_H of travel around a reserved gap. This replaces an earlier note
+saying the mask could not be done on a window-scrolled page.
 
 **The loading seal shows once per session**, not on every navigation, via `sessionStorage` plus a
 blocking script in `<head>` that hides content before paint. A two-second pour on every page load
