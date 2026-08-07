@@ -51,6 +51,13 @@ export function Cta({
 
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
+  /* A plain <a> driven by router.push never enters next/link's viewport prefetcher, so
+     the route payload was being fetched after the tap — on top of the deliberate 420ms
+     hold. Every page is static, so warming it on mount is cheap and it stays warm. */
+  useEffect(() => {
+    if (href) router.prefetch(href);
+  }, [href, router]);
+
   const press = useCallback(
     (event: React.MouseEvent) => {
       if (held) return;

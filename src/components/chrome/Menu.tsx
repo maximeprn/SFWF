@@ -21,6 +21,14 @@ export function Menu({ onClose }: { readonly onClose: () => void }) {
 
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
+  /* These words are the site's primary navigation, but they are buttons, not <Link>s, so
+     nothing prefetches them by being in the viewport. Warm every destination the moment
+     the menu opens: by the time a word has been picked and held, the payload is already
+     here, and the screen change costs paint, not network. */
+  useEffect(() => {
+    for (const item of NAV) router.prefetch(item.href);
+  }, [router]);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
