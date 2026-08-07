@@ -58,8 +58,14 @@ export const ICON_NAMES = [
 
 export type IconName = (typeof ICON_NAMES)[number];
 
-export const iconSrc = (name: IconName): string => `/icons/icon-${name}.png`;
+/*
+ * These point at the derivatives written by `scripts/optimize-images.mjs`, not at the
+ * festival's original PNGs, which stay in `public/` as the master copies. None of these
+ * three go through next/image — the icons are plain <img>, the seal is an SVG <image> and
+ * the dye is a WebGL texture — so the codec has to be right in the file itself.
+ */
+export const iconSrc = (name: IconName): string => `/icons/icon-${name}.avif`;
 
-export const DYE_TEXTURE = "/textures/indigo-shibori.png";
+export const DYE_TEXTURE = "/textures/indigo-shibori.webp";
 export const LOGO = "/logo/sfwf-octopus-official.avif";
-export const LOADER_SEAL = "/logo/loader-seal-art.png";
+export const LOADER_SEAL = "/logo/loader-seal-art.avif";

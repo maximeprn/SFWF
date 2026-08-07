@@ -37,7 +37,19 @@ export function Doodle({
     ...pos,
   };
   /* Plain <img>: these are tiny, decorative, and positioned absolutely, so next/image's
-     layout machinery buys nothing here. */
-  // eslint-disable-next-line @next/next/no-img-element
-  return <img src={iconSrc(icon)} alt="" aria-hidden="true" style={style} />;
+     layout machinery buys nothing here. Lazy and async because nothing waits on a doodle —
+     it must never compete with the seal or the dye for the first few hundred ms. */
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={iconSrc(icon)}
+      alt=""
+      aria-hidden="true"
+      width={size}
+      height={size}
+      loading="lazy"
+      decoding="async"
+      style={style}
+    />
+  );
 }
