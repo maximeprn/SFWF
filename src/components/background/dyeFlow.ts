@@ -35,6 +35,8 @@ export type FlowSettings = { feel: FeelName; strength: number; radius: number };
 export type FlowOptions = Partial<FlowSettings> & {
   image: string;
   onImageError?: () => void;
+  /** The GPU took the context back. Nothing will paint again — show the still dye. */
+  onContextLost?: () => void;
 };
 
 export type DyeFlow = {
@@ -50,6 +52,8 @@ type Ctx = FlowSettings & {
   /** Null when the device can't render to a field at all — ambient drift only. */
   field: Field | null;
   cur: number;
+  /** The box moved; the loop picks it up on its next frame rather than mid-scroll. */
+  resized: boolean;
 };
 
 function simPass(ctx: Ctx, stroke: Stroke, dt: number): void {
@@ -112,16 +116,29 @@ function displayPass(ctx: Ctx, stroke: Stroke, t: number): void {
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 }
 
+/**
+ * Assigning to `canvas.width`/`height` reallocates the drawing buffer and clears it to
+ * black, whether or not the value actually changed. So this only assigns when the pixel
+ * size really moved, and the loop only calls it immediately before painting a frame.
+ *
+ * Both halves matter on iOS, where the URL bar resizes the viewport continuously through
+ * a scroll: an unguarded resize blanks the canvas between frames, and on an opaque context
+ * that reads as the whole page flashing black.
+ */
 function resize(ctx: Ctx, tracker: StrokeTracker): void {
   const { gl, canvas, pipeline } = ctx;
   const box = canvas.getBoundingClientRect();
   const dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
-  canvas.width = Math.max(1, (box.width * dpr) | 0);
-  canvas.height = Math.max(1, (box.height * dpr) | 0);
+  const width = Math.max(1, (box.width * dpr) | 0);
+  const height = Math.max(1, (box.height * dpr) | 0);
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
   gl.useProgram(pipeline.display);
-  gl.uniform1f(pipeline.u.ar, canvas.width / canvas.height);
+  gl.uniform1f(pipeline.u.ar, width / height);
   gl.uniform2f(pipeline.u.gs, box.width / NOISE_SCALE, box.height / NOISE_SCALE);
-  gl.viewport(0, 0, canvas.width, canvas.height);
+  gl.viewport(0, 0, width, height);
   tracker.measure();
 }
 
@@ -155,6 +172,12 @@ function startLoop(ctx: Ctx, tracker: StrokeTracker): () => void {
   let raf = 0;
   const draw = () => {
     raf = requestAnimationFrame(draw);
+    /* Many observer ticks collapse into one resize here, and the frame that follows
+       repaints the buffer the resize just cleared before anything is composited. */
+    if (ctx.resized) {
+      ctx.resized = false;
+      resize(ctx, tracker);
+    }
     const now = performance.now();
     const dt = Math.max(DT_MIN, Math.min(DT_MAX, (now - prev) / 1000));
     prev = now;
@@ -194,6 +217,7 @@ export function createDyeFlow(canvas: HTMLCanvasElement, options: FlowOptions): 
     pipeline,
     field: createField(gl),
     cur: 0,
+    resized: false,
     feel: options.feel ?? DEFAULT_FEEL,
     strength: options.strength ?? PAGE_STRENGTH,
     radius: options.radius ?? DEFAULT_RADIUS,
@@ -207,10 +231,23 @@ export function createDyeFlow(canvas: HTMLCanvasElement, options: FlowOptions): 
 
   const tracker = createStrokeTracker(canvas);
   const cancelLoad = loadDye(ctx, options.image, options.onImageError);
-  const observer = new ResizeObserver(() => resize(ctx, tracker));
+  /* The observer only raises a flag — the loop does the work, in a frame it then paints. */
+  const observer = new ResizeObserver(() => {
+    ctx.resized = true;
+  });
   observer.observe(canvas);
   resize(ctx, tracker);
   const stopLoop = startLoop(ctx, tracker);
+
+  /* iOS hands WebGL contexts back under memory pressure. Left alone the canvas simply
+     stays black, which on an opaque context is a black screen — so stand down and let
+     the host put the still dye up instead. */
+  const onContextLost = (event: Event) => {
+    event.preventDefault();
+    stopLoop();
+    options.onContextLost?.();
+  };
+  canvas.addEventListener("webglcontextlost", onContextLost);
 
   return {
     set(next) {
@@ -222,6 +259,7 @@ export function createDyeFlow(canvas: HTMLCanvasElement, options: FlowOptions): 
     destroy() {
       stopLoop();
       cancelLoad();
+      canvas.removeEventListener("webglcontextlost", onContextLost);
       observer.disconnect();
       tracker.destroy();
       if (ctx.field) ctx.field = disposeField(gl, ctx.field);

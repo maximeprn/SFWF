@@ -44,6 +44,7 @@ export function BloomLayer({ loading = false }: { readonly loading?: boolean }) 
       image: DYE_TEXTURE,
       strength: strengthRef.current,
       onImageError: () => setFailed(true),
+      onContextLost: () => setFailed(true),
     });
     if (!flow) {
       setFailed(true);
