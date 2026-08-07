@@ -80,7 +80,7 @@ export function TapHint() {
       <div
         style={{
           position: "absolute",
-          left: 20,
+          left: 7,
           top: -27,
           animation: armed ? "hintJab 5s cubic-bezier(.4,.2,.3,1) 1.15s infinite" : "none",
         }}
