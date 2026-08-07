@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { usePathname } from "next/navigation";
 
 /** Reserved space the nav lives in: 56px inset + 46px mark. Not a bar height. */
@@ -11,8 +11,6 @@ export interface NavReveal {
   readonly offset: number;
   /** True only for the one eased move — a fast flick that jumps a whole gap. */
   readonly snap: boolean;
-  /** Scroll position this offset was read at. The content mask needs it — see below. */
-  readonly y: number;
 }
 
 /** The fade: cut for the band's height less 8px, then ramping back over 42px. */
@@ -93,31 +91,30 @@ function advance(s: State, gaps: number[], y: number): { offset: number; snap: b
 }
 
 /**
- * The content fade — page copy cut for the band's height and ramping back over 42px, so
- * text evaporates a few pixels before the mark instead of sliding under it.
+ * The content fade — page copy cut for the band's visible height and ramping back to
+ * opaque over 42px, so text evaporates a few pixels before the mark instead of sliding
+ * under it.
  *
  * A mask, not a scrim. It removes the content's own alpha and paints nothing of its own,
  * so the dye carries through the gap at full strength. A gradient overlay would have to
  * pick a flat colour to stand in for a moving photograph, and would separate from it the
  * moment the dye shifted.
  *
- * The spec anchors this to a scroller whose box is the viewport. This site scrolls the
- * window instead — deliberately, since an inner scroller breaks iOS URL-bar collapse — so
- * `main`'s box starts at the top of the document, not of the viewport, and every stop
- * carries the scroll position to compensate. That is also why the mask is dropped outright
- * once the band is out: recomputing it costs a repaint of the masked layer, and the band
- * is only ever on screen for NAV_H of travel around a reserved gap.
+ * The zone hangs from the top of the VIEWPORT — wherever the reader is, whatever the band
+ * is doing. Copy passing under the mark is dissolving at any scroll position, not only
+ * around the gap where the band last moved. The spec's prototype got that for free by
+ * masking a scroller whose box is the viewport; this site scrolls the window, so the
+ * masked element's box is the document and the stops must carry the current scroll
+ * position — which is why the mask has to be rewritten as the reader moves, not only when
+ * the band does. Past band <= 2 it is dropped entirely rather than left as a no-op
+ * composite on every frame of the reading-down scrolling readers do most.
  */
-export function contentMask(nav: NavReveal): string | undefined {
-  const band = NAV_H + nav.offset; // the band's visible height right now, NAV_H → 0
+export function contentMask(offset: number, y: number): string | undefined {
+  const band = NAV_H + offset; // the band's visible height right now, NAV_H → 0
   if (band <= 2) return undefined;
-  const clear = nav.y + Math.max(0, band - MASK_HEAD);
-  const opaque = nav.y + band + MASK_TAIL;
-  /* Above the viewport top the mask stays opaque — nothing up there should be cut. */
-  return (
-    `linear-gradient(to bottom,#000 0px,#000 ${nav.y}px,` +
-    `rgba(0,0,0,0) ${nav.y}px,rgba(0,0,0,0) ${clear}px,#000 ${opaque}px)`
-  );
+  const clear = y + Math.max(0, band - MASK_HEAD);
+  const opaque = y + band + MASK_TAIL;
+  return `linear-gradient(to bottom,rgba(0,0,0,0) ${clear}px,#000 ${opaque}px)`;
 }
 
 /**
@@ -136,10 +133,31 @@ export function contentMask(nav: NavReveal): string | undefined {
  * ordinary downward scrolling. That is why the band behaved on a desktop browser and not
  * on a phone. Both are now absorbed rather than read.
  */
-export function useNavReveal(): NavReveal {
-  const [nav, setNav] = useState<NavReveal>({ offset: 0, snap: false, y: 0 });
+/**
+ * Writes the fade onto the masked element. The mask changes on every scroll frame the
+ * band is on screen — too often for React state — so it goes straight to the style and
+ * stays out of JSX entirely, where a render could clobber it with a stale value. Both
+ * spellings are required: Safari, iOS included, still needs the prefix, and the
+ * unprefixed property alone does nothing there — the exact platform this fade is for.
+ */
+function applyMask(
+  el: HTMLElement,
+  offset: number,
+  y: number,
+  last: { current: string },
+): void {
+  const mask = contentMask(offset, y) ?? "";
+  if (mask === last.current) return;
+  last.current = mask;
+  el.style.setProperty("-webkit-mask-image", mask);
+  el.style.setProperty("mask-image", mask);
+}
+
+export function useNavReveal(fadeTarget?: RefObject<HTMLElement | null>): NavReveal {
+  const [nav, setNav] = useState<NavReveal>({ offset: 0, snap: false });
   const state = useRef<State>({ o: 0, y: 0, mode: "in" });
   const gaps = useRef<number[]>([]);
+  const lastMask = useRef("");
   const pathname = usePathname();
 
   /* A new screen starts with the nav in, at the top — it must not inherit the last one.
@@ -151,14 +169,22 @@ export function useNavReveal(): NavReveal {
     s.y = scrollTop();
     s.mode = "in";
     gaps.current = measureGaps();
-    setNav({ offset: 0, snap: false, y: s.y });
-  }, [pathname]);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setNav({ offset: 0, snap: false });
+    const el = fadeTarget?.current;
+    if (el) applyMask(el, 0, s.y, lastMask);
+  }, [pathname, fadeTarget]);
 
   useEffect(() => {
     const s = state.current;
     let raf = 0;
     let settle = 0;
     let quietUntil = 0;
+
+    const paint = (offset: number, y: number) => {
+      const el = fadeTarget?.current;
+      if (el) applyMask(el, offset, y, lastMask);
+    };
 
     const frame = () => {
       raf = 0;
@@ -167,14 +193,17 @@ export function useNavReveal(): NavReveal {
          Follow the position so no travel accumulates, and leave the band where it is. */
       if (performance.now() < quietUntil) {
         s.y = y;
+        paint(s.o, y);
         return;
       }
       const next = advance(s, gaps.current, y);
-      if (!next || next.offset === s.o) return;
-      s.o = next.offset;
-      /* The mask is derived from the offset and the position it was read at, so both
-         travel together in one commit — the fade can never lag the band by a frame. */
-      setNav({ ...next, y });
+      if (next && next.offset !== s.o) {
+        s.o = next.offset;
+        setNav(next);
+      }
+      /* Every frame, not only when the band moves: the zone hangs from the viewport top,
+         and reading up with the band pinned at 0 is exactly when copy passes through it. */
+      paint(s.o, y);
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(frame);
@@ -192,6 +221,7 @@ export function useNavReveal(): NavReveal {
     const onViewportChange = () => {
       quietUntil = performance.now() + LAYOUT_QUIET_MS;
       s.y = scrollTop();
+      paint(s.o, s.y);
       remeasure();
     };
 
@@ -204,6 +234,7 @@ export function useNavReveal(): NavReveal {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onViewportChange);
     window.visualViewport?.addEventListener("resize", onViewportChange);
+    paint(s.o, scrollTop()); // first paint, before any scroll arrives
 
     return () => {
       cancelAnimationFrame(raf);
@@ -213,7 +244,7 @@ export function useNavReveal(): NavReveal {
       window.removeEventListener("resize", onViewportChange);
       window.visualViewport?.removeEventListener("resize", onViewportChange);
     };
-  }, []);
+  }, [fadeTarget]);
 
   return nav;
 }

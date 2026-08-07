@@ -28,12 +28,16 @@ glue in, ride out 1:1, lock back in when a section edge crosses the viewport top
 **The fade-under-the-band mask is carried over, re-anchored for window scroll.** `NAV-BAND.md`
 specifies it as a `mask-image` on the scroller — a mask and not a scrim, so the dye behind
 carries through at full strength rather than being flattened by a wash of some flat colour
-picked to stand in for a moving photograph. The spec's scroller has the viewport for a box, and
-ours is the window, so `main`'s box starts at the top of the document instead: every gradient
-stop carries the scroll position to compensate, and the mask is dropped outright once the band
-is out. That last part is what keeps the cost off the scrolling readers actually do — the band
-is only on screen for NAV_H of travel around a reserved gap. This replaces an earlier note
-saying the mask could not be done on a window-scrolled page.
+picked to stand in for a moving photograph. In the prototype the scroller's box is the
+viewport, so the gradient stops are viewport offsets that hold still on their own. Here the
+masked element is `main`, whose box is the document: the same stops have to hang from the
+current scroll position and be rewritten as the reader moves — not only when the band moves,
+because reading up with the band pinned at 0 is precisely when copy passes through the fade.
+The rewrite rides the same rAF as the band and goes straight to the element's style, never
+through React state (a render per scroll frame is the cost the original note on this deviation
+refused to pay), and the mask is dropped entirely once the band is out, which keeps the
+recompute off the reading-down scrolling readers do most. This replaces an earlier note saying
+the mask could not be done on a window-scrolled page.
 
 **The loading seal shows once per session**, not on every navigation, via `sessionStorage` plus a
 blocking script in `<head>` that hides content before paint. A two-second pour on every page load
