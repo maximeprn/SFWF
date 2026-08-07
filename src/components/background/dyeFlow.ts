@@ -30,6 +30,20 @@ import {
 /** The noise tile is 64px but sampled over a 128px box, so the grain reads soft, not sharp. */
 const NOISE_SCALE = 128;
 
+/**
+ * How long the box must hold still before the drawing buffer is rebuilt to match it.
+ *
+ * A rebuild clears the buffer to black, and iOS scrolls on the compositor: it will happily
+ * present frames while the main thread is still waiting for its next rAF, so between the
+ * clear and the repaint the screen really is black. That gap only exists during a drag,
+ * which is why the flash never showed on a tap.
+ *
+ * So the buffer is left alone for the whole gesture — CSS scales the old one to the box,
+ * which at the ~10% the URL bar moves is invisible on a soft texture — and the one real
+ * rebuild happens once the scroll has settled and rAF is dependable again.
+ */
+const RESIZE_SETTLE_MS = 250;
+
 export type FlowSettings = { feel: FeelName; strength: number; radius: number };
 
 export type FlowOptions = Partial<FlowSettings> & {
@@ -52,8 +66,8 @@ type Ctx = FlowSettings & {
   /** Null when the device can't render to a field at all — ambient drift only. */
   field: Field | null;
   cur: number;
-  /** The box moved; the loop picks it up on its next frame rather than mid-scroll. */
-  resized: boolean;
+  /** When the box last moved, or 0 if it is settled and the buffer already matches. */
+  resizedAt: number;
 };
 
 function simPass(ctx: Ctx, stroke: Stroke, dt: number): void {
@@ -172,13 +186,14 @@ function startLoop(ctx: Ctx, tracker: StrokeTracker): () => void {
   let raf = 0;
   const draw = () => {
     raf = requestAnimationFrame(draw);
-    /* Many observer ticks collapse into one resize here, and the frame that follows
-       repaints the buffer the resize just cleared before anything is composited. */
-    if (ctx.resized) {
-      ctx.resized = false;
+    const now = performance.now();
+    /* Every tick of a gesture collapses into the single rebuild that follows it, and the
+       frame doing that rebuild repaints immediately — so nothing composites a cleared
+       buffer. Waiting for the box to settle is what keeps that out of the drag itself. */
+    if (ctx.resizedAt && now - ctx.resizedAt > RESIZE_SETTLE_MS) {
+      ctx.resizedAt = 0;
       resize(ctx, tracker);
     }
-    const now = performance.now();
     const dt = Math.max(DT_MIN, Math.min(DT_MAX, (now - prev) / 1000));
     prev = now;
     const stroke = tracker.step(dt, (now - t0) / 1000);
@@ -217,7 +232,7 @@ export function createDyeFlow(canvas: HTMLCanvasElement, options: FlowOptions): 
     pipeline,
     field: createField(gl),
     cur: 0,
-    resized: false,
+    resizedAt: 0,
     feel: options.feel ?? DEFAULT_FEEL,
     strength: options.strength ?? PAGE_STRENGTH,
     radius: options.radius ?? DEFAULT_RADIUS,
@@ -231,9 +246,9 @@ export function createDyeFlow(canvas: HTMLCanvasElement, options: FlowOptions): 
 
   const tracker = createStrokeTracker(canvas);
   const cancelLoad = loadDye(ctx, options.image, options.onImageError);
-  /* The observer only raises a flag — the loop does the work, in a frame it then paints. */
+  /* The observer only stamps the time — the loop does the work, once the box holds still. */
   const observer = new ResizeObserver(() => {
-    ctx.resized = true;
+    ctx.resizedAt = performance.now();
   });
   observer.observe(canvas);
   resize(ctx, tracker);

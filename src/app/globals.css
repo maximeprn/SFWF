@@ -280,6 +280,25 @@ body {
 
 /* Reduced motion lands every reveal in its finished state rather than removing content.
    The bloom shader and the loader pour opt out separately, in their own components. */
+/* ── the dye layer ────────────────────────────────────────────────────────
+   Sized to the LARGE viewport, not the current one. `inset: 0` on a fixed element
+   resolves against the viewport as it is right now, so the moment iOS retracts the URL
+   bar on a downward scroll it uncovers a strip this layer does not reach — which reads
+   as the screen flashing black, and only ever on the way down. lvh is the height with
+   the browser chrome retracted, so the layer already covers that strip before it
+   appears. It also stops the box height changing at all mid-scroll, which is what was
+   making the drawing buffer rebuild under the gesture.
+   The vh line is the fallback for browsers without lvh; on iOS it means the same thing. */
+.dye-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  z-index: 0;
+}
+
 /* ── the hand-drawn underline ─────────────────────────────────────────────
    Press feedback, redrawing the rule left to right. Touch has no hover, so this is the
    only acknowledgement a tap gets before the next screen arrives. */

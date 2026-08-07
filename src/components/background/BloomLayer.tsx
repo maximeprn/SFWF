@@ -63,7 +63,7 @@ export function BloomLayer({ loading = false }: { readonly loading?: boolean }) 
   }, [strength]);
 
   return (
-    <div aria-hidden="true" style={{ position: "fixed", inset: 0, zIndex: 0 }}>
+    <div aria-hidden="true" className="dye-layer">
       <canvas
         ref={canvasRef}
         style={{
