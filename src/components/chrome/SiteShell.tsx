@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { BloomLayer } from "@/components/background/BloomLayer";
 import { LightboxProvider } from "@/components/ui/LightboxProvider";
 import { NAV_H, contentMask, useNavReveal } from "@/lib/useNavReveal";
+import { useScrollLock } from "@/lib/useScrollLock";
 import { Footer } from "./Footer";
 import { ENTER_TOTAL_MS, Loader } from "./Loader";
 import { Menu } from "./Menu";
@@ -20,6 +21,11 @@ export function SiteShell({ children }: { readonly children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [leaving, setLeaving] = useState(false);
+
+  /* Closes the one gesture the CSS half of the lock can't reach. Held for the whole time
+     the seal is mounted, exit fade included — the page must not start moving under a seal
+     that is still on screen. */
+  useScrollLock(loading);
 
   /* The blocking script in <head> has already hidden the content if this is a first visit,
      so reading the flag here only decides whether to mount the seal — it never causes the

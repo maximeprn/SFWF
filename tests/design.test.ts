@@ -58,3 +58,48 @@ describe("stylesheet rules", () => {
     expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\)/);
   });
 });
+
+/**
+ * The seal is the one screen that must not move. Every rule below closes a route the page
+ * has to travel — scroll, rubber band, pull-to-refresh, zoom, selection callout — and each
+ * is easy to drop by accident, because none of them show up on a desktop browser.
+ */
+describe("the loading lock", () => {
+  const css = readFileSync(new URL("../src/app/globals.css", import.meta.url), "utf8");
+  const layout = readFileSync(new URL("../src/app/layout.tsx", import.meta.url), "utf8");
+  const shell = readFileSync(
+    new URL("../src/components/chrome/SiteShell.tsx", import.meta.url),
+    "utf8",
+  );
+  const lock = css.slice(css.indexOf("html.sfwf-loading"), css.indexOf(".noscroll"));
+
+  it("pins the document so there is nothing to scroll or rubber-band", () => {
+    expect(lock).toMatch(/position:\s*fixed/);
+    expect(lock).toMatch(/overflow:\s*hidden/);
+    expect(lock).toMatch(/overscroll-behavior:\s*none/);
+  });
+
+  it("closes zoom and the selection callout", () => {
+    expect(lock).toMatch(/touch-action:\s*none/);
+    expect(lock).toMatch(/user-select:\s*none/);
+    expect(lock).toMatch(/-webkit-touch-callout:\s*none/);
+  });
+
+  it("is scoped to the seal, so the site below still scrolls", () => {
+    // The unconditional html rule must stay a plain scroller — the page itself is the
+    // scroller the nav mechanic and iOS URL-bar collapse both depend on.
+    const base = css.slice(css.indexOf("\nhtml {"), css.indexOf("html::-webkit-scrollbar"));
+    expect(base).not.toMatch(/position:\s*fixed|touch-action:|user-select:/);
+    // The class is the only thing holding the lock, and it is removed on the way in.
+    expect(shell).toMatch(/classList\.remove\("sfwf-loading"\)/);
+  });
+
+  it("applies before paint rather than on hydration", () => {
+    // The blocking script in <head> is what makes the first frame unscrollable.
+    expect(layout).toMatch(/classList\.add\('sfwf-loading'\)/);
+  });
+
+  it("holds the pinch guard for as long as the seal is mounted", () => {
+    expect(shell).toMatch(/useScrollLock\(loading\)/);
+  });
+});

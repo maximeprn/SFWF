@@ -47,6 +47,32 @@ body {
   pointer-events: none !important;
 }
 
+/* While the seal is up the document is not a scroller at all. Both boxes are pinned to the
+   viewport with nothing to overflow into, so there is no travel to rubber-band off, no
+   pull-to-refresh to reach for, and no downward scroll for iOS to answer by dropping its
+   URL bar back in over the seal. Because the class is set by the blocking script in <head>,
+   this holds from the first painted frame — before React has loaded, let alone hydrated.
+   Everything here is scoped to the class and lifts with it the moment the seal is
+   dismissed; the site below scrolls by every ordinary means. */
+html.sfwf-loading,
+html.sfwf-loading body {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  /* The effective value is the intersection down the ancestor chain, so `none` on the root
+     closes every pan, pinch and double-tap-zoom route in the document under it. It does not
+     stop the dye being stirred: the stroke tracker's listeners still see every move, they
+     just no longer come with a default action attached. */
+  touch-action: none;
+  /* A long press on the seal must not raise the selection callout. "Look Up · Search Web"
+     is the browser's own search arriving on top of a screen with nothing to select. */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Scrolling stays; the bar is hidden. Used on the photo reel and the lightbox pager,
    where a desktop scrollbar would cut across the image. */
 .noscroll {
