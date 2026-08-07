@@ -1,0 +1,89 @@
+/* Siargao Food & Wine Festival — design tokens.
+ *
+ * Typography and tracking come verbatim from the design system's tokens/typography.css.
+ * The colour set is palette "1a" (Dye & Gold) from ui_kits/mobile/prototype.html, which is
+ * the locked one — indigo dye plus the yellow mark, bubbles in paper-white.
+ *
+ * Only #FFD010 (mark yellow) and #204020 (mark green) are measured from the festival's real
+ * assets. The indigo tones are measured from the supplied dye texture. Everything else is a
+ * considered proposal, not established brand — see project-docs/design-decisions.md.
+ */
+
+:root {
+  /* ── type ──────────────────────────────────────────────────────────────
+     Wigglye is the festival's hand-drawn display face: headings, bubble labels,
+     numerals. Never body copy — the wiggle is illegible below ~18px and at length.
+     Satoshi carries everything else. Both are supplied by the festival.
+     The --font-*-src variables are injected by next/font/local in layout.tsx. */
+  --font-display: var(--font-wigglye-src), ui-rounded, system-ui, sans-serif;
+  --font-body: var(--font-satoshi-src), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --display-1: 400 clamp(2.5rem, 2rem + 4vw, 4rem) / 0.98 var(--font-display);
+  --display-2: 400 clamp(1.75rem, 1.5rem + 2vw, 2.5rem) / 1.04 var(--font-display);
+  --display-3: 400 1.375rem/1.1 var(--font-display);
+  --display-4: 400 1.125rem/1.15 var(--font-display);
+
+  --text-h2: 700 1rem/1.3 var(--font-body);
+  --text-h3: 700 0.8125rem/1.4 var(--font-body);
+  --text-body-lg: 400 1.0625rem/1.6 var(--font-body);
+  --text-body: 400 0.9375rem/1.62 var(--font-body);
+  --text-body-sm: 400 0.8125rem/1.55 var(--font-body);
+  --text-caption: 500 0.6875rem/1.45 var(--font-body);
+  --text-label: 700 0.75rem/1 var(--font-body);
+  --text-eyebrow: 500 0.625rem/1 var(--font-body);
+
+  --tracking-eyebrow: 0.18em;
+  --tracking-label: 0.09em;
+
+  /* ── palette 1a — "Dye & Gold" ─────────────────────────────────────────
+     The veil is what makes white type hold over the live dye. Mark yellow fails
+     contrast on paper and must sit on ink or dye; it is a mark colour, not a UI colour. */
+  --veil: rgba(18, 30, 46, 0.4);
+  --on-bg: #ffffff;
+  --on-bg-soft: rgba(255, 255, 255, 0.76);
+  --bubble: rgba(255, 255, 255, 0.9);
+  --bubble-ink: #101b27;
+  --bubble-soft: rgba(16, 27, 39, 0.62);
+  --mark: #ffd010;
+  --cta: #ffd010;
+  --cta-ink: #101b27;
+  --chip-free: rgba(16, 27, 39, 0.1);
+  --chip-free-ink: #101b27;
+  --chip-paid: #101b27;
+  --chip-paid-ink: #ffd010;
+  --ink-deep: #0b1420;
+
+  /* Copy sitting straight on the dye needs this to stay legible; bubbles never use it.
+     This is a scrim, not an elevation system — the design has no shadows on surfaces. */
+  --text-shadow-on-dye: 0 1px 12px rgba(10, 18, 28, 0.45);
+  --text-shadow-on-dye-strong: 0 2px 14px rgba(8, 16, 26, 0.55);
+
+  /* ── layout rhythm ────────────────────────────────────────────────────
+     NAVH is reserved space, not a bar height: the nav rides in and out of it on scroll. */
+  --nav-h: 102px;
+  --gap: 36px;
+  --sec: 64px;
+  --sec-program: 52px;
+  --sec-media: 36px;
+  --gutter: clamp(20px, 4vw, 56px);
+  --column: 1180px;
+  --prose: 68ch;
+
+  /* ── motion ───────────────────────────────────────────────────────────
+     One easing curve across the whole product. The only ambient motion is the
+     bloom background; everything else is a direct response to a tap. */
+  --ease: cubic-bezier(0.22, 0.75, 0.2, 1);
+  --open: 0.34s;
+}
+
+/* Desktop raises the display caps — the mobile clamps top out too early on a wide column. */
+@media (min-width: 1100px) {
+  :root {
+    --display-1: 400 clamp(4rem, 2rem + 4vw, 5.25rem) / 0.98 var(--font-display);
+    --display-2: 400 clamp(2.5rem, 1.5rem + 2vw, 3.25rem) / 1.04 var(--font-display);
+    --display-3: 400 1.75rem/1.1 var(--font-display);
+    --display-4: 400 1.375rem/1.15 var(--font-display);
+    --text-body: 400 1rem/1.62 var(--font-body);
+    --text-body-sm: 400 0.875rem/1.55 var(--font-body);
+  }
+}

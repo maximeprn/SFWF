@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Siargao Food & Wine Festival — 2026
 
-## Getting Started
+The festival site: a weeklong celebration of food, culture and community on Siargao Island,
+**26–31 August 2026**.
 
-First, run the development server:
+Built from the mobile prototype in the Claude Design project *Website redesign information
+architecture* — the live indigo-dye background, the hand-cut bubble shapes, the scroll-driven
+nav and the "why we do this" growing-line story are all ported from it rather than reinterpreted.
+
+## Running it
 
 ```bash
+npm install
+cp .env.example .env.local   # fill in before the tickets form can send
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Command | |
+|---|---|
+| `npm run dev` | dev server on :3000 |
+| `npm run build` | production build, typechecks as it goes |
+| `npm test` | vitest — content integrity, form validation, design invariants |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npx eslint .` | lint |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Only the tickets enquiry form needs configuration. Without it the page still works and the
+form reports that email isn't wired up yet.
 
-## Learn More
+| Variable | |
+|---|---|
+| `RESEND_API_KEY` | Resend key for sending enquiries |
+| `CONTACT_EMAIL_TO` | where enquiries land |
+| `CONTACT_EMAIL_FROM` | verified sender on your Resend domain |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | wa.me format, digits only. Blank hides the WhatsApp button |
 
-To learn more about Next.js, take a look at the following resources:
+No database. Content is typed TypeScript in `src/content/` — editing the programme is a commit.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploying
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Vercel, zero config. Set the four variables above in the project settings.
 
-## Deploy on Vercel
+## Before launch
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open questions for the festival are listed at the end of [CLAUDE.md](CLAUDE.md) — most
+importantly **confirm the 2026 dates**, which disagree across the festival's own sources.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Docs
+
+- [CLAUDE.md](CLAUDE.md) — design and content rules that are the brand, not preferences
+- [project-docs/deviations-from-prototype.md](project-docs/deviations-from-prototype.md) —
+  every deliberate difference from the prototype, and why
