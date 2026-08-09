@@ -90,7 +90,11 @@ export function PurposeSection() {
       className="purpose"
       style={{ padding: "var(--nav-h) var(--gutter) 0" }}
     >
-      <div style={{ textShadow: "var(--text-shadow-on-dye)", maxWidth: "var(--prose)" }}>
+      {/* Both blocks stay narrow for readability but sit centred in the column. Left-aligned
+          in a 1180px column they hugged one edge with up to 600px of dead dye beside them,
+          which read as a layout fault rather than as a margin. The copy inside stays ranged
+          left — the story is a thread to follow, and centred body text breaks that. */}
+      <div style={{ textShadow: "var(--text-shadow-on-dye)", maxWidth: "var(--prose)", marginInline: "auto" }}>
         <p
           style={{
             margin: 0,
@@ -113,7 +117,7 @@ export function PurposeSection() {
 
       {/* The line itself is narrow on any screen — it reads as a single thread, so it does
           not widen with the column the way prose does. */}
-      <div style={{ paddingTop: 12, maxWidth: 560 }}>
+      <div style={{ paddingTop: 12, maxWidth: 560, marginInline: "auto" }}>
         <Chapter
           n="01"
           title={PURPOSE_COPY.problemTitle}
