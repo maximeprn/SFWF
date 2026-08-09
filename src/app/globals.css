@@ -325,6 +325,35 @@ html.sfwf-loading body {
   z-index: 0;
 }
 
+/* ── the social marks ─────────────────────────────────────────────────────
+   The row is hand-placed: each mark rests at its own slight angle, carried in --tilt so
+   the transform can always return to it. Pointing at one stands it upright and brings it
+   forward — feedback on the pointer, not ambient motion, which is why it is allowed at all
+   in a system whose only moving thing is the dye.
+
+   Guarded by (hover: hover) so a phone never latches the hovered state after a tap; touch
+   gets the same move from :active instead, on the press, matching the buttons and the
+   hand-drawn underline. */
+.social-mark {
+  transform: rotate(var(--tilt));
+  opacity: 0.85;
+  transition:
+    transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.22s ease;
+}
+
+@media (hover: hover) {
+  .social-mark:hover {
+    transform: rotate(0deg) scale(1.14);
+    opacity: 1;
+  }
+}
+
+.social-mark:active {
+  transform: rotate(0deg) scale(0.97);
+  opacity: 1;
+}
+
 /* ── the hand-drawn underline ─────────────────────────────────────────────
    Press feedback, redrawing the rule left to right. Touch has no hover, so this is the
    only acknowledgement a tap gets before the next screen arrives. */
@@ -347,6 +376,13 @@ html.sfwf-loading body {
 @media (prefers-reduced-motion: reduce) {
   .squiggle-draw {
     animation: none;
+  }
+  /* Keep the mark's resting angle and let only the brightening carry the feedback. */
+  .social-mark,
+  .social-mark:hover,
+  .social-mark:active {
+    transform: rotate(var(--tilt));
+    transition: opacity 0.22s ease;
   }
   .purpose .rv {
     opacity: 1;

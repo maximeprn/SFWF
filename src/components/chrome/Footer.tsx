@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { SOCIALS } from "@/content/site";
 
 /**
@@ -42,17 +42,21 @@ export function Footer() {
             target="_blank"
             rel="noreferrer"
             aria-label={s.name}
-            style={{
-              width: 44,
-              height: 44,
-              display: "grid",
-              placeItems: "center",
-              color: "var(--mark)",
-              textDecoration: "none",
-              WebkitTapHighlightColor: "transparent",
-              transform: `rotate(${s.tilt}deg)`,
-              transition: "opacity .2s ease",
-            }}
+            className="social-mark"
+            /* --tilt is the mark's resting angle; the hover rule in globals.css returns
+               to it, so the two can never drift apart. */
+            style={
+              {
+                width: 44,
+                height: 44,
+                display: "grid",
+                placeItems: "center",
+                color: "var(--mark)",
+                textDecoration: "none",
+                WebkitTapHighlightColor: "transparent",
+                "--tilt": `${s.tilt}deg`,
+              } as CSSProperties
+            }
           >
             <svg
               width="27"
