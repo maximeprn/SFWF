@@ -7,7 +7,7 @@ import { Squiggle, useSquiggle } from "@/components/ui/Squiggle";
 import { LOGO } from "@/content/photos";
 import { NAV } from "@/content/site";
 import { blob } from "@/lib/design/shapes";
-import { NAV_H, type NavReveal } from "@/lib/useNavReveal";
+import { NAV_H } from "@/lib/useContentFade";
 
 /** Not a button: gold label with a hand-drawn underline, so it reads as a link on the dye. */
 function TicketsLink() {
@@ -50,23 +50,20 @@ const burger: CSSProperties = {
 };
 
 export function NavBand({
-  nav,
   menuOpen,
   onToggleMenu,
 }: {
-  readonly nav: NavReveal;
   readonly menuOpen: boolean;
   readonly onToggleMenu: () => void;
 }) {
   const pathname = usePathname();
-  // While the menu is open the chrome sits still — it is the menu's own header.
-  const offset = menuOpen ? 0 : nav.offset;
-  const reachable = offset > -60;
 
   return (
     <div
       data-chrome
       style={{
+        /* Fixed and still: the band neither hides on the way down nor returns on the way
+           up. The only thing that tracks the reader is the fade on the copy beneath it. */
         position: "fixed",
         top: 0,
         left: 0,
@@ -74,10 +71,6 @@ export function NavBand({
         height: NAV_H,
         zIndex: 60,
         pointerEvents: "none",
-        transform: `translateY(${offset}px)`,
-        /* The lock-in reading up is the only animated move in the mechanic. Everything
-           else is pixel-tracked to the finger and must have no transition, or it lags. */
-        transition: nav.snap ? "transform .26s cubic-bezier(.4,0,.2,1)" : "none",
       }}
     >
       <div
@@ -85,7 +78,7 @@ export function NavBand({
         style={{ maxWidth: "var(--column)", paddingTop: 56 }}
       >
         {/* Mobile: Tickets left, mark centred, burger right. Wide: mark left, words centred. */}
-        <div className="wide:hidden" style={{ pointerEvents: reachable ? "auto" : "none" }}>
+        <div className="wide:hidden" style={{ pointerEvents: "auto" }}>
           <TicketsLink />
         </div>
 
@@ -93,7 +86,7 @@ export function NavBand({
           href="/"
           aria-label="Siargao Food and Wine Festival — home"
           className="absolute left-1/2 -translate-x-1/2 wide:static wide:translate-x-0"
-          style={{ pointerEvents: reachable ? "auto" : "none", lineHeight: 0 }}
+          style={{ pointerEvents: "auto", lineHeight: 0 }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={LOGO} alt="Siargao Food and Wine Festival" style={{ height: 46, width: "auto" }} />
@@ -123,7 +116,7 @@ export function NavBand({
           })}
         </nav>
 
-        <div className="flex items-center gap-[10px]" style={{ pointerEvents: reachable ? "auto" : "none" }}>
+        <div className="flex items-center gap-[10px]" style={{ pointerEvents: "auto" }}>
           <div className="hidden wide:block">
             <TicketsLink />
           </div>

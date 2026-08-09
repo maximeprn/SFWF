@@ -27,7 +27,7 @@ src/components/
 src/lib/
   design/         Blob paths, nub radii, the menu ring.
   tickets/        Enquiry schema, mail, rate limit.
-  useNavReveal.ts The scroll-driven nav mechanic.
+  useContentFade.ts The mask that dissolves copy under the fixed nav band.
 src/styles/       tokens.css — every colour, type and rhythm value.
 public/           Brand assets. All originals from the festival; none are regenerable.
 project-docs/     Design decisions and the list of deliberate deviations.

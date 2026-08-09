@@ -19,21 +19,19 @@ bloom strength 100%`.
 
 ## Behavioural changes
 
-**The nav mechanic runs on window scroll, not an inner scroller.** The prototype ran the whole
-app inside one `overflow-y: auto` div and drove the nav from its `scrollTop`. On a real site an
-inner scroller breaks iOS URL-bar collapse, anchor links and browser scroll restoration, so
-`useNavReveal` works against `window.scrollY`.
+**The band does not move at all. `NAV-BAND.md`'s whole reveal mechanic is dropped.** The
+prototype held the band out until the next section boundary crossed the viewport top — "reading
+up never yanks it back mid-paragraph" — driven from an inner scroller's `scrollTop` against
+measured `data-nav-anchor` positions. Ported to window scroll it was a persistent source of
+bugs: on a phone, anything that moves the page without the reader touching it (the URL bar
+resizing the viewport, rubber-band overscroll) arrives as travel, and each guard against that
+bought a new edge case. A hide-on-down/return-on-up version was tried next and had the same
+class of problem.
 
-**The reserved-gap mechanic is superseded: the band returns on upward travel.** `NAV-BAND.md`
-held the band out until the next section boundary crossed the viewport top — "reading up never
-yanks it back mid-paragraph". On phones that read as the nav failing to return, and the gap
-measurement it required (anchor positions, re-measured on every layout change) was the buggy
-part. At the festival's request the band now hides riding down, 1:1 with the finger, and comes
-back the moment upward travel passes a small intent threshold (8px, so the wobble at the end of
-a fling cannot flicker it). The one eased move is that return. The reserved `NAV_H` gaps at the
-top of sections stay as layout rhythm; nothing reads `data-nav-anchor` any more. The travel
-guards survive unchanged — clamped positions against rubber-band overscroll, and the quiet
-window through URL-bar sweeps — because they are what make travel readable on iOS at all.
+At the festival's request the band is now plain fixed chrome: always visible, never
+translated, with no state machine behind it. `data-nav-anchor` is gone from the sections and
+the reserved `NAV_H` gaps stay only as layout rhythm. What survives is the part that was
+always wanted — the fade below.
 
 **The fade-under-the-band mask is carried over, re-anchored for window scroll.** `NAV-BAND.md`
 specifies it as a `mask-image` on the scroller — a mask and not a scrim, so the dye behind
@@ -41,13 +39,11 @@ carries through at full strength rather than being flattened by a wash of some f
 picked to stand in for a moving photograph. In the prototype the scroller's box is the
 viewport, so the gradient stops are viewport offsets that hold still on their own. Here the
 masked element is `main`, whose box is the document: the same stops have to hang from the
-current scroll position and be rewritten as the reader moves — not only when the band moves,
-because reading up with the band pinned at 0 is precisely when copy passes through the fade.
-The rewrite rides the same rAF as the band and goes straight to the element's style, never
-through React state (a render per scroll frame is the cost the original note on this deviation
-refused to pay), and the mask is dropped entirely once the band is out, which keeps the
-recompute off the reading-down scrolling readers do most. This replaces an earlier note saying
-the mask could not be done on a window-scrolled page.
+current scroll position and be rewritten on every scroll frame. The rewrite goes straight to
+the element's style, never through React state — a render per scroll frame is the cost the
+original note on this deviation refused to pay. With the band now permanently in, the zone is
+a constant 94px→136px below the viewport top, so the fade is always live. This replaces an
+earlier note saying the mask could not be done on a window-scrolled page.
 
 **The loading seal shows once per session**, not on every navigation, via `sessionStorage` plus a
 blocking script in `<head>` that hides content before paint. A two-second pour on every page load

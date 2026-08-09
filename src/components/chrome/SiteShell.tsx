@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { BloomLayer } from "@/components/background/BloomLayer";
 import { LightboxProvider } from "@/components/ui/LightboxProvider";
-import { NAV_H, useNavReveal } from "@/lib/useNavReveal";
+import { NAV_H, useContentFade } from "@/lib/useContentFade";
 import { useScrollLock } from "@/lib/useScrollLock";
 import { Footer } from "./Footer";
 import { ENTER_TOTAL_MS, Loader } from "./Loader";
@@ -15,10 +15,10 @@ export const ENTERED_KEY = "sfwf-entered";
 
 export function SiteShell({ children }: { readonly children: ReactNode }) {
   /* The hook writes the content fade straight onto <main> — it follows the viewport on
-     every scroll frame the band is visible, which is too often for React state. That is
-     why no mask appears in the JSX below. */
+     every scroll frame, which is too often for React state. That is why no mask appears
+     in the JSX below. */
   const mainRef = useRef<HTMLElement | null>(null);
-  const nav = useNavReveal(mainRef);
+  useContentFade(mainRef);
   const [menuOpen, setMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [leaving, setLeaving] = useState(false);
@@ -83,7 +83,7 @@ export function SiteShell({ children }: { readonly children: ReactNode }) {
 
       {menuOpen && <Menu onClose={() => setMenuOpen(false)} />}
 
-      <NavBand nav={nav} menuOpen={menuOpen} onToggleMenu={() => setMenuOpen((v) => !v)} />
+      <NavBand menuOpen={menuOpen} onToggleMenu={() => setMenuOpen((v) => !v)} />
 
       {loading && <Loader onEnter={enter} exiting={leaving} />}
     </LightboxProvider>
