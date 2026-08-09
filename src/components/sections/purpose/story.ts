@@ -86,27 +86,29 @@ export const PROBLEM_STEPS: readonly StoryStep[] = [
 
 export const PROBLEM_CONNECTORS: readonly Connector[] = [
   {
-    w: 84,
+    w: 100,
     h: 86,
-    vb: "0 0 84 86",
-    margin: "-5px 0 -6px 86px",
-    main: { d: "M12 4C4 24 30 32 20 50C11 66 32 74 26 82", sw: 3.6 },
-    len: 120,
+    vb: "0 0 100 86",
+    /* Bottom margin carries the stem 17px into the bubble below: the blob clips its
+       corners hardest, so an end that touches the element box still hangs in the air. */
+    margin: "-5px 0 -28px 86px",
+    main: { d: "M12 4C4 24 30 32 20 50C11 66 60 70 76 82", sw: 3.6 },
+    len: 140,
   },
   {
     w: 150,
     h: 112,
     vb: "0 0 150 112",
     margin: "-18px 0 -19px 96px",
-    main: { d: "M10 4C24 28 4 42 22 62C40 82 82 86 112 106", sw: 3.4 },
-    len: 200,
+    main: { d: "M57 4C50 26 8 40 22 62C40 82 82 86 112 106", sw: 3.4 },
+    len: 210,
     branches: [{ d: "M22 62C12 70 8 78 10 86", sw: 2.2 }],
   },
   {
     w: 150,
     h: 80,
     vb: "0 0 150 80",
-    margin: "-2px 0 -3px 128px",
+    margin: "-8px 0 -12px 128px",
     main: { d: "M120 4C102 22 66 16 36 28C14 37 6 56 14 72", sw: 3.8 },
     len: 200,
     branches: [{ d: "M36 28C42 16 54 12 64 14", sw: 2.2 }],
@@ -168,8 +170,8 @@ export const SOLUTION_CONNECTORS: readonly Connector[] = [
     w: 110,
     h: 96,
     vb: "0 0 110 96",
-    margin: "-10px 0 -11px 24px",
-    main: { d: "M14 4C4 26 34 32 22 52C10 72 42 78 36 90", sw: 3.6 },
+    margin: "-10px 0 -15px 24px",
+    main: { d: "M14 4C4 26 34 32 22 52C10 72 48 76 56 90", sw: 3.6 },
     len: 145,
     branches: [
       { d: "M22 52C34 48 44 52 52 44", sw: 2.2 },
@@ -183,12 +185,12 @@ export const SOLUTION_CONNECTORS: readonly Connector[] = [
   {
     w: 164,
     h: 80,
-    margin: "-2px 0 -3px 40px",
+    margin: "-16px 0 -7px 40px",
     vb: "0 0 164 80",
     /* Ends at y=78, hard against the box's bottom edge, so the stroke meets the top of the
        bubble below instead of stopping 9px short of it and hanging in the air off to the
        right. The tail also comes back left, over the centred bubble it lands on. */
-    main: { d: "M10 4C28 22 64 14 96 26C118 36 122 58 112 78", sw: 3.4 },
+    main: { d: "M41 4C52 20 68 16 96 26C118 36 122 58 112 78", sw: 3.4 },
     len: 200,
     branches: [
       { d: "M96 26C98 14 108 8 118 10", sw: 2.2 },
