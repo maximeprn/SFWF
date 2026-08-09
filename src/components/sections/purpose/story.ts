@@ -183,9 +183,12 @@ export const SOLUTION_CONNECTORS: readonly Connector[] = [
   {
     w: 164,
     h: 80,
-    vb: "0 0 164 80",
     margin: "-2px 0 -3px 40px",
-    main: { d: "M10 4C28 22 64 14 96 26C120 35 132 52 140 68", sw: 3.4 },
+    vb: "0 0 164 80",
+    /* Ends at y=78, hard against the box's bottom edge, so the stroke meets the top of the
+       bubble below instead of stopping 9px short of it and hanging in the air off to the
+       right. The tail also comes back left, over the centred bubble it lands on. */
+    main: { d: "M10 4C28 22 64 14 96 26C118 36 122 58 112 78", sw: 3.4 },
     len: 200,
     branches: [
       { d: "M96 26C98 14 108 8 118 10", sw: 2.2 },
