@@ -86,7 +86,7 @@
      stacked sections need air to read as separate. This one has a fixed wordmark on one
      side of it and the page's own headline on the other, and 94px of it on a phone reads as
      a loading state. */
-  --page-top: clamp(40px, 5vw, 72px);
+  --page-top: clamp(24px, 5vw, 72px);
 
   /* The air a section flourish carries on each side. The flourish owns both halves — see
      `WobbleFlourish` — because when the space above it belonged to the section's padding and

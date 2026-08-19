@@ -75,10 +75,12 @@ export function ProgramSection() {
           }}
         >
           Tap any gathering to see who is cooking and how to get in.{" "}
-          {/* Bold, same colour — the design's own emphasis rule, since beige is already the
-              ceiling on violet and a second tint would only read as a broken link. This is
-              the sentence that explains why no button on the page sells anything. */}
-          <strong style={{ fontWeight: 700 }}>
+          {/* Orange, at the festival's request. It is 2.73:1 on the violet where the beige
+              around it is 7.28:1 — the same trade already made knowingly for the big script
+              headline and for the place name in an open bubble. The sentence is not the only
+              place this is said: the closing line repeats it, and every booking button names
+              its venue. */}
+          <strong style={{ fontWeight: 700, color: "var(--orange)" }}>
             Every reservation is made with the venue itself.
           </strong>
         </p>
