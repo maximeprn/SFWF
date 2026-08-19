@@ -1,24 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* Every 2025 route now lives on the one page. These are permanent (301) because the
-     pages are not coming back at these paths: /program folds into `/`, /media-center
-     becomes /press in phase 2, and about, tickets, food-crawl and purpose were cut from
-     the redesign outright. Nothing 404s — old links, printed cards and shared posts all
-     keep working. */
+  /* The 2025 paths that are not coming back. `/program` is a real route again as of phase
+     2, so it has left this list; `/media-center` becomes `/press` rather than home, because
+     the page it named still exists under a new name. About, tickets, food-crawl and purpose
+     were cut from the redesign outright and their content folded into Home. Nothing 404s —
+     old links, printed cards and shared posts all keep working.
+
+     301, not Next's `permanent: true`, which emits 308. All of this traffic is GET — printed
+     cards, old posts, search results — and 301 is the permanent redirect every crawler and
+     proxy already understands. */
   async redirects() {
-    return [
-      "/program",
-      "/about",
-      "/tickets",
-      "/purpose",
-      "/media-center",
-      "/food-crawl",
-      "/food-crawl/:crawl",
-      /* 301, not Next's `permanent: true`, which emits 308. All of this traffic is GET —
-         printed cards, old posts, search results — and 301 is the permanent redirect every
-         crawler and proxy already understands. */
-    ].map((source) => ({ source, destination: "/", statusCode: 301 }));
+    const home = ["/about", "/tickets", "/purpose", "/food-crawl", "/food-crawl/:crawl"].map(
+      (source) => ({ source, destination: "/", statusCode: 301 as const }),
+    );
+    return [...home, { source: "/media-center", destination: "/press", statusCode: 301 as const }];
   },
 
   images: {

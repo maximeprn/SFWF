@@ -3,6 +3,7 @@ import { Arimo, Baloo_2, Beth_Ellen } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { BlobDefs } from "@/components/ui/BlobDefs";
 import { BloomLayer } from "@/components/background/BloomLayer";
+import { Chrome } from "@/components/chrome/Chrome";
 import { Footer } from "@/components/chrome/Footer";
 import { BackToTop } from "@/components/chrome/BackToTop";
 import { DYE_TEXTURE } from "@/content/photos";
@@ -89,9 +90,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <BlobDefs />
         <BloomLayer />
-        {/* The page sits on z-index 1; the dye is fixed at 0 underneath. There is no nav
-            band in this release, so the page opens straight on the hero and there is no
-            fade mask — both return with phase 2. */}
+        {/* The page sits on z-index 1; the dye is fixed at 0 underneath. `Chrome` owns the
+            band, the menu and the masked scroller — the three things that share one piece
+            of state — and renders the page inside its own <main>. */}
         <div
           style={{
             position: "relative",
@@ -101,9 +102,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             flexDirection: "column",
           }}
         >
-          <main className="page-in" style={{ flex: 1 }}>
-            {children}
-          </main>
+          <Chrome>{children}</Chrome>
           <Footer />
         </div>
         <BackToTop />

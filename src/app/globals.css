@@ -28,6 +28,10 @@
 html {
   background: var(--ground);
   line-height: normal;
+  /* Route changes and the one in-page anchor (`/#purpose`) both land softly. Next scrolls
+     to the top on navigation on its own; this is what makes that scroll readable rather
+     than a jump. Cut under prefers-reduced-motion, below. */
+  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   /* The bar is a grey slab down the edge of a full-bleed dye. The page still scrolls by
      every means — wheel, touch, keyboard, find-in-page — only the slab is gone. */
@@ -102,10 +106,34 @@ a {
   background: var(--ground);
 }
 
+/* The media-kit grid: four named slots for a folder the festival has not sent yet. The
+   hatching is the one gradient in the product and it is deliberately not a colour wash —
+   it is a placeholder pattern inside a beige card, never over the dye. */
+.kit-tile {
+  aspect-ratio: 4/3;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hairline-violet);
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(79, 63, 121, 0.14) 0 8px,
+    transparent 8px 16px
+  );
+}
+
 /* ── motion ──────────────────────────────────────────────────────────────
    The whole inventory. Motion is response, not ambience: if it is not answering a tap, a
    hover or a scroll, it does not move. The dye is the one exception, and it is slow enough
    to read as cloth. Hand-drawn strokes never animate — no draw-on effects anywhere. */
+
+@keyframes menuIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
 @keyframes pageIn {
   from {
@@ -187,5 +215,8 @@ a {
   .reveal,
   .social-mark {
     transition: none;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }

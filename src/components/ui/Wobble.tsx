@@ -18,6 +18,8 @@ const BUBBLE_RULE =
 
 const KICKER_RULE = "M1 3.6 C 34 1.2 68 5 100 2.8 C 134 0.7 168 4.8 199 2.2";
 
+const UNDERLINE_RULE = "M1 3.4 C 18 1 34 5.2 52 3 C 68 1.1 84 5 99 2.6";
+
 /** A rule that spans its container — day dividers, the footer hairline. */
 export function WobbleRule({
   tone = "beige",
@@ -142,6 +144,31 @@ export function WobbleTick({ flip = false }: { readonly flip?: boolean }) {
         strokeOpacity={0.72}
         strokeWidth={1.5}
         strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/**
+ * The mark under the nav word for the page you are on. It is drawn rather than a
+ * `text-decoration`, and it is the second signal on that word — orange alone is 2.73:1 on
+ * the violet, which is a picture of emphasis rather than a legible one.
+ */
+export function WobbleUnderline() {
+  return (
+    <svg
+      viewBox="0 0 100 6"
+      preserveAspectRatio="none"
+      fill="none"
+      aria-hidden="true"
+      style={{ position: "absolute", left: 0, right: 0, bottom: 0, width: "100%", height: 5, overflow: "visible" }}
+    >
+      <path
+        d={UNDERLINE_RULE}
+        stroke="var(--beige)"
+        strokeWidth={1.6}
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
       />
     </svg>
   );

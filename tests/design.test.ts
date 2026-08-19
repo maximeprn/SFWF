@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { BLOB_PATHS, bubbleShape, buttonShape, soft } from "@/lib/design/shapes";
+import { NAV_CTA, NAV_LINKS } from "@/content/nav";
 
 const SRC = new URL("../src/", import.meta.url).pathname;
 
@@ -135,13 +136,28 @@ describe("surfaces", () => {
   });
 
   it("pushes no colour — the palette as written, over a flat ground", () => {
-    // No filter stack, no gradient over the violet, and the ground hex is never lightened
-    // or darkened to "lift" a section off it.
+    // No filter stack, and the ground hex is never lightened or darkened to "lift" a
+    // section off it.
     for (const [path, text] of sources) {
       expect(text, path).not.toMatch(/saturate\(|hue-rotate|brightness\(|contrast\(/i);
     }
+  });
+
+  it("lays no gradient over the violet", () => {
+    // Phase 2 introduces gradients, so this can no longer be "none anywhere" — but each one
+    // is a decision, and an undocumented fourth is the way a wash ends up on the dye. The
+    // three that exist: the media-kit hatching inside a beige card, the nav fade mask
+    // (which paints no colour at all — it removes the content's own alpha), and the film
+    // caption scrim on top of a photograph.
+    const ALLOWED = ["app/globals.css", "lib/chrome/useFadeMask.ts"];
+    const sheet = readFileSync(new URL("../src/app/globals.css", import.meta.url), "utf8");
     for (const [path, text] of page) {
-      expect(text, path).not.toMatch(/gradient/i);
+      if (!/gradient/i.test(text)) continue;
+      expect(ALLOWED, `${path} introduces a gradient — document it or take it out`).toContain(path);
+    }
+    // Whatever the allowlist says, nothing gradient-y lands on the ground itself.
+    for (const rule of [/\.dye-layer\s*\{[^}]*\}/, /\bbody\s*\{[^}]*\}/, /\bhtml\s*\{[^}]*\}/]) {
+      expect(sheet.match(rule)?.[0] ?? "", String(rule)).not.toMatch(/gradient/i);
     }
   });
 
@@ -158,13 +174,43 @@ describe("surfaces", () => {
 });
 
 /**
- * The chrome phase 1 deliberately removes. Each of these came back once already during the
- * redesign; the test is here so a stray import does not quietly reinstate one.
+ * The chrome. Phase 1 shipped without a nav band, a menu or a fade mask and had a test
+ * saying so; phase 2 adds all three, so what is guarded here is the way they work — the
+ * mask's numbers, and the fact that the menu never puts a scrim over the dye.
  */
-describe("what this release does not ship", () => {
-  it("has no loading seal, no nav band and no menu", () => {
+describe("chrome", () => {
+  const mask = readFileSync(new URL("../src/lib/chrome/useFadeMask.ts", import.meta.url), "utf8");
+  const menu = readFileSync(
+    new URL("../src/components/chrome/MobileMenu.tsx", import.meta.url),
+    "utf8",
+  );
+
+  it("keeps the loading seal gone", () => {
+    // The gold pour was dropped with the 2025 system and is not coming back in any phase.
     for (const [path, text] of sources) {
-      expect(text, path).not.toMatch(/sfwf-loading|LOADER_SEAL|NavBand|useContentFade/);
+      expect(text, path).not.toMatch(/sfwf-loading|LOADER_SEAL/);
+    }
+  });
+
+  it("masks the copy under the band rather than scrimming it", () => {
+    // A gradient div would paint a flat wash over a moving photograph. mask-image composites
+    // nothing of its own, so the dye passes through at full strength.
+    expect(mask).toMatch(/maskImage/);
+    expect(mask).toMatch(/const BAND = 56/);
+    expect(mask).toMatch(/const RAMP = 26/);
+  });
+
+  it("gives the menu no scrim — the dye stays exactly as it was", () => {
+    expect(stripComments(menu)).not.toMatch(/background(Color)?\s*:/);
+  });
+
+  it("carries the three routes and one primary button, per page", () => {
+    expect(NAV_LINKS.map((l) => l.href)).toEqual(["/", "/program", "/press"]);
+    for (const link of NAV_LINKS) {
+      const cta = NAV_CTA[link.href];
+      expect(cta.label, link.href).toBeTruthy();
+      // The button never points at the page you are already on.
+      expect(cta.href, link.href).not.toBe(link.href);
     }
   });
 });
