@@ -19,11 +19,11 @@ export const FESTIVAL_DATES = {
 export const DATELINE = `${FESTIVAL_DATES.label} · ${FESTIVAL_DATES.location}`;
 
 /**
- * Where this site actually lives. The 2026 edition sits on its own subdomain because the
- * festival's existing site keeps the apex. Every canonical, sitemap entry, Open Graph URL
- * and JSON-LD id is built from this — move the site and change it here only.
+ * Where this site lives. Every canonical, sitemap entry, Open Graph URL and JSON-LD id is
+ * built from this, so it has to match the domain actually being served — move the site and
+ * change it here only.
  */
-export const SITE_URL = "https://2026.siargaofoodfest.com";
+export const SITE_URL = "https://siargaofoodfest.com";
 
 export const SITE = {
   name: "Siargao Food & Wine Festival",
