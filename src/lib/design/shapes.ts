@@ -30,15 +30,28 @@ export const soft = (i: number): string => `url(#pb${i % BLOB_PATHS.length})`;
  * against the bottom edge, and the six bubble outlines curve inward there enough to clip the
  * scrubber's ends and its timecodes away.
  *
- * Deriving it by scaling one of those does not work — they already sit almost exactly on the
- * unit square, so any outward scale puts the whole boundary outside the box and the clip
- * renders as a plain rectangle. Drawn, not generated, like the six.
+ * It is the first of those six with its corner-region coordinates pulled a quarter of the way to
+ * the box, and nothing else touched: the corner now meets the right edge at 0.898 where the
+ * original meets it at 0.864, and leaves the bottom edge at 0.831 where the original leaves
+ * at 0.774. Every mid-edge coordinate is untouched, so the wobble along the sides is the
+ * original's, unchanged — only the corners are tighter.
+ *
+ * Scaling the whole path outward does not work, which is worth recording: these already sit
+ * almost exactly on the unit square, so any outward scale puts the entire boundary outside
+ * the box and the clip renders as a plain rectangle.
  */
 export const MEDIA_BLOB_PATH =
-  "M 0.014 0.024 C 0.280 0.002 0.600 0.022 0.984 0.008 " +
-  "C 0.998 0.280 0.984 0.620 0.992 0.974 " +
-  "C 0.720 0.996 0.340 0.976 0.018 0.990 " +
-  "C 0.002 0.700 0.020 0.320 0.014 0.024 Z";
+  "M 0.0735 0.9910 " +
+  "C 0.3240 1.0015 0.5560 0.9805 0.8305 0.9925 " +
+  "C 0.9190 0.9985 0.9805 0.9670 0.9880 0.8980 " +
+  "C 0.9955 0.8335 0.9865 0.6220 0.9910 0.4780 " +
+  "C 0.9955 0.3320 1.0000 0.1140 0.9715 0.0615 " +
+  "C 0.9475 0.0165 0.8470 0.0165 0.5860 0.0075 " +
+  "C 0.3760 -0.0015 0.1110 0.0060 0.0405 0.0285 " +
+  "C 0.0060 0.0390 0.0015 0.1530 0.0060 0.4000 " +
+  "C 0.0105 0.5960 0.0000 0.8635 0.0210 0.9295 " +
+  "C 0.0345 0.9790 0.0495 0.9850 0.0735 0.9910 " +
+  "Z";
 
 export const mediaFrame = (): string => "url(#pbMedia)";
 /**
