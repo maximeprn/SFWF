@@ -40,12 +40,12 @@ export function PressSection() {
           {MEDIA_KIT.body}
         </p>
 
-        {/* The button is drawn even though it has nowhere to go yet, and the line under it
-            says why. Hiding it until the folder exists would leave the page claiming a media
-            kit it never offers. */}
-        <span
+        {/* A real address rather than a dead download. The folder does not exist yet and the
+            line under this says what the mail is for, so the one control on the page still
+            does something when it is pressed. */}
+        <a
+          href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(MEDIA_KIT.subject)}`}
           className="cta-in-bubble"
-          aria-disabled="true"
           style={{
             display: "inline-block",
             marginTop: 16,
@@ -57,7 +57,7 @@ export function PressSection() {
           }}
         >
           {MEDIA_KIT.cta}
-        </span>
+        </a>
         <p
           className="mono"
           style={{ margin: "9px 0 0", fontSize: 11, letterSpacing: ".14em", color: "var(--beige)" }}

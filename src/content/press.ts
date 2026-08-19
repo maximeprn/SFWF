@@ -1,10 +1,10 @@
 /**
  * The Press page's copy, from `SFWF prototype.dc.html`.
  *
- * The media folder's URL is not here because the festival has not sent it. The page says so
- * in its own words rather than hiding the button or inventing a link — "missing copy is
- * stated, not hidden" is the design, and a press page with no visible media kit reads as a
- * festival that has none.
+ * There is no media folder to link to yet, so the button asks for a person instead of a
+ * file. That keeps the page honest and keeps it useful: the prototype's dead PDF button with
+ * "link to be added" under it told a journalist what the festival does not have, where this
+ * tells them what to do about it.
  */
 export const MEDIA_KIT = {
   heading: "Festival media kit",
@@ -12,8 +12,9 @@ export const MEDIA_KIT = {
     "In our Media Folder, you will find a curated selection of high-resolution photos " +
     "available for download. Please credit ‘Siargao Food and Wine Festival’ when using " +
     "photos for your coverage.",
-  cta: "Download the media kit (PDF)",
-  note: "PDF LINK TO BE ADDED",
+  cta: "Send us an email",
+  note: "TO RECEIVE THE MEDIA KIT",
+  subject: "Media kit request",
 } as const;
 
 export const COVERING = {
