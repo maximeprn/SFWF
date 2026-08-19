@@ -4,11 +4,9 @@
  * not sent either, and a page that stays silent about a deadline reads as though there
  * isn't one.
  *
- * `ACCREDITATION_EMAIL` is the second address in play. The footer and the programme use
- * `CONTACT_EMAIL`; the design puts this one on every Press action. Both are live and the
- * festival has not yet picked one — see `project-docs/phase-1-deviations.md`.
+ * Every action here writes to `CONTACT_EMAIL`. The design drew a separate accreditation
+ * address; the festival has since settled on one for the whole site.
  */
-export const ACCREDITATION_EMAIL = "hello@siargaofoodandwinefestival.com";
 
 export const ACCREDITATION = {
   kicker: { lead: "NOW OPEN", rest: "ACCREDITATION" },

@@ -1,4 +1,5 @@
-import { ACCREDITATION, ACCREDITATION_EMAIL, MEDIA_KIT, PRESS_STATS } from "@/content/press";
+import { ACCREDITATION, MEDIA_KIT, PRESS_STATS } from "@/content/press";
+import { CONTACT_EMAIL } from "@/content/site";
 import { soft } from "@/lib/design/shapes";
 import { CARD_PROSE, CardNote, PressCard } from "./PressCard";
 
@@ -62,7 +63,7 @@ export function PressSection() {
                 with no deadline. */}
             <CardNote>{ACCREDITATION.deadline}</CardNote>
             <a
-              href={`mailto:${ACCREDITATION_EMAIL}?subject=${encodeURIComponent("Media accreditation 2026")}`}
+              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Media accreditation 2026")}`}
               className="cta-in-bubble on-beige"
               style={{
                 display: "inline-block",
@@ -138,7 +139,7 @@ export function PressSection() {
           Tell us what you’re working on and we’ll put you with the right people on the island.
         </p>
         <a
-          href={`mailto:${ACCREDITATION_EMAIL}`}
+          href={`mailto:${CONTACT_EMAIL}`}
           className="cta"
           style={{
             display: "inline-block",
@@ -152,7 +153,7 @@ export function PressSection() {
             transition: "background var(--hover)",
           }}
         >
-          {ACCREDITATION_EMAIL}
+          {CONTACT_EMAIL}
         </a>
       </section>
     </>

@@ -35,8 +35,10 @@ export const SITE = {
 } as const;
 
 /**
- * One address for the whole site. The Press page's `hello@siargaofoodandwinefestival.com`
- * is a phase 2 question; nothing in the one-pager reaches for it.
+ * One address for the whole site — the footer, the Press page and the accreditation form
+ * all reach for this one. The design drew a second, `hello@siargaofoodandwinefestival.com`,
+ * on every Press action; the festival settled it on 19 Aug 2026 in favour of this one, so
+ * that address appears nowhere in the product.
  */
 export const CONTACT_EMAIL = "info@siargaofoodfest.com";
 

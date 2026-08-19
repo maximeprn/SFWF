@@ -107,6 +107,9 @@ Tracked in `project-docs/phase-1-deviations.md`:
 
 1. **Sagana's Instagram handle** — a ₱2,000 dinner currently booking through the festival account.
 2. **`@tropicalacademyiao`** — looks truncated; verify before it sends anyone to a dead profile.
-3. **Which contact address** — `info@siargaofoodfest.com` (shipped) or
-   `hello@siargaofoodandwinefestival.com` (Press, phase 2).
-4. **Seven unconfirmed prices**, one event with no line-up and no description.
+3. **Seven unconfirmed prices**, one event with no line-up and no description.
+4. **The accreditation deadline and the media-folder URL** are stated as unset on Press, which
+   is the design — not placeholders to fill in.
+
+Settled: the contact address is `info@siargaofoodfest.com` everywhere (19 Aug 2026). The
+design's second address, `hello@siargaofoodandwinefestival.com`, is used nowhere.

@@ -102,8 +102,10 @@ These are §13 items that touch what shipped. None were invented around.
 4. **The place name in an open bubble's hint line is `#E9622D` on beige — 2.67:1.** Kept at the
    festival's request against §3's own rule. Nothing is only available there (the venue is in the
    collapsed kicker and the booking button too), but it should be settled rather than left drifting.
-5. `info@siargaofoodfest.com` is the only address on the page. The Press page's
-   `hello@siargaofoodandwinefestival.com` is a phase 2 question.
+5. ~~Two addresses in play.~~ **Settled 19 Aug 2026: `info@siargaofoodfest.com` everywhere.**
+   The design put `hello@siargaofoodandwinefestival.com` on every Press action — the nav
+   button, the accreditation form and the sign-off. All three now write to the one address
+   and the second appears nowhere in the product.
 6. **`CLAUDE-CODE-2026-08-19-content-update.md` §5 asks for `Tropical Academy` to be set in type in
    the hosts row** now that Hiyas Farm is gone. It is not there: the festival asked for both names
    removed on the same day, and a type-set name is the only lettering in a row of fifteen marks.

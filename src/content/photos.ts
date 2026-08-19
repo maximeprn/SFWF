@@ -3,6 +3,15 @@
  * enough to carry a whole site, so prefer text-only card grids over reusing one image
  * repeatedly. Captions surface in the lightbox, not under the thumbnails: the homepage
  * reel should read as images, not as a list.
+ *
+ * Every `width`/`height` here was wrong until 19 Aug 2026 — all four were declared as
+ * landscape at 1200x800 or 1600x1067, and all four are portrait. next/image reserves the
+ * box from these numbers, so the page would have laid out to an aspect ratio none of the
+ * files has. They are now the files' real dimensions.
+ *
+ * Three of them are 331x497, which is too small to display at any size this design uses:
+ * the smallest frame on the site is 300px wide, so they are at 1.1x and soft on any
+ * retina screen. Ask the festival for the originals before putting them on a page.
  */
 export interface Photo {
   readonly src: string;
@@ -15,26 +24,26 @@ export const PHOTOS: readonly Photo[] = [
   {
     src: "/photography/wild-gala-dinner.webp",
     caption: "Opening gala, Wild Siargao",
-    width: 1600,
-    height: 1067,
+    width: 1365,
+    height: 2048,
   },
   {
     src: "/photography/chef-flambe.png",
     caption: "Service at the tasting dinner",
-    width: 1200,
-    height: 800,
+    width: 331,
+    height: 497,
   },
   {
     src: "/photography/communal-table-dusk.png",
     caption: "The closing boodle, Harana",
-    width: 1200,
-    height: 800,
+    width: 331,
+    height: 497,
   },
   {
     src: "/photography/string-lights-palms.png",
     caption: "Sundown under the palms",
-    width: 1200,
-    height: 800,
+    width: 331,
+    height: 497,
   },
 ];
 

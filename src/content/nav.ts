@@ -1,3 +1,5 @@
+import { CONTACT_EMAIL } from "./site";
+
 /**
  * The three routes, and the one primary button that sits beside them.
  *
@@ -26,8 +28,6 @@ export interface NavCta {
 export const NAV_CTA: Record<NavLink["href"], NavCta> = {
   "/": { href: "/program", label: "View the Program", shape: 2 },
   "/program": { href: "/#purpose", label: "Why we do this", shape: 3 },
-  /* Press asks for a person rather than a page — the accreditation address, which is the
-     one the design puts on every Press action. See the open question in
-     `project-docs/phase-1-deviations.md`: the festival still has two addresses in play. */
-  "/press": { href: "mailto:hello@siargaofoodandwinefestival.com", label: "Apply for a pass", shape: 1 },
+  /* Press asks for a person rather than a page. */
+  "/press": { href: `mailto:${CONTACT_EMAIL}`, label: "Apply for a pass", shape: 1 },
 };
