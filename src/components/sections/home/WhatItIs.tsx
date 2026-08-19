@@ -12,7 +12,7 @@ export function WhatItIs() {
   return (
     <section style={{ maxWidth: "var(--sw)", margin: "0 auto", padding: "0 var(--gutter)" }}>
       <WobbleFlourish variant={2} />
-      <div style={{ maxWidth: 660, margin: "0 auto", textAlign: "center" }}>
+      <div style={{ maxWidth: "80vw", margin: "0 auto", textAlign: "center" }}>
         <p
           className="mono"
           style={{ margin: "0 0 14px", fontSize: 11.5, letterSpacing: ".2em", color: "var(--beige)" }}

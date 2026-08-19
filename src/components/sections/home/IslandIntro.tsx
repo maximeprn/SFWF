@@ -1,7 +1,12 @@
 import { ISLAND_INTRO, ISLAND_SIGN_OFF } from "@/content/home";
 
 /**
- * Two paragraphs and a script line, centred at the design's 620px cap.
+ * Two paragraphs and a script line.
+ *
+ * The measure is 80vw rather than the design's per-block px cap, at the festival's request:
+ * it gives the block real margins on a phone and lets it fill the column on a desktop. Note
+ * that at the full column this runs to roughly 140 characters a line, about twice the 60–75
+ * that reads comfortably — the caps it replaces were 620–680px for that reason.
  *
  * No flourish above it: it reads as the film's caption more than as a new section, and the
  * boundary the film already carries is the one the eye needs there.
@@ -17,7 +22,7 @@ export function IslandIntro() {
         justifyContent: "center",
       }}
     >
-      <div style={{ maxWidth: 620, textAlign: "center" }}>
+      <div style={{ maxWidth: "80vw", textAlign: "center" }}>
         {ISLAND_INTRO.map((para, i) => (
           <p
             key={para.slice(0, 24)}

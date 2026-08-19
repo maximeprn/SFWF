@@ -117,7 +117,7 @@ export function Hero() {
           className="cta"
           style={{
             display: "inline-block",
-            marginTop: "clamp(30px,4.4vw,44px)",
+            marginTop: "clamp(42px,4.7vw,60px)",
             clipPath: soft(1),
             padding: "17px 36px 20px",
             background: "var(--beige)",
