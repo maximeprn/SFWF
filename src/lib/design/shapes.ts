@@ -22,6 +22,25 @@ export const BLOB_PATHS: readonly string[] = [
 export const soft = (i: number): string => `url(#pb${i % BLOB_PATHS.length})`;
 
 /**
+ * A shallow hand-cut outline, for a video while it is playing.
+ *
+ * Native controls sit hard against the bottom edge, and all six of the outlines above curve
+ * inward there — the scrubber's ends and its timecodes were being clipped away. Dropping the
+ * clip fixed that and looked wrong: the frame changed shape under the tap.
+ *
+ * Deriving it by scaling one of them does not work. They already sit almost exactly on the
+ * unit square, so any outward scale puts the whole boundary outside the box and the clip
+ * renders as a plain rectangle. This is drawn instead: the same irregular hand, with every
+ * deviation held inside about 2% so nothing reaches the controls.
+ */
+export const SHALLOW_BLOB_PATH =
+  "M 0.014 0.024 C 0.280 0.002 0.600 0.022 0.984 0.008 " +
+  "C 0.998 0.280 0.984 0.620 0.992 0.974 " +
+  "C 0.720 0.996 0.340 0.976 0.018 0.990 " +
+  "C 0.002 0.700 0.020 0.320 0.014 0.024 Z";
+
+export const shallow = (): string => "url(#sbPlay)";
+/**
  * Which silhouette a bubble and its booking button take. Both are deliberately coprime-ish
  * walks over the six outlines, so neighbours in the grid never match and a button never
  * repeats the shell it sits inside.

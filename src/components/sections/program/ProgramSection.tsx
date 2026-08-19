@@ -75,12 +75,16 @@ export function ProgramSection() {
           }}
         >
           Tap any gathering to see who is cooking and how to get in.{" "}
-          {/* Orange, at the festival's request. It is 2.73:1 on the violet where the beige
-              around it is 7.28:1 — the same trade already made knowingly for the big script
-              headline and for the place name in an open bubble. The sentence is not the only
-              place this is said: the closing line repeats it, and every booking button names
-              its venue. */}
-          <strong style={{ fontWeight: 700, color: "var(--orange)" }}>
+          {/* Beige, and marked with the drawn stroke instead of a second colour — beige is
+              already the contrast ceiling on the violet, so emphasis has to come from weight
+              and from ink rather than from a tint. The underline is a repeating background
+              rather than `WobbleUnderline`, because this sentence wraps and an absolutely
+              positioned SVG can only underline one box.
+
+              Not bold: the drawn stroke is the emphasis, and weight on top of it made the
+              sentence shout twice. `<strong>` still carries the meaning for a screen reader,
+              which is what the element is for. */}
+          <strong className="drawn-underline" style={{ fontWeight: 400 }}>
             Every reservation is made with the venue itself.
           </strong>
         </p>

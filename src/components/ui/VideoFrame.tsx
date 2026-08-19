@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { PlayMark } from "@/components/ui/PlayMark";
-import { soft } from "@/lib/design/shapes";
+import { shallow, soft } from "@/lib/design/shapes";
 import { useHlsPlayback } from "@/lib/media/useHlsPlayback";
 import { type Clip, posterUrl, streamUrl } from "@/content/videos";
 
@@ -102,7 +102,9 @@ export function VideoFrame({
         style={{
           position: "relative",
           aspectRatio: "9 / 16",
-          clipPath: soft(shape),
+          /* Still hand-cut while playing, just shallow enough to clear the native controls
+             along the bottom edge — see SHALLOW_BLOB_PATH. */
+          clipPath: playing ? shallow() : soft(shape),
           background: "var(--chip-well)",
         }}
       >
