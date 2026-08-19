@@ -13,22 +13,22 @@ const PROSE = "400 clamp(14.5px,0.5vw + 13.1px,16px)/1.7 var(--font-body)";
  * chapters are copy, not linework, and nothing on this page moves that is not answering a
  * tap, a hover or a scroll.
  *
- * `id="purpose"` is the target of the programme page's own primary button.
+ * No eyebrow. The headline says what the section is; a mono label above it only names the
+ * genre, and this block already carries two numbered labels of its own.
+ *
+ * `id="purpose"` is the target of the in-page link from the programme.
  */
 export function Purpose() {
   return (
     <section id="purpose" style={{ maxWidth: "var(--sw)", margin: "0 auto", padding: "0 var(--gutter)" }}>
       <WobbleFlourish variant={4} />
       <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "left" }}>
-        <p className="mono" style={{ margin: 0, fontSize: 11.5, letterSpacing: ".2em", color: "var(--beige)" }}>
-          WHY WE DO THIS
-        </p>
         {/* Beige, not orange — README §3's section-h2 row and the canonical prototype both.
             The orange script belongs to the hero and the sign-offs; here it would compete
             with the two chapter statements directly below it, which are the orange. */}
         <h2
           style={{
-            margin: "16px 0 0",
+            margin: 0,
             font: "400 clamp(30px,5vw,46px)/1.14 var(--font-display)",
             color: "var(--beige)",
             textWrap: "pretty",
