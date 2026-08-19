@@ -1,5 +1,7 @@
 "use client";
 
+import { Fragment } from "react";
+
 import type { FestivalEvent } from "@/content/types";
 import { soft } from "@/lib/design/shapes";
 import type { Phase } from "@/lib/program/useBubbleReveal";
@@ -99,8 +101,17 @@ export function EventBubble({
                 color: "var(--ink-body)",
               }}
             >
-              <span style={{ fontWeight: 700, color: "var(--venue-orange)" }}>{event.venue}</span>{" "}
-              ·<span style={{ whiteSpace: "nowrap" }}> {event.time}</span>
+              <span style={{ fontWeight: 700, color: "var(--venue-orange)" }}>{event.venue}</span>
+              {/* A clock time never breaks, but a two-seating string is two of them and may.
+                  Held together as one span, "1ST SEATING 5PM · 2ND 8PM" is 219px of text in
+                  a 163px box on a phone, and it ran straight under the access mark. Each
+                  part is unbreakable; the separators between them are not. */}
+              {event.time.split(" · ").map((part) => (
+                <Fragment key={part}>
+                  {" · "}
+                  <span style={{ whiteSpace: "nowrap" }}>{part}</span>
+                </Fragment>
+              ))}
             </p>
             <p
               style={{
