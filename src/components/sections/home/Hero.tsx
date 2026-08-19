@@ -76,7 +76,7 @@ export function Hero() {
           here to set them apart. `tests/design.test.ts` holds it. */}
       <div
         style={{
-          margin: "var(--sec) auto",
+          margin: "calc(var(--sec) - 10px) auto",
           width: "fit-content",
           maxWidth: "100%",
           display: "flex",

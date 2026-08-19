@@ -110,7 +110,12 @@ describe("stylesheet rules", () => {
     // headline's margin and the space below was the hero's padding plus the film's.
     const hero = sources.find(([path]) => path === "components/sections/home/Hero.tsx")?.[1] ?? "";
     const film = sources.find(([path]) => path === "components/sections/home/TheFilm.tsx")?.[1] ?? "";
-    expect(hero, "the dateline no longer owns both sides").toMatch(/margin: "var\(--sec\) auto"/);
+    // Matched on shape, not on the exact value: what must not come back is a third value or
+    // a separate marginTop/marginBottom, which is how the two halves came apart. Trimming
+    // the number is fine and leaves them equal by construction.
+    expect(hero, "the dateline no longer owns both sides").toMatch(
+      /margin: "[^"]*var\(--sec\)[^"]*auto"/,
+    );
     expect(hero, "the headline took its bottom margin back").toMatch(/auto 0"/);
     expect(hero, "the hero pads below its dateline again").toMatch(/var\(--gutter\) 0"/);
     expect(film, "the film pads above itself again").toMatch(/padding: "0 var\(--gutter\)"/);
