@@ -77,7 +77,10 @@ export function Hero() {
           the space below to the hero's padding plus the film's, the two could not agree and it
           sat 80px under "ani sang Siargao" and 126px over the film. There is no third value
           here to set them apart. `tests/design.test.ts` holds it. */}
-      <div style={{ margin: "calc(var(--sec) - 10px) auto" }}>
+      {/* Still one owner per boundary, written as one shorthand — but no longer symmetric.
+          Once the button joined the group the two ends stopped being the same kind of gap:
+          above is the headline meeting its dateline, below is the hero meeting the film. */}
+      <div style={{ margin: "calc(var(--sec) - 10px) auto calc(var(--sec) - 45px)" }}>
         <div
           style={{
             margin: "0 auto",
@@ -114,7 +117,7 @@ export function Hero() {
           className="cta"
           style={{
             display: "inline-block",
-            marginTop: "clamp(22px,3.4vw,32px)",
+            marginTop: "clamp(30px,4.4vw,44px)",
             clipPath: soft(1),
             padding: "17px 36px 20px",
             background: "var(--beige)",
