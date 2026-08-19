@@ -41,7 +41,7 @@ export function Purpose() {
       >
         Celebrate with Us
       </Link>
-      <div style={{ maxWidth: "80vw", margin: "0 auto", textAlign: "left" }}>
+      <div style={{ maxWidth: "min(80vw,820px)", margin: "0 auto", textAlign: "left" }}>
         {/* Beige, not orange — README §3's section-h2 row and the canonical prototype both.
             The orange script belongs to the hero and the sign-offs; here it would compete
             with the two chapter statements directly below it, which are the orange. */}

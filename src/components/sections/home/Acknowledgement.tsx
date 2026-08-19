@@ -14,7 +14,7 @@ export function Acknowledgement() {
   return (
     <section style={{ maxWidth: "var(--sw)", margin: "0 auto", padding: "0 var(--gutter)" }}>
       <WobbleFlourish variant={3} />
-      <div style={{ maxWidth: "80vw", margin: "0 auto", textAlign: "center" }}>
+      <div style={{ maxWidth: "min(80vw,820px)", margin: "0 auto", textAlign: "center" }}>
         <p
           style={{
             margin: 0,
