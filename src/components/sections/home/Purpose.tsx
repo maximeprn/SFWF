@@ -23,11 +23,14 @@ export function Purpose() {
         <p className="mono" style={{ margin: 0, fontSize: 11.5, letterSpacing: ".2em", color: "var(--beige)" }}>
           WHY WE DO THIS
         </p>
+        {/* Beige, not orange — README §3's section-h2 row and the canonical prototype both.
+            The orange script belongs to the hero and the sign-offs; here it would compete
+            with the two chapter statements directly below it, which are the orange. */}
         <h2
           style={{
             margin: "16px 0 0",
             font: "400 clamp(30px,5vw,46px)/1.14 var(--font-display)",
-            color: "var(--orange)",
+            color: "var(--beige)",
             textWrap: "pretty",
           }}
         >
@@ -63,10 +66,20 @@ export function Purpose() {
                 />
               </svg>
             </div>
+            {/* Arimo 700 uppercase, not the script. README §3 calls this the "chapter
+                statement" and §6 spells it out again; `SFWF prototype.dc.html`, the canonical
+                artifact, draws it that way. Only `SFWF Home.dc.html` sets it in Beth Ellen,
+                and that file is the outlier — it is also the one still carrying Wigglye and
+                Satoshi in its footer.
+
+                This is the second uppercase-Arimo statement on the page, after the
+                acknowledgement. Both are the page stating something rather than speaking. */}
             <h3
               style={{
                 margin: "18px 0 0",
-                font: "400 clamp(25px,3.6vw,34px)/1.2 var(--font-display)",
+                font: "700 clamp(15px,0.5vw + 13.1px,17.5px)/1.34 var(--font-body)",
+                letterSpacing: ".005em",
+                textTransform: "uppercase",
                 color: "var(--orange)",
                 textWrap: "pretty",
               }}
