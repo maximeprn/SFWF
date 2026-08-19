@@ -123,7 +123,12 @@ export function Purpose() {
         >
           {PURPOSE.payoff}
         </p>
-        <p style={{ margin: "24px 0 0", font: PROSE, color: "var(--beige)", textWrap: "pretty" }}>
+        {/* Desktop only. On a phone this column is already four screens of reading before
+            the button, and the line adds no argument the two chapters have not made. */}
+        <p
+          className="hidden wide:block"
+          style={{ margin: "24px 0 0", font: PROSE, color: "var(--beige)", textWrap: "pretty" }}
+        >
           {PURPOSE.closing}
         </p>
         <Link
