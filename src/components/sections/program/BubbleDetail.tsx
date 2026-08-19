@@ -26,15 +26,22 @@ export function BubbleDetail({
 }) {
   return (
     <>
+      {/* The price lives here, so this was the worst line in the product to have set at
+          8.5px in weight 900: uppercase throws away the word shapes you read by, and 900
+          closes the counters at exactly the size where they are already collapsing. Bigger,
+          lighter, and tracked — uppercase runs this long need the air. */}
       <p
         style={{
           margin: "6px 0 0",
-          font: "900 8.5px/1.5 var(--font-body)",
+          font: "700 clamp(10.5px, 0.11vw + 10.07px, 11.5px)/1.5 var(--font-body)",
+          letterSpacing: ".03em",
           color: "var(--ink-body)",
           textTransform: "uppercase",
         }}
       >
-        <span style={{ color: "var(--orange)" }}>{placeOf(event.venue)}</span> ·{" "}
+        {/* `--orange` is 2.67:1 on beige. The design system names the substitute for exactly
+            this case and this is the line that needed it most. */}
+        <span style={{ color: "var(--orange-on-light)" }}>{placeOf(event.venue)}</span> ·{" "}
         {hintRest(event)}
       </p>
 
@@ -97,15 +104,18 @@ export function BubbleDetail({
             style={{
               alignSelf: "flex-start",
               clipPath: soft(buttonShapeIndex),
-              padding: "10px 18px 11px",
+              padding: "11px 20px 12px",
               background: "var(--orange)",
               color: "var(--beige)",
-              font: "700 12px/1.2 var(--font-body)",
+              /* Above the description, below the title. At the handoff's flat 12px the one
+                 thing in the bubble you are meant to press was set smaller than the prose
+                 you had just finished reading. */
+              font: "700 clamp(13.5px, 0.17vw + 12.84px, 15px)/1.2 var(--font-body)",
               cursor: "pointer",
               transition: "background var(--hover)",
             }}
           >
-            Message {bookNameOf(event.venue)} to reserve
+            Message {bookNameOf(event.venue)}
           </a>
         )}
       </div>
