@@ -12,9 +12,10 @@ import { HostRow } from "@/components/sections/partners/HostRow";
  * Home. The order is fixed by the festival's brief and every section is centre-spined
  * except "why we do this", which is the one left-aligned column of prose.
  *
- * The two logo rows sit together, hosts first: the programme has just named those venues
- * sixteen times, so the wall reads as the same list at a glance and the money follows. That
- * puts "why we do this" ahead of both, where the README has it ahead of the host row.
+ * Both logo rows are near the end, hosts first, with last year's clips between them: the
+ * two walls read as one long list of marks when they are adjacent, and the strip breaks
+ * them apart with the only thing on the page that moves. That puts "why we do this" ahead
+ * of all three, where the README has it ahead of the host row.
  */
 export default function HomePage() {
   return (
@@ -26,8 +27,8 @@ export default function HomePage() {
       <Acknowledgement />
       <Purpose />
       <HostRow />
-      <SponsorRow />
       <LastYear />
+      <SponsorRow />
     </>
   );
 }
