@@ -124,6 +124,11 @@ a {
   height: 18px;
   border: 0;
   background: transparent;
+  /* Not `background: transparent` alone. Safari and Firefox both keep painting some of their
+     own thumb through it — a pale square sitting behind the drawn head. Nothing about this
+     element is meant to be seen: the head is the violet tick two layers down, and the thumb
+     is here only to be dragged, which `opacity: 0` does not stop. */
+  opacity: 0;
 }
 
 .scrub::-moz-range-track,
@@ -137,6 +142,7 @@ a {
   height: 18px;
   border: 0;
   background: transparent;
+  opacity: 0;
 }
 
 /* Focus is never removed, only restyled. Nearly every focusable thing sits on the violet
