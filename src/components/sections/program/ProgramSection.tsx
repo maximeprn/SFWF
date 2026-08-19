@@ -53,8 +53,13 @@ export function ProgramSection() {
             textWrap: "pretty",
           }}
         >
-          Tap any gathering to see who is cooking and how to get in. Every reservation is
-          made with the venue itself.
+          Tap any gathering to see who is cooking and how to get in.{" "}
+          {/* Bold, same colour — the design's own emphasis rule, since beige is already the
+              ceiling on violet and a second tint would only read as a broken link. This is
+              the sentence that explains why no button on the page sells anything. */}
+          <strong style={{ fontWeight: 700 }}>
+            Every reservation is made with the venue itself.
+          </strong>
         </p>
       </section>
 
