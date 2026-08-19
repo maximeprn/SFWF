@@ -43,7 +43,11 @@ export function BubbleDetail({
           style={{
             margin: "11px 0 0",
             maxWidth: "78ch",
-            font: "400 11.5px/1.62 var(--font-body)",
+            /* Clamped, where the handoff had a flat 11.5px. Every other body value in the
+               system scales, so a fixed one never grew on a 440px bubble and — worse — left
+               the description smaller than the line-up crediting it. Prose now sits above
+               its own credit list at every width, under the title, where it belongs. */
+            font: "400 clamp(12.5px, 0.14vw + 11.95px, 13.5px)/1.62 var(--font-body)",
             color: "var(--ink-title)",
             textWrap: "pretty",
           }}
