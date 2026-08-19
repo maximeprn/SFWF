@@ -39,11 +39,23 @@ export function ProgramSection() {
 
   return (
     <>
-      {/* No "the six-day journey" headline here. It is the Program *page's* h1, and on a
-          single page it lands directly under "ani sang Siargao" — two script headlines in a
-          row, and a second h1 on a document that already has one. The standfirst carries the
-          instruction on its own; the dateline above already says how long the week is. */}
-      <section style={{ ...FRAME, padding: "clamp(14px,1.8vw,22px) var(--gutter) 0", textAlign: "center" }}>
+      {/* The headline is back. It was taken out when this was a one-pager, where it landed
+          directly under "ani sang Siargao" — two script headlines in a row, and a second h1
+          on a document that already had one. The reason it gave for going was that it is the
+          Program *page's* h1, and this is now that page: without it the route had no heading
+          element at all, only the six day names. */}
+      <section style={{ ...FRAME, padding: "var(--sec) var(--gutter) 0", textAlign: "center" }}>
+        <h1
+          style={{
+            margin: "0 auto",
+            maxWidth: "16em",
+            font: "400 clamp(38px,7vw,74px)/1.1 var(--font-display)",
+            color: "var(--orange)",
+            textWrap: "pretty",
+          }}
+        >
+          the six-day journey
+        </h1>
         <p
           style={{
             /* Above the handoff's 16px ceiling on purpose: this is the only prose on the
@@ -52,7 +64,7 @@ export function ProgramSection() {
                is 640px of line — still inside the 660px the design caps centred prose at.
                The measure is per block now; there is no --tm, because a `ch` cap grew this
                column every time the type did. */
-            margin: "0 auto",
+            margin: "clamp(14px,1.6vw,20px) auto 0",
             maxWidth: "32em",
             font: "400 clamp(15.5px,0.72vw + 11.1px,20px)/1.66 var(--font-body)",
             color: "var(--beige)",
