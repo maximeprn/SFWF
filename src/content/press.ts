@@ -1,44 +1,22 @@
 /**
- * The Press page's copy. The two unset facts — the accreditation deadline and the media
- * folder's URL — are written as unset rather than left out or invented: the festival has
- * not sent either, and a page that stays silent about a deadline reads as though there
- * isn't one.
+ * The Press page's copy, from `SFWF prototype.dc.html`.
  *
- * Every action here writes to `CONTACT_EMAIL`. The design drew a separate accreditation
- * address; the festival has since settled on one for the whole site.
+ * The media folder's URL is not here because the festival has not sent it. The page says so
+ * in its own words rather than hiding the button or inventing a link — "missing copy is
+ * stated, not hidden" is the design, and a press page with no visible media kit reads as a
+ * festival that has none.
  */
-
-export const ACCREDITATION = {
-  kicker: { lead: "NOW OPEN", rest: "ACCREDITATION" },
-  title: "Media accreditation for the 2026 festival",
-  intro:
-    "26 – 31 August 2026, bringing together celebrated chefs, culinary experts, food " +
-    "entrepreneurs and passionate food lovers from across Siargao and the world.",
-  benefits: [
-    "A media pass with entry to all main programmes across the week — demos, food discussions and live programming at every venue",
-    "Invitations to festival press conferences and the opening celebration",
-    "Interviews with chefs, speakers and festival representatives",
-  ],
-  deadline: "APPLICATIONS CLOSE ON A DATE STILL TO BE CONFIRMED",
-  cta: "Apply for accreditation",
-} as const;
-
 export const MEDIA_KIT = {
-  kicker: { lead: "MEDIA KIT", rest: "IMAGES" },
-  title: "Festival media kit",
-  intro:
-    "Our media folder holds a curated selection of high-resolution photographs available " +
-    "for download. Please credit “Siargao Food and Wine Festival” when using images in " +
-    "your coverage.",
-  /* Named tiles, not thumbnails. There are four festival photographs in total and none of
-     them is one of these — the grid says what the folder holds, it does not preview it. */
-  tiles: ["2025 GALA", "WET MARKET", "THE FARM", "LONG TABLE"],
-  link: "FOLDER LINK TO BE ADDED BY THE FESTIVAL",
+  heading: "Festival media kit",
+  body:
+    "In our Media Folder, you will find a curated selection of high-resolution photos " +
+    "available for download. Please credit ‘Siargao Food and Wine Festival’ when using " +
+    "photos for your coverage.",
+  cta: "Download the media kit (PDF)",
+  note: "PDF LINK TO BE ADDED",
 } as const;
 
-export const PRESS_STATS = [
-  { figure: "6", label: "THEMED DAYS" },
-  { figure: "9", label: "MUNICIPALITIES" },
-  { figure: "30+", label: "COLLABORATORS" },
-  { figure: "2nd", label: "EDITION" },
-] as const;
+export const COVERING = {
+  heading: "Covering the Festival?",
+  body: "Tell us what you’re working on and we’ll put you with the right people on the island.",
+} as const;

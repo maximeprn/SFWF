@@ -107,13 +107,12 @@ export function BubbleDetail({
               flex: "none",
               clipPath: soft(buttonShapeIndex),
               padding: "16px 28px",
-              /* Orange, with the near-black every other orange button in the product uses.
-                 README §3's colour table is explicit — "Button label #191218, on orange and
-                 beige buttons" — and it is the reading that survives contrast: the canonical
-                 prototype draws a beige label here, which is 1.9:1 and puts the one thing you
-                 are meant to press below the prose above it. */
+              /* Beige on orange. The prototype splits its buttons by face: a Baloo primary
+                 CTA takes #191218, an Arimo in-content button takes beige, and this is the
+                 second kind. It is 1.9:1 and that is a real cost — raise it with the
+                 festival rather than in this file, as with the hint line's orange. */
               background: "var(--orange)",
-              color: "var(--button-ink)",
+              color: "var(--beige)",
               font: "700 14.5px/1.2 var(--font-body)",
               cursor: "pointer",
               transition: "background var(--hover)",

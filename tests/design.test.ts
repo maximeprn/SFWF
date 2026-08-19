@@ -234,13 +234,12 @@ describe("chrome", () => {
     expect(stripComments(menu)).not.toMatch(/background(Color)?\s*:/);
   });
 
-  it("carries the three routes and one primary button, per page", () => {
+  it("carries the three routes and exactly one primary button", () => {
+    // README §1: "with View Program pinned right as the one primary button." One button,
+    // one label, every route — not a per-page CTA, which is what the per-section prototypes
+    // suggested and what this shipped by mistake.
     expect(NAV_LINKS.map((l) => l.href)).toEqual(["/", "/program", "/press"]);
-    for (const link of NAV_LINKS) {
-      const cta = NAV_CTA[link.href];
-      expect(cta.label, link.href).toBeTruthy();
-      // The button never points at the page you are already on.
-      expect(cta.href, link.href).not.toBe(link.href);
-    }
+    expect(NAV_CTA.label).toBe("View Program");
+    expect(NAV_CTA.href).toBe("/program");
   });
 });

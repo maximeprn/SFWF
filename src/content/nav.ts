@@ -1,11 +1,10 @@
-import { CONTACT_EMAIL } from "./site";
-
 /**
  * The three routes, and the one primary button that sits beside them.
  *
- * The CTA is per page and is always the thing you have not seen yet: Home sends you to the
- * programme, the programme sends you to the argument for the festival, and Press sends you
- * to a person. There is never more than one, and none of them sells anything.
+ * There is exactly one button and it says the same thing everywhere — README §1: "Nav order:
+ * Home · Program · Press, with View Program pinned right as the one primary button." An
+ * earlier build gave each page its own CTA; that came from the per-section prototypes, which
+ * are brainstorming sheets rather than the design.
  */
 export interface NavLink {
   readonly href: "/" | "/program" | "/press";
@@ -18,16 +17,4 @@ export const NAV_LINKS: readonly NavLink[] = [
   { href: "/press", label: "Press" },
 ];
 
-export interface NavCta {
-  readonly href: string;
-  readonly label: string;
-  /** Blob index, so no two pages draw the button in the same silhouette. */
-  readonly shape: number;
-}
-
-export const NAV_CTA: Record<NavLink["href"], NavCta> = {
-  "/": { href: "/program", label: "View the Program", shape: 2 },
-  "/program": { href: "/#purpose", label: "Why we do this", shape: 3 },
-  /* Press asks for a person rather than a page. */
-  "/press": { href: `mailto:${CONTACT_EMAIL}`, label: "Apply for a pass", shape: 1 },
-};
+export const NAV_CTA = { href: "/program", label: "View Program", shape: 2 } as const;

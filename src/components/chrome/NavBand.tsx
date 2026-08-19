@@ -23,8 +23,6 @@ export function NavBand({
   readonly menuOpen: boolean;
   readonly onToggleMenu: () => void;
 }) {
-  const cta = NAV_CTA[route];
-
   return (
     <header style={{ position: "sticky", top: 0, zIndex: 60, pointerEvents: "none" }}>
       <div
@@ -67,12 +65,12 @@ export function NavBand({
         </nav>
 
         <Link
-          href={cta.href}
+          href={NAV_CTA.href}
           className="cta hidden wide:block"
           style={{
             justifySelf: "end",
             pointerEvents: "auto",
-            clipPath: soft(cta.shape),
+            clipPath: soft(NAV_CTA.shape),
             padding: "12px 24px 15px",
             background: "var(--orange)",
             color: "var(--button-ink)",
@@ -81,7 +79,7 @@ export function NavBand({
             transition: "background var(--hover)",
           }}
         >
-          {cta.label}
+          {NAV_CTA.label}
         </Link>
 
         {/* The one organic border-radius in the product, and the only surface that carries

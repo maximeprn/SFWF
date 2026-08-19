@@ -1,148 +1,108 @@
-import { ACCREDITATION, MEDIA_KIT, PRESS_STATS } from "@/content/press";
+import Image from "next/image";
+import { COVERING, MEDIA_KIT } from "@/content/press";
+import { PHOTOS } from "@/content/photos";
 import { CONTACT_EMAIL } from "@/content/site";
 import { soft } from "@/lib/design/shapes";
-import { CARD_PROSE, CardNote, PressCard } from "./PressCard";
 
-const FRAME = { maxWidth: "var(--sw)", margin: "0 auto" } as const;
-const GRID = { maxWidth: 1000, margin: "0 auto", display: "grid", alignItems: "start" } as const;
+const FRAME = {
+  maxWidth: "var(--sw)",
+  margin: "0 auto",
+  padding: "var(--sec) var(--gutter) 0",
+} as const;
+
+const HEADING = "400 clamp(24px,3.4vw,32px)/1.2 var(--font-display)";
+const PROSE = "400 clamp(14.5px,0.5vw + 13.1px,16px)/1.7 var(--font-body)";
+
+/* The two the prototype places here: the long table at dusk, and the lights in the palms. */
+const SPREAD = [
+  { photo: PHOTOS[2]!, alt: "The long communal table at dusk", shape: 0 },
+  { photo: PHOTOS[3]!, alt: "String lights strung between the palms", shape: 1 },
+];
 
 /**
- * The media centre. Two cards, four figures, and a way to reach a person.
+ * The media centre: the kit, two photographs, and a way to reach a person.
  *
- * There are no photographs on it. The design of record drops the pair the README sketched,
- * and it is right to: the festival has four images in total, none of them is a press image,
- * and a page that promises a media folder should not illustrate itself with the only four
- * pictures the site already uses elsewhere.
+ * Left-aligned, unlike Home. This is the one page a reader arrives at with a job to do
+ * rather than a festival to be told about, and centred prose is for announcements.
+ *
+ * There is no accreditation card and there are no stat blobs. README §6 describes both, and
+ * they were built once from `SFWF Press.dc.html` — but that file is a brainstorming sheet,
+ * and the canonical prototype draws this page as the two sections below.
  */
 export function PressSection() {
   return (
     <>
-      <section style={{ ...FRAME, padding: "clamp(30px,5vw,60px) var(--gutter) 0", textAlign: "center" }}>
-        <p className="mono" style={{ margin: "0 0 14px", fontSize: 11.5, letterSpacing: ".2em", color: "var(--beige)" }}>
-          PRESS
-        </p>
-        <h1
-          style={{
-            margin: "0 auto",
-            maxWidth: "16em",
-            font: "400 clamp(38px,7vw,74px)/1.1 var(--font-display)",
-            color: "var(--orange)",
-            textWrap: "pretty",
-          }}
-        >
-          media centre
+      <section style={FRAME}>
+        <h1 style={{ margin: 0, font: HEADING, color: "var(--beige)", textWrap: "pretty" }}>
+          {MEDIA_KIT.heading}
         </h1>
-        <p
+        <p style={{ margin: "10px 0 0", maxWidth: "42em", font: PROSE, color: "var(--beige)", textWrap: "pretty" }}>
+          {MEDIA_KIT.body}
+        </p>
+
+        {/* The button is drawn even though it has nowhere to go yet, and the line under it
+            says why. Hiding it until the folder exists would leave the page claiming a media
+            kit it never offers. */}
+        <span
+          className="cta-in-bubble"
+          aria-disabled="true"
           style={{
-            margin: "20px auto 0",
-            maxWidth: "38em",
-            font: "400 clamp(15px,0.6vw + 13.3px,16.5px)/1.7 var(--font-body)",
+            display: "inline-block",
+            marginTop: 16,
+            clipPath: soft(2),
+            padding: "12px 22px 14px",
+            background: "var(--orange)",
             color: "var(--beige)",
-            textWrap: "pretty",
+            font: "700 clamp(13px,0.3vw + 12.1px,14.5px)/1.2 var(--font-body)",
           }}
         >
-          We’re available to assist media outlets, journalists and food content creators
-          needing information, images, video and interviews for coverage of the festival.
+          {MEDIA_KIT.cta}
+        </span>
+        <p
+          className="mono"
+          style={{ margin: "9px 0 0", fontSize: 11, letterSpacing: ".14em", color: "var(--beige)" }}
+        >
+          {MEDIA_KIT.note}
         </p>
-      </section>
 
-      <section style={{ ...FRAME, padding: "clamp(44px,6vw,72px) var(--gutter) 0" }}>
-        <div style={{ ...GRID, gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,300px),1fr))", gap: 14 }}>
-          <PressCard shape={0} kicker={ACCREDITATION.kicker} title={ACCREDITATION.title}>
-            <p style={{ margin: "12px 0 0", font: `400 ${CARD_PROSE}`, color: "var(--ink-body)", textWrap: "pretty" }}>
-              {ACCREDITATION.intro}
-            </p>
-            <ul style={{ margin: "16px 0 0", paddingLeft: 20, font: `400 ${CARD_PROSE}`, color: "var(--ink-body)" }}>
-              {ACCREDITATION.benefits.map((benefit, i) => (
-                <li key={benefit} style={{ marginBottom: i < ACCREDITATION.benefits.length - 1 ? 8 : 0 }}>
-                  {benefit}
-                </li>
-              ))}
-            </ul>
-            {/* Written as unset, not omitted. A page with no deadline on it reads as a page
-                with no deadline. */}
-            <CardNote>{ACCREDITATION.deadline}</CardNote>
-            <a
-              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Media accreditation 2026")}`}
-              className="cta-in-bubble on-beige"
+        <div
+          style={{
+            margin: "clamp(24px,3.4vw,38px) 0 0",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,260px),1fr))",
+            gap: "clamp(14px,2.2vw,24px)",
+          }}
+        >
+          {SPREAD.map(({ photo, alt, shape }) => (
+            <Image
+              key={photo.src}
+              src={photo.src}
+              alt={alt}
+              width={photo.width}
+              height={photo.height}
+              loading="lazy"
               style={{
-                display: "inline-block",
-                marginTop: 18,
-                clipPath: soft(1),
-                padding: "15px 26px 17px",
-                background: "var(--ink-body)",
-                color: "var(--cream)",
-                font: "700 14.5px/1.2 var(--font-body)",
-                transition: "background var(--hover)",
+                display: "block",
+                width: "100%",
+                height: "auto",
+                aspectRatio: "2 / 1",
+                objectFit: "cover",
+                clipPath: soft(shape),
               }}
-            >
-              {ACCREDITATION.cta}
-            </a>
-          </PressCard>
-
-          <PressCard shape={1} kicker={MEDIA_KIT.kicker} title={MEDIA_KIT.title}>
-            <p style={{ margin: "12px 0 0", font: `400 ${CARD_PROSE}`, color: "var(--ink-body)", textWrap: "pretty" }}>
-              {MEDIA_KIT.intro}
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginTop: 18 }}>
-              {MEDIA_KIT.tiles.map((tile) => (
-                <div key={tile} className="kit-tile">
-                  <p className="mono" style={{ margin: 0, fontSize: 11, letterSpacing: ".12em", color: "var(--ink-body)" }}>
-                    {tile}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <CardNote>{MEDIA_KIT.link}</CardNote>
-          </PressCard>
-        </div>
-      </section>
-
-      <section style={{ ...FRAME, padding: "clamp(44px,6vw,72px) var(--gutter) 0" }}>
-        <div style={{ ...GRID, gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,220px),1fr))", gap: 12 }}>
-          {PRESS_STATS.map((stat, i) => (
-            <div key={stat.label} style={{ background: "var(--beige)", clipPath: soft(i), padding: "22px 26px 26px" }}>
-              {/* `--orange-on-light`, not the bright orange: these sit on beige, where
-                  #E9622D is 2.67:1 and this is 5.99:1. */}
-              <p style={{ margin: 0, font: "400 34px/1 var(--font-display)", color: "var(--orange-on-light)" }}>
-                {stat.figure}
-              </p>
-              <p className="mono" style={{ margin: "8px 0 0", fontSize: 11, letterSpacing: ".16em", color: "var(--ink-body)" }}>
-                {stat.label}
-              </p>
-            </div>
+            />
           ))}
         </div>
       </section>
 
-      <section style={{ ...FRAME, padding: "clamp(50px,6.4vw,76px) var(--gutter) 0", textAlign: "center" }}>
-        <h2
-          style={{
-            margin: "0 auto",
-            maxWidth: "22em",
-            font: "400 clamp(24px,3.4vw,32px)/1.24 var(--font-display)",
-            color: "var(--beige)",
-            textWrap: "pretty",
-          }}
-        >
-          Covering the Festival?
+      <section style={FRAME}>
+        <h2 style={{ margin: 0, font: HEADING, color: "var(--beige)", textWrap: "pretty" }}>
+          {COVERING.heading}
         </h2>
-        <p
-          style={{
-            margin: "16px auto 0",
-            maxWidth: "32em",
-            font: "400 clamp(14.5px,0.5vw + 13.1px,16px)/1.7 var(--font-body)",
-            color: "var(--beige)",
-            textWrap: "pretty",
-          }}
-        >
-          Tell us what you’re working on and we’ll put you with the right people on the island.
+        <p style={{ margin: "10px 0 0", maxWidth: "36em", font: PROSE, color: "var(--beige)", textWrap: "pretty" }}>
+          {COVERING.body}
         </p>
-        {/* The address is set, not boxed. README §6 ends this page on "the email in Beth
-            Ellen", and the prototype draws it as a plain script link that turns orange —
-            a button here would be the third primary CTA on one page, after the nav's and
-            the accreditation card's, and this is an invitation rather than an action. */}
-        <p style={{ margin: "16px 0 0" }}>
+        {/* Set, not boxed: this is an invitation, and the page already has a button on it. */}
+        <p style={{ margin: "14px 0 0" }}>
           <a
             href={`mailto:${CONTACT_EMAIL}`}
             style={{
