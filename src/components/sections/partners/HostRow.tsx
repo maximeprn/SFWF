@@ -48,7 +48,7 @@ export function HostRow() {
             src={host.src}
             alt={host.name}
             intrinsic={host.intrinsic}
-            style={{ width: host.width, height: "auto" }}
+            style={{ width: `calc(${host.width}px * var(--mark-scale))`, height: "auto" }}
           />
         ))}
       </div>

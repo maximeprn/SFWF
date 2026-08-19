@@ -75,6 +75,12 @@
    * not less. The floor is now the number that matters and the ramp only adds to it. */
   --sec: clamp(94px, 3.45vw + 80.6px, 125px);
 
+  /* Every partner and host mark is a hand-tuned px width, set against the 1180px column —
+     see `HOST_LOGOS`. Those numbers do not shrink on their own, so on a phone three marks
+     and their gaps overrun the 342px of content there is. One multiplier keeps the whole
+     row in proportion rather than re-tuning fifteen numbers for a second width. */
+  --mark-scale: 0.7;
+
   /* The air a section flourish carries on each side. The flourish owns both halves — see
      `WobbleFlourish` — because when the space above it belonged to the section's padding and
      the space below it to the flourish's own margin, the two had no way to agree and the
@@ -88,6 +94,12 @@
   /* Every colour hover in the product, and the one overshoot: the footer marks standing up. */
   --hover: 0.15s ease;
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (min-width: 860px) {
+  :root {
+    --mark-scale: 1;
+  }
 }
 
 /* There is no --hs token. The hero's second step above 1100px is carried by the vw term

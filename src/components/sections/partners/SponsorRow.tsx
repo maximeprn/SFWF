@@ -52,7 +52,7 @@ export function SponsorRow() {
             /* Per-mark width, height derived — the host row's rule, for the host row's
                reason. The handoff's common height was set for four landscape wordmarks;
                it cannot also serve four square badges. Widths live in `SPONSORS`. */
-            style={{ width: sponsor.width, height: "auto", maxWidth: "100%" }}
+            style={{ width: `calc(${sponsor.width}px * var(--mark-scale))`, height: "auto", maxWidth: "100%" }}
           />
         ))}
       </div>
