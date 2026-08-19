@@ -3,14 +3,12 @@
 import Image from "next/image";
 import { useState } from "react";
 import { PlayMark } from "@/components/ui/PlayMark";
-import { shallow, soft } from "@/lib/design/shapes";
+import { mediaFrame } from "@/lib/design/shapes";
 import { useHlsPlayback } from "@/lib/media/useHlsPlayback";
 import { type Clip, posterUrl, streamUrl } from "@/content/videos";
 
 interface VideoFrameProps {
   readonly clip: Clip;
-  /** Which of the six hand-cut outlines this frame takes. */
-  readonly shape: number;
   /** CSS width of the frame. The design sets the film and the strip to different caps. */
   readonly width: string;
   /** Rendered width in px, doubled for the poster so Mux cuts it at 2x. */
@@ -87,7 +85,6 @@ function PosterFace({
  */
 export function VideoFrame({
   clip,
-  shape,
   width,
   posterWidth,
   priority,
@@ -102,9 +99,9 @@ export function VideoFrame({
         style={{
           position: "relative",
           aspectRatio: "9 / 16",
-          /* Still hand-cut while playing, just shallow enough to clear the native controls
-             along the bottom edge — see SHALLOW_BLOB_PATH. */
-          clipPath: playing ? shallow() : soft(shape),
+          /* One outline, paused and playing alike: a frame must not change shape when it
+             is tapped. See MEDIA_BLOB_PATH for why it is shallower than the six. */
+          clipPath: mediaFrame(),
           background: "var(--chip-well)",
         }}
       >

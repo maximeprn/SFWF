@@ -88,12 +88,10 @@ export function LastYear() {
         ref={rail}
         className="rail last-year-rail"
       >
-        {LAST_YEAR.map((clip, i) => (
+        {LAST_YEAR.map((clip) => (
           <div key={clip.id} style={{ flex: "0 0 auto" }}>
             <VideoFrame
               clip={clip}
-              /* Offset by one so the first clip never repeats the film's silhouette. */
-              shape={(i + 1) % 6}
               width={CLIP}
               posterWidth={208}
               showCaption

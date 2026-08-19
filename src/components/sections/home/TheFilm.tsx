@@ -26,7 +26,7 @@ export function TheFilm() {
         justifyContent: "center",
       }}
     >
-      <VideoFrame clip={FILM} shape={0} width="min(72vw,268px)" posterWidth={268} priority />
+      <VideoFrame clip={FILM} width="min(72vw,268px)" posterWidth={268} priority />
     </section>
   );
 }
