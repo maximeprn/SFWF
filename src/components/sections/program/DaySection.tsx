@@ -41,48 +41,55 @@ export function DaySection({
     <div style={{ padding: "clamp(22px,3vw,32px) 0 clamp(14px,2vw,20px)" }}>
       <WobbleRule style={{ margin: "0 0 clamp(22px,3vw,32px)" }} />
 
+      {/* Date, name and marker on one baseline — the doodle punctuates the heading rather
+          than sitting beside a stack of two lines. */}
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          gap: 5,
+          flexWrap: "wrap",
+          alignItems: "center",
+          gap: "10px 16px",
           margin: "0 0 clamp(16px,2.2vw,22px)",
         }}
       >
         <p
           className="mono"
-          style={{ margin: 0, fontSize: 11, letterSpacing: ".2em", color: "var(--beige)" }}
+          style={{ margin: 0, fontSize: 12, letterSpacing: ".2em", color: "var(--beige)" }}
         >
           {day.date}
         </p>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <h2
-            style={{
-              margin: 0,
-              font: "400 clamp(19.8px,2.42vw,24.2px)/1.16 var(--font-display)",
-              color: "var(--beige)",
-            }}
-          >
-            {day.name}
-          </h2>
-          <Image
-            src={`/doodles/beige/${day.icon}.png`}
-            alt=""
-            width={w}
-            height={h}
-            style={{ width: day.iconWidth, height: "auto", flex: "none" }}
-          />
-        </div>
+        <h2
+          style={{
+            margin: 0,
+            font: "400 clamp(26px,3.4vw,30px)/1.15 var(--font-display)",
+            color: "var(--beige)",
+          }}
+        >
+          {day.name}
+        </h2>
+        <Image
+          src={`/doodles/beige/${day.icon}.png`}
+          alt=""
+          width={w}
+          height={h}
+          style={{ width: day.iconWidth, height: "auto", flex: "none" }}
+        />
       </div>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,280px),1fr))",
+          /* Two up at the full frame, and no cap on the grid itself: the 440px cap on each
+             bubble is what holds the row, so every gathering draws the same width whether
+             its day has one or four. A grid narrow enough to make the tracks land on 440
+             would only reintroduce the difference, because a collapsed auto-fit track hands
+             a lone bubble the whole row.
+             At the old 280px minimum this drew four columns of 249px, and the type below
+             was rebuilt at sizes that column cannot hold — a 21px open title wants the
+             380px this one gives it. */
+          gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,380px),1fr))",
           gap: 12,
           alignItems: "start",
-          maxWidth: "calc(var(--sw) - 148px)",
         }}
       >
         {day.events.map((event, eventIndex) => (

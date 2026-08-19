@@ -10,8 +10,9 @@ import { FESTIVAL_DATES, SITE } from "@/content/site";
  * there is nothing for one to link to — the phase 2 Home gets it back when the page grows
  * a film and an island intro between the two.
  *
- * Everything scales off `--hs`, which is 1 until 1100px and 1.4 above it. That is the
- * design's second step and the only place the hero and the rest of the page disagree.
+ * Every size is the design of record's own clamp, applied directly. The earlier build
+ * multiplied a smaller set by --hs above 1100px, which is the same ramp expressed twice:
+ * the vw term already carries it, and it landed the dateline 30% over.
  */
 export function Hero() {
   return (
@@ -19,7 +20,7 @@ export function Hero() {
       style={{
         maxWidth: "var(--sw)",
         margin: "0 auto",
-        padding: "calc(clamp(34px,5vw,58px) * var(--hs) * var(--hs)) var(--gutter) 0",
+        padding: "clamp(44px,7vw,86px) var(--gutter) clamp(30px,4vw,44px)",
         textAlign: "center",
       }}
     >
@@ -28,7 +29,7 @@ export function Hero() {
           position: "relative",
           display: "inline-block",
           maxWidth: "100%",
-          paddingTop: "calc(22px * var(--hs))",
+          paddingTop: "clamp(26px,3.6vw,40px)",
         }}
       >
         <Mark
@@ -36,15 +37,15 @@ export function Hero() {
           alt={SITE.name}
           intrinsic={[780, 321]}
           priority
-          style={{ width: "calc(min(46vw, 300px) * var(--hs))", height: "auto" }}
+          style={{ width: "min(50vw,490px)", height: "auto" }}
         />
         <p
           style={{
             position: "absolute",
-            bottom: "calc(100% + 2px)",
+            bottom: "calc(100% + 3px)",
             right: 0,
             margin: 0,
-            font: "400 calc(clamp(16.5px,2.2vw,22px) * var(--hs))/1 var(--font-display)",
+            font: "400 clamp(19px,2.5vw,29px)/1 var(--font-display)",
             color: "var(--beige)",
             whiteSpace: "nowrap",
             transform: "rotate(-4deg)",
@@ -58,9 +59,9 @@ export function Hero() {
       {/* Lowercase is the voice, not a text-transform — the festival writes it this way. */}
       <h1
         style={{
-          margin: "calc(14px * var(--hs)) auto calc(clamp(26px,4vw,40px) * var(--hs))",
-          maxWidth: "14em",
-          font: "400 calc(clamp(35.2px,5.94vw,61.6px) * var(--hs))/1.1 var(--font-display)",
+          margin: "clamp(14px,2.4vw,22px) auto clamp(52px,7.2vw,80px)",
+          maxWidth: "15em",
+          font: "400 clamp(46px,8.4vw,88px)/1.06 var(--font-display)",
           color: "var(--orange)",
           textWrap: "pretty",
         }}
@@ -71,10 +72,12 @@ export function Hero() {
       <div
         style={{
           margin: "0 auto",
+          width: "fit-content",
+          maxWidth: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: "clamp(10px,2vw,18px)",
+          gap: "clamp(12px,2vw,20px)",
         }}
       >
         <WobbleTick />
@@ -82,8 +85,8 @@ export function Hero() {
           className="mono"
           style={{
             margin: 0,
-            fontSize: "calc(clamp(11px,1.54vw,12.65px) * var(--hs))",
-            letterSpacing: ".22em",
+            fontSize: "clamp(11.5px,1.6vw,13.5px)",
+            letterSpacing: ".24em",
             color: "var(--beige)",
             whiteSpace: "nowrap",
           }}

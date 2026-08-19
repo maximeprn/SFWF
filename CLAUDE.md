@@ -72,6 +72,11 @@ different festival.
 - **Never add a `pointerup`, `pointerleave` or `pointercancel` handler to the dye.** Lifting off
   is not an event it cares about — the field stops being fed and coasts.
 - **Colours come from `src/styles/tokens.css`.** Never hardcode a hex or an rgba in a component.
+- **Type comes from `PHASE-1-TYPE-SCALE.md`, not README §7.** Prose 15–16.5px, bubble title 15.5–17
+  closed / 18–21 open, description 14.5–16, mono eyebrows 11–12, and **nothing under 11px**. There
+  is no global reading measure — `ch` is font-relative, so a `ch` cap grows every time the type
+  does; each block carries its own cap. The frame is 1180px: `--sw` (1132px of content) plus two
+  24px gutters.
 - **Motion is response, not ambience.** The bubble reveal, colour hovers, the footer marks
   standing upright, and the dye. Nothing else moves — no scroll reveals, no fade-ins, no
   parallax, and hand-drawn strokes never draw themselves on.

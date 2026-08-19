@@ -52,7 +52,7 @@ export function DayFilter({
         style={{
           width: "min(56%,300px)",
           height: "auto",
-          margin: "25px auto clamp(10px,1.6vw,18px)",
+          margin: "clamp(34px,4.4vw,54px) auto clamp(10px,1.6vw,18px)",
         }}
       />
 
@@ -80,20 +80,20 @@ export function DayFilter({
               style={{ flex: "none", padding: 0, background: "transparent", border: 0, cursor: "pointer", textAlign: "center" }}
             >
               {pick === tab.key ? (
-                <span style={{ display: "block", background: "var(--beige)", clipPath: soft(i), padding: "7px 13px 9px" }}>
-                  <span className="mono" style={{ display: "block", fontSize: 9.35, letterSpacing: ".14em", color: "var(--orange-on-light)" }}>
+                <span style={{ display: "block", background: "var(--beige)", clipPath: soft(i), padding: "9px 16px 11px" }}>
+                  <span className="mono" style={{ display: "block", fontSize: 12, letterSpacing: ".14em", color: "var(--orange-on-light)" }}>
                     {tab.date}
                   </span>
-                  <span style={{ display: "block", marginTop: 1, font: "400 17.6px/1.1 var(--font-display)", color: "var(--ink-title)", whiteSpace: "nowrap" }}>
+                  <span style={{ display: "block", marginTop: 1, font: "400 clamp(15px,0.5vw + 11.8px,18px)/1.1 var(--font-display)", color: "var(--ink-title)", whiteSpace: "nowrap" }}>
                     {tab.name}
                   </span>
                 </span>
               ) : (
-                <span className="day-chip-off" style={{ display: "block", padding: "7px 9px 9px", opacity: 0.7, transition: "opacity var(--hover)" }}>
-                  <span className="mono" style={{ display: "block", fontSize: 9.35, letterSpacing: ".14em", color: "var(--beige)" }}>
+                <span className="day-chip-off" style={{ display: "block", padding: "9px 12px 11px", opacity: 0.7, transition: "opacity var(--hover)" }}>
+                  <span className="mono" style={{ display: "block", fontSize: 12, letterSpacing: ".14em", color: "var(--beige)" }}>
                     {tab.date}
                   </span>
-                  <span style={{ display: "block", marginTop: 1, font: "400 clamp(13.2px,0.55vw + 9.24px,15.95px)/1.1 var(--font-display)", color: "var(--beige)", whiteSpace: "nowrap" }}>
+                  <span style={{ display: "block", marginTop: 1, font: "400 clamp(15px,0.5vw + 11.8px,18px)/1.1 var(--font-display)", color: "var(--beige)", whiteSpace: "nowrap" }}>
                     {tab.name}
                   </span>
                 </span>
@@ -105,7 +105,10 @@ export function DayFilter({
 
       {/* Below 860px the chips carry dates only — one line, no script, so the row reads as
           a control rather than a second block of headline. */}
-      <div className="flex wide:hidden" style={{ flexWrap: "wrap", gap: 6 }}>
+      <div
+        className="flex wide:hidden"
+        style={{ flexWrap: "wrap", gap: 6, marginTop: "clamp(28px,4vw,40px)" }}
+      >
         {TABS.map((tab, i) => (
           <button
             key={String(tab.key)}
@@ -115,11 +118,11 @@ export function DayFilter({
             style={{ flex: "none", padding: 0, background: "transparent", border: 0, cursor: "pointer" }}
           >
             {pick === tab.key ? (
-              <span className="mono" style={{ display: "block", padding: "8px 13px 9px", clipPath: soft(i), background: "var(--orange)", fontSize: 12.1, letterSpacing: ".1em", color: "var(--beige)" }}>
+              <span className="mono" style={{ display: "block", padding: "8px 13px 9px", clipPath: soft(i), background: "var(--orange)", fontSize: 12, letterSpacing: ".1em", color: "var(--beige)" }}>
                 {tab.short}
               </span>
             ) : (
-              <span className="mono day-chip-off" style={{ display: "block", margin: "1px 0", padding: "6px 11px 7px", clipPath: soft(i), background: "var(--chip-well)", fontSize: 11, letterSpacing: ".1em", color: "var(--beige)", opacity: 0.72, transition: "opacity var(--hover)" }}>
+              <span className="mono day-chip-off" style={{ display: "block", margin: "1px 0", padding: "6px 11px 7px", clipPath: soft(i), background: "var(--chip-well)", fontSize: 11.5, letterSpacing: ".1em", color: "var(--beige)", opacity: 0.72, transition: "opacity var(--hover)" }}>
                 {tab.short}
               </span>
             )}

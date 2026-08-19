@@ -11,7 +11,7 @@ import { SocialMark } from "./SocialMark";
  */
 export function Footer() {
   return (
-    <footer style={{ marginTop: "clamp(44px,5vw,68px)" }}>
+    <footer style={{ marginTop: "clamp(50px,6.4vw,80px)" }}>
       <div
         style={{
           maxWidth: "calc(var(--sw) + 60px)",
@@ -25,7 +25,7 @@ export function Footer() {
         style={{
           maxWidth: "var(--sw)",
           margin: "0 auto",
-          padding: "clamp(24px,3vw,34px) var(--gutter) clamp(28px,3.4vw,40px)",
+          padding: "clamp(28px,4vw,40px) var(--gutter)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -61,7 +61,7 @@ export function Footer() {
           <a
             href={`mailto:${CONTACT_EMAIL}`}
             style={{
-              font: "400 17.6px/1 var(--font-display)",
+              font: "400 20px/1 var(--font-display)",
               color: "var(--beige)",
               transition: "color var(--hover)",
             }}

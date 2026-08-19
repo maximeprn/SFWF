@@ -33,11 +33,12 @@
   --venue-orange: #f9621b; /* the bold venue name in a collapsed kicker, only */
   --orange-on-light: #8f3a12; /* orange text on beige/light grounds */
   --button-ink: #191218; /* label on orange and beige buttons */
+  --cream: #f7f3e4; /* the one ink that clears contrast on violet (8.4:1) */
   --bubble-hover: #f2f0d4;
   --orange-hover: #f27a49; /* primary buttons */
-  --orange-hover-in-bubble: #d4551f;
   --hairline-beige: rgba(233, 231, 194, 0.4); /* drawn rules on the ground */
   --hairline-beige-strong: rgba(233, 231, 194, 0.5);
+  --chip-edge: rgba(233, 231, 194, 0.45); /* the day filter's drawn chip edge */
   --hairline-violet: rgba(79, 63, 121, 0.3); /* the drawn rule inside an open bubble */
 
   /* Three tints, each with exactly one job. They are alpha over the palette, never a
@@ -51,13 +52,20 @@
   /* The palette's cyan is in the brand and used nowhere on the site yet. It stays unused
      rather than being found a job, so it is deliberately not a token here. */
 
-  /* ── layout ───────────────────────────────────────────────────────────── */
-  --sw: 1040px; /* content column */
-  --tm: 80ch; /* reading measure; sections cap at --tm, or --tm ± 2–8ch */
-  --hs: 1; /* hero scale — the media query below raises it where there is room */
-  --gutter: clamp(18px, 5vw, 52px);
-  --gutter-program: clamp(24px, 7vw, 76px);
-  --sec: clamp(34px, 4.6vw, 54px);
+  /* ── layout ─────────────────────────────────────────────────────────────
+     One column, one gutter. 1040px and the 80ch measure were the prototype's own frame,
+     trimmed narrow; every type value in the design of record was measured at 1180px + 24px
+     instead. There is deliberately no global measure token: `ch` is font-relative, so 80ch
+     at the shipped prose size resolves to ~700–740px of line, well past comfortable. Each
+     block carries its own cap in the component that owns it.
+
+     --sw is the *content* width, so a section is --sw + two gutters = the design's 1180px
+     frame. The handoff writes it the other way round (max-width 1180 with the padding
+     inside) because its prototypes run on the browser default box-sizing; this product
+     restores content-box, which the 440px bubble cap depends on — see globals.css. */
+  --sw: 1132px; /* content column; 1180px frame less its two gutters */
+  --gutter: 24px;
+  --sec: clamp(40px, 5.4vw, 62px);
 
   /* ── motion ───────────────────────────────────────────────────────────── */
   --ease: cubic-bezier(0.22, 0.75, 0.2, 1);
@@ -67,10 +75,6 @@
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* The hero grows only where there is room for it. One breakpoint at 860px carries the
-   whole layout; this second step is the hero alone. */
-@media (min-width: 1100px) {
-  :root {
-    --hs: 1.4;
-  }
-}
+/* There is no --hs token. The hero's second step above 1100px is carried by the vw term
+   inside each of its own clamps — clamp(46px, 8.4vw, 88px) lands on its maximum at a
+   1048px viewport — so a separate multiplier would apply the ramp twice. */

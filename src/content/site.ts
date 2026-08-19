@@ -67,20 +67,24 @@ export type SocialName = (typeof SOCIALS)[number]["name"];
  * over the wordmarks, since a wordmark's bounding box is mostly the whitespace between
  * letters. These sit between the two, then were nudged per mark against the rendered row.
  *
+ * Every width here is 1.27x the number tuned against the old 1040px column — the factor
+ * the design of record's own host row sits at once the column is 1180. The nudges are
+ * preserved; only the scale moved.
+ *
  * They are our numbers, not the festival's. Anyone with the real brand book should feel
  * free to overrule them.
  */
 export const SPONSORS = [
-  { name: "Happy Living Philippines", src: "/sponsors/happy-living.png", width: 74, intrinsic: [560, 338] },
-  { name: "Modulus", src: "/sponsors/modulus.png", width: 114, intrinsic: [640, 188] },
-  { name: "Destileria Limtuaco", src: "/sponsors/destileria-limtuaco.svg", width: 138, intrinsic: [2022, 416] },
-  { name: "Galatea Tours Siargao", src: "/sponsors/galatea.svg", width: 94, intrinsic: [2311, 955] },
-  { name: "Coconut Cruisers", src: "/sponsors/coconut-cruisers.svg", width: 52, intrinsic: [388, 391] },
-  { name: "Greenhouse", src: "/sponsors/greenhouse.svg", width: 110, intrinsic: [734, 271] },
-  { name: "Masterplan Global", src: "/sponsors/masterplan-global.svg", width: 60, intrinsic: [837, 713] },
-  { name: "Ripple", src: "/sponsors/ripple.svg", width: 123, intrinsic: [852, 243] },
-  { name: "The Henry", src: "/sponsors/the-henry.svg", width: 56, intrinsic: [383, 371] },
-  { name: "Tropika", src: "/sponsors/tropika.svg", width: 56, intrinsic: [395, 395] },
+  { name: "Happy Living Philippines", src: "/sponsors/happy-living.png", width: 94, intrinsic: [560, 338] },
+  { name: "Modulus", src: "/sponsors/modulus.png", width: 145, intrinsic: [640, 188] },
+  { name: "Destileria Limtuaco", src: "/sponsors/destileria-limtuaco.svg", width: 175, intrinsic: [2022, 416] },
+  { name: "Galatea Tours Siargao", src: "/sponsors/galatea.svg", width: 119, intrinsic: [2311, 955] },
+  { name: "Coconut Cruisers", src: "/sponsors/coconut-cruisers.svg", width: 66, intrinsic: [388, 391] },
+  { name: "Greenhouse", src: "/sponsors/greenhouse.svg", width: 140, intrinsic: [734, 271] },
+  { name: "Masterplan Global", src: "/sponsors/masterplan-global.svg", width: 76, intrinsic: [837, 713] },
+  { name: "Ripple", src: "/sponsors/ripple.svg", width: 156, intrinsic: [852, 243] },
+  { name: "The Henry", src: "/sponsors/the-henry.svg", width: 71, intrinsic: [383, 371] },
+  { name: "Tropika", src: "/sponsors/tropika.svg", width: 71, intrinsic: [395, 395] },
 ] as const;
 
 /**
@@ -97,19 +101,19 @@ export const SPONSORS = [
  * that pair is out, so the row is a wall of logos with nothing lettered among them.
  */
 export const HOST_LOGOS = [
-  { name: "Wild Siargao", src: "/venues/beige/wild.png", width: 34, intrinsic: [114, 174] },
-  { name: "Alma", src: "/venues/beige/alma.png", width: 84, intrinsic: [318, 141] },
-  { name: "Lokal Lab", src: "/venues/beige/lokal-lab.png", width: 60, intrinsic: [249, 147] },
-  { name: "Lyma", src: "/venues/beige/lyma.png", width: 64, intrinsic: [246, 147] },
-  { name: "Kermit Siargao", src: "/venues/beige/kermit.png", width: 60, intrinsic: [228, 147] },
-  { name: "Bravo Beach Resort", src: "/venues/beige/bravo.png", width: 46, intrinsic: [156, 165] },
-  { name: "Roots Siargao", src: "/venues/beige/roots.png", width: 92, intrinsic: [372, 138] },
-  { name: "Lamari", src: "/venues/beige/lamari.png", width: 86, intrinsic: [348, 75] },
-  { name: "Hue Hotels & Resorts Siargao", src: "/venues/beige/hue.png", width: 62, intrinsic: [237, 138] },
-  { name: "Sagana Siargao", src: "/venues/beige/sagana.png", width: 58, intrinsic: [560, 421] },
-  { name: "Paraluman Siargao", src: "/venues/beige/paraluman.png", width: 78, intrinsic: [560, 296] },
-  { name: "Isla Panciteria", src: "/venues/beige/isla-panciteria.png", width: 74, intrinsic: [560, 309] },
-  { name: "Cev Siargao", src: "/venues/beige/cev.png", width: 78, intrinsic: [620, 246] },
-  { name: "Lunares Café", src: "/venues/beige/lunares.png", width: 48, intrinsic: [420, 420] },
-  { name: "Siargao Corner Café", src: "/venues/beige/siargao-corner-cafe.png", width: 48, intrinsic: [1120, 1121] },
+  { name: "Wild Siargao", src: "/venues/beige/wild.png", width: 43, intrinsic: [114, 174] },
+  { name: "Alma", src: "/venues/beige/alma.png", width: 107, intrinsic: [318, 141] },
+  { name: "Lokal Lab", src: "/venues/beige/lokal-lab.png", width: 76, intrinsic: [249, 147] },
+  { name: "Lyma", src: "/venues/beige/lyma.png", width: 81, intrinsic: [246, 147] },
+  { name: "Kermit Siargao", src: "/venues/beige/kermit.png", width: 76, intrinsic: [228, 147] },
+  { name: "Bravo Beach Resort", src: "/venues/beige/bravo.png", width: 58, intrinsic: [156, 165] },
+  { name: "Roots Siargao", src: "/venues/beige/roots.png", width: 117, intrinsic: [372, 138] },
+  { name: "Lamari", src: "/venues/beige/lamari.png", width: 109, intrinsic: [348, 75] },
+  { name: "Hue Hotels & Resorts Siargao", src: "/venues/beige/hue.png", width: 79, intrinsic: [237, 138] },
+  { name: "Sagana Siargao", src: "/venues/beige/sagana.png", width: 74, intrinsic: [560, 421] },
+  { name: "Paraluman Siargao", src: "/venues/beige/paraluman.png", width: 99, intrinsic: [560, 296] },
+  { name: "Isla Panciteria", src: "/venues/beige/isla-panciteria.png", width: 94, intrinsic: [560, 309] },
+  { name: "Cev Siargao", src: "/venues/beige/cev.png", width: 99, intrinsic: [620, 246] },
+  { name: "Lunares Café", src: "/venues/beige/lunares.png", width: 61, intrinsic: [420, 420] },
+  { name: "Siargao Corner Café", src: "/venues/beige/siargao-corner-cafe.png", width: 61, intrinsic: [1120, 1121] },
 ] as const;

@@ -134,7 +134,7 @@ a {
     background: var(--orange-hover);
   }
   .cta-in-bubble:hover {
-    background: var(--orange-hover-in-bubble);
+    background: var(--ink-title);
   }
   .day-chip-off:hover {
     opacity: 1;

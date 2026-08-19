@@ -132,7 +132,7 @@ export function WobbleTick({ flip = false }: { readonly flip?: boolean }) {
         display: "block",
         flex: "none",
         height: 12,
-        width: "calc(clamp(54px, 10vw, 110px) * var(--hs))",
+        width: "clamp(72px, 12vw, 130px)",
         transform: flip ? "scaleX(-1)" : undefined,
       }}
     >

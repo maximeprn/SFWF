@@ -60,16 +60,16 @@ export function EventBubble({
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "space-between",
-            gap: 20,
+            gap: 18,
             paddingRight: 6,
           }}
         >
-          {/* The title grows rather than being replaced — 13.2–14.5 up to 15–16.5. */}
+          {/* The title grows rather than being replaced — 15.5–17 up to 18–21. */}
           <p
             style={{
               margin: 0,
-              maxWidth: "22em",
-              font: "700 clamp(16.5px,0.22vw + 15.675px,18.15px)/1.3 var(--font-body)",
+              maxWidth: "26em",
+              font: "700 clamp(18px,1.05vw + 14.6px,21px)/1.22 var(--font-body)",
               color: "var(--ink-title)",
               textWrap: "pretty",
             }}
@@ -84,7 +84,7 @@ export function EventBubble({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 14,
+            gap: 16,
           }}
         >
           <div style={{ minWidth: 0 }}>
@@ -92,9 +92,9 @@ export function EventBubble({
               className="mono"
               style={{
                 margin: "0 0 7px",
-                fontSize: 11,
+                fontSize: 11.5,
                 lineHeight: 1.5,
-                letterSpacing: ".14em",
+                letterSpacing: ".16em",
                 color: "var(--ink-body)",
               }}
             >
@@ -104,7 +104,7 @@ export function EventBubble({
             <p
               style={{
                 margin: 0,
-                font: "700 clamp(14.52px,0.154vw + 13.97px,15.95px)/1.35 var(--font-body)",
+                font: "700 clamp(15.5px,0.7vw + 13.3px,17px)/1.35 var(--font-body)",
                 color: "var(--ink-title)",
                 textWrap: "pretty",
               }}

@@ -19,20 +19,20 @@ export function AccessMark({
         flex: "none",
         display: "flex",
         alignItems: "center",
-        gap: 10,
-        marginTop: chevron === "▴" ? 3 : undefined,
+        gap: 13,
+        marginTop: chevron === "▴" ? 4 : undefined,
       }}
     >
-      <div style={{ flex: "none", display: "flex", alignItems: "center", gap: 6 }}>
+      <div style={{ flex: "none", display: "flex", alignItems: "center", gap: 7 }}>
         {dot && (
           <span
             aria-hidden="true"
-            style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--orange)" }}
+            style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--orange)" }}
           />
         )}
         <span
           className="mono"
-          style={{ fontSize: 11, letterSpacing: ".12em", color: "var(--ink-body)" }}
+          style={{ fontSize: 11.5, letterSpacing: ".14em", color: "var(--ink-body)" }}
         >
           {word}
         </span>
@@ -40,7 +40,7 @@ export function AccessMark({
       {/* The chevron flips with no transition — it is a state, not a movement. */}
       <span
         aria-hidden="true"
-        style={{ flex: "none", font: "700 12.1px/1 var(--font-body)", color: "var(--chevron)" }}
+        style={{ flex: "none", font: "700 13px/1 var(--font-body)", color: "var(--chevron)" }}
       >
         {chevron}
       </span>

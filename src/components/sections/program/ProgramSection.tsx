@@ -7,7 +7,7 @@ import { DayFilter, type DayPick } from "./DayFilter";
 import { DaySection } from "./DaySection";
 
 const FRAME = {
-  maxWidth: "calc(var(--sw) - 60px)",
+  maxWidth: "var(--sw)",
   margin: "0 auto",
 } as const;
 
@@ -43,12 +43,18 @@ export function ProgramSection() {
           single page it lands directly under "ani sang Siargao" — two script headlines in a
           row, and a second h1 on a document that already has one. The standfirst carries the
           instruction on its own; the dateline above already says how long the week is. */}
-      <section style={{ ...FRAME, padding: "clamp(28px,4vw,46px) var(--gutter-program) 0", textAlign: "center" }}>
+      <section style={{ ...FRAME, padding: "clamp(14px,1.8vw,22px) var(--gutter) 0", textAlign: "center" }}>
         <p
           style={{
+            /* Above the handoff's 16px ceiling on purpose: this is the only prose on the
+               page and the one instruction anybody has to read, and at 16px on a 1180px
+               frame it read as a caption. It keeps climbing to 20px at 1240px, where 32em
+               is 640px of line — still inside the 660px the design caps centred prose at.
+               The measure is per block now; there is no --tm, because a `ch` cap grew this
+               column every time the type did. */
             margin: "0 auto",
-            maxWidth: "calc(var(--tm) - 8ch)",
-            font: "400 clamp(14.08px,0.209vw + 13.31px,15.95px)/1.66 var(--font-body)",
+            maxWidth: "32em",
+            font: "400 clamp(15.5px,0.72vw + 11.1px,20px)/1.66 var(--font-body)",
             color: "var(--beige)",
             textWrap: "pretty",
           }}
@@ -61,24 +67,21 @@ export function ProgramSection() {
             Every reservation is made with the venue itself.
           </strong>
         </p>
+        <DayFilter pick={pick} onPick={onPick} />
       </section>
 
-      <section style={{ ...FRAME, padding: "clamp(22px,3.2vw,34px) var(--gutter-program) 0" }}>
-        <DayFilter pick={pick} onPick={onPick} />
+      <section style={{ ...FRAME, padding: "clamp(30px,4vw,46px) var(--gutter) 0" }}>
         <p
           className="mono"
           style={{
-            margin: "clamp(26px,3.4vw,38px) 0 0",
-            fontSize: 11,
+            margin: "0 0 8px",
+            fontSize: 11.5,
             letterSpacing: ".2em",
             color: "var(--beige)",
           }}
         >
           {count}
         </p>
-      </section>
-
-      <section style={{ ...FRAME, padding: "clamp(14px,2vw,20px) var(--gutter-program) 0" }}>
         {shown.map((day) => (
           <DaySection
             key={day.id}
@@ -90,12 +93,12 @@ export function ProgramSection() {
         ))}
       </section>
 
-      <section style={{ ...FRAME, padding: "clamp(30px,4vw,46px) var(--gutter-program) 0", textAlign: "center" }}>
+      <section style={{ ...FRAME, padding: "clamp(44px,6vw,72px) var(--gutter) 0", textAlign: "center" }}>
         <p
           style={{
             margin: "0 auto",
             maxWidth: "24em",
-            font: "400 clamp(20.9px,2.64vw,27.5px)/1.28 var(--font-display)",
+            font: "400 clamp(24px,3.4vw,32px)/1.24 var(--font-display)",
             color: "var(--beige)",
             textWrap: "pretty",
           }}

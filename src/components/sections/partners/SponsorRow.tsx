@@ -21,7 +21,7 @@ export function SponsorRow() {
              more air under it than a paragraph would to read as a label rather than as the
              first thing in the row. */
           margin: "0 0 clamp(26px,3.2vw,36px)",
-          fontSize: 11.55,
+          fontSize: 11.5,
           letterSpacing: ".2em",
           color: "var(--beige)",
         }}
@@ -34,10 +34,10 @@ export function SponsorRow() {
           flexWrap: "wrap",
           justifyContent: "center",
           alignItems: "center",
-          gap: "clamp(22px,3.6vw,38px)",
+          gap: "clamp(22px,3.6vw,40px)",
           /* Same measure as the host row directly above. Left at the full column the ten
              marks pack 8 + 2 at desktop and the last two read as stragglers. */
-          maxWidth: 880,
+          maxWidth: 980,
           margin: "clamp(4px,1vw,10px) auto 0",
         }}
       >

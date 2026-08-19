@@ -4,11 +4,9 @@ import { bookNameOf, instagramUrl, placeOf } from "@/content/venues";
 import { access, hintRest } from "@/lib/program/eventCopy";
 import { soft } from "@/lib/design/shapes";
 
-const ITALIC_NOTE = {
-  margin: "11px 0 0",
-  font: "italic 400 clamp(13.2px,0.121vw + 12.76px,14.3px)/1.5 var(--font-body)",
-  color: "var(--ink-body)",
-} as const;
+/* Size and face only — every use below prefixes its own weight and style. */
+const META = "clamp(13.5px,0.3vw + 12.8px,14.5px)/1.45 var(--font-body)";
+const PROSE = "clamp(14.5px,0.5vw + 13.1px,16px)/1.6 var(--font-body)";
 
 /**
  * What an open bubble says. The venue has left the kicker and joined the time and price on
@@ -26,17 +24,16 @@ export function BubbleDetail({
 }) {
   return (
     <>
-      {/* The price lives here, so this was the worst line in the product to have set at
-          8.5px in weight 900: uppercase throws away the word shapes you read by, and 900
-          closes the counters at exactly the size where they are already collapsing. Bigger,
-          lighter, and tracked — uppercase runs this long need the air. */}
+      {/* Sentence case, regular weight. This line was set uppercase in 900 at 8.5px, which
+          is the worst treatment available for the one place a price appears: uppercase
+          throws away the word shapes you read by, and 900 closes the counters at exactly the
+          size where they are already collapsing. Uppercase belongs to the mono roles — the
+          eyebrows, dates and access marks — and to nothing else. */}
       <p
         style={{
-          margin: "6px 0 0",
-          font: "700 clamp(11.55px, 0.121vw + 11.077px, 12.65px)/1.5 var(--font-body)",
-          letterSpacing: ".03em",
+          margin: "7px 0 0",
+          font: `400 ${META}`,
           color: "var(--ink-body)",
-          textTransform: "uppercase",
         }}
       >
         {/* The bright orange, as the prototype draws it — and knowingly: it is 2.67:1 on
@@ -51,13 +48,12 @@ export function BubbleDetail({
       {event.desc ? (
         <p
           style={{
-            margin: "11px 0 0",
-            maxWidth: "78ch",
-            /* Clamped, where the handoff had a flat 11.5px. Every other body value in the
-               system scales, so a fixed one never grew on a 440px bubble and — worse — left
-               the description smaller than the line-up crediting it. Prose now sits above
-               its own credit list at every width, under the title, where it belongs. */
-            font: "400 clamp(13.75px, 0.154vw + 13.145px, 14.85px)/1.62 var(--font-body)",
+            margin: "14px 0 0",
+            /* A cap that never binds at this width — the bubble stops at 440px long before
+               900 does. It is here so the block keeps its own measure when phase 2 gives
+               the programme a page to itself. */
+            maxWidth: 900,
+            font: `400 ${PROSE}`,
             color: "var(--ink-title)",
             textWrap: "pretty",
           }}
@@ -65,35 +61,38 @@ export function BubbleDetail({
           {event.desc}
         </p>
       ) : (
-        <p style={{ ...ITALIC_NOTE, fontSize: "clamp(14.08px,0.209vw + 13.31px,15.95px)", lineHeight: 1.62 }}>
+        <p style={{ margin: "14px 0 0", font: `italic 400 ${PROSE}`, color: "var(--ink-body)" }}>
           Program details to be announced.
         </p>
       )}
 
+      <div style={{ marginTop: 14 }}>
+        <WobbleRule tone="violet" />
+      </div>
+
+      {/* Line-up and booking on one line, wrapping to two when the bubble is too narrow to
+          hold both — which at 440px is most of them. */}
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          gap: 13,
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 18,
           marginTop: 14,
         }}
       >
-        <WobbleRule tone="violet" />
-        {event.who ? (
-          <p
-            style={{
-              margin: 0,
-              maxWidth: "52ch",
-              font: "400 clamp(13.2px,0.121vw + 12.76px,14.3px)/1.5 var(--font-body)",
-              color: "var(--ink-body)",
-            }}
-          >
-            {event.who}
-          </p>
-        ) : (
-          <p style={{ ...ITALIC_NOTE, margin: 0 }}>Line-up to be announced</p>
-        )}
+        <p
+          style={{
+            margin: 0,
+            flex: 1,
+            minWidth: 150,
+            font: event.who ? `400 ${META}` : `italic 400 ${META}`,
+            color: "var(--ink-body)",
+          }}
+        >
+          {event.who ?? "Line-up to be announced"}
+        </p>
 
         {/* Only on bookable events, and it stops the tap short of the bubble so following
             the link never collapses what you were reading. */}
@@ -105,15 +104,15 @@ export function BubbleDetail({
             onClick={(e) => e.stopPropagation()}
             className="cta-in-bubble on-beige"
             style={{
-              alignSelf: "flex-start",
+              flex: "none",
               clipPath: soft(buttonShapeIndex),
-              padding: "11px 20px 12px",
-              background: "var(--orange)",
-              color: "var(--beige)",
-              /* Above the description, below the title. At the handoff's flat 12px the one
-                 thing in the bubble you are meant to press was set smaller than the prose
-                 you had just finished reading. */
-              font: "700 clamp(14.85px, 0.187vw + 14.124px, 16.5px)/1.2 var(--font-body)",
+              padding: "16px 28px",
+              /* Violet fill, cream label — 8.4:1. The earlier beige-on-orange was 1.9:1,
+                 which put the one thing in the bubble you are meant to press below the
+                 legibility of the prose above it. */
+              background: "var(--ink-body)",
+              color: "var(--cream)",
+              font: "700 14.5px/1.2 var(--font-body)",
               cursor: "pointer",
               transition: "background var(--hover)",
             }}

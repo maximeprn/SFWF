@@ -3,6 +3,28 @@
 **For:** the developer (Claude Code) working in `siargaofoodfest` — the Next.js app already live.
 **Date:** 19 August 2026. **Festival:** 26–31 August 2026, Siargao Island, Philippines.
 
+> ## ⛔ Corrections after the first handoff pass — read these first
+>
+> The first implementation added two things this document never asked for. Both must be removed and
+> neither may be reintroduced:
+>
+> 1. **No grain, noise, film or paper overlay. Anywhere.** Not on the ground, not on the bubbles, not
+>    on images, not at low opacity, not as a `background-blend-mode`, not as an SVG `feTurbulence`, not
+>    as a repeating PNG. **The dye cloth is the only texture in this design.** If a surface looks flat,
+>    that is the design working correctly.
+> 2. **Do not push the colour.** The palette is exactly four hexes — `#4F3F79` violet, `#E9622D`
+>    orange, `#E9E7C2` beige, `#65C6BD` cyan (unused) — plus the derived inks in §3. No `filter:
+>    saturate()`, `contrast()`, `brightness()` or `hue-rotate()` on the ground or on any surface; no
+>    gradient over the violet; no third colour introduced to "warm it up". The ground hex is never
+>    lightened or darkened, and the dye is remapped to **two palette colours only**.
+>
+> The dye ground ships at **coverage 40, wash 50** (§8's tweak list) — those exact numbers, locked to
+> width, never `cover`. Higher coverage or wash reads as "too strong colours" and is wrong.
+>
+> Content corrections from the festival's own poster set — three confirmed times, the fuller Slow Food
+> line, Last Chance on the Mam-on chef's table, Hiyas Farm removed, six added sponsor marks — are
+> specified in `CLAUDE-CODE-2026-08-19-content-update.md` in this bundle.
+
 ---
 
 ## Overview
@@ -207,7 +229,10 @@ Google Fonts one-liner used by every page:
 <link href="https://fonts.googleapis.com/css2?family=Beth+Ellen&family=Baloo+2:wght@400;700&family=Arimo:wght@400;500;700&display=swap" rel="stylesheet">
 ```
 
-Scale as shipped in the prototype (the "6c" scale, trimmed for the 1040px column):
+⚠️ **The table below is the prototype's own scale, trimmed for its narrow 1040px column. Do not
+build from it.** Used at full width it renders everything too small — that is what happened on the
+first pass. The shipped scale, at the 1180px content column, is in **`PHASE-1-TYPE-SCALE.md`**;
+build from that file and treat this one as historical.
 
 | Role | Value |
 |---|---|
@@ -232,16 +257,45 @@ Scale as shipped in the prototype (the "6c" scale, trimmed for the 1040px column
 | Primary button | `700 12.5–13.5px/1` Baloo 2, `.02em` |
 | In-bubble button | `700 12px/1.2` Arimo, beige on orange |
 
+(Again: those are 1040px-column numbers. `PHASE-1-TYPE-SCALE.md` has the ones to ship — bubble title
+15.5–17px closed, 18–21px open, description 14.5–16px, mono eyebrows 11–12px, nothing under 11px.)
+
 Set the **display faces in lowercase** where the design does — "ani sang Siargao", "the six-day
 journey", "the whole island is the venue". That lowercase is the voice, not a CSS transform.
 
 ## Layout variables
 
+⚠️ **Same trap as the type table: these are the prototype's frame values, not the shipped ones.**
+`--sw: 1040px` / `--tm: 80ch` belong to the narrow prototype column. Ship the numbers in the second
+block — the measure especially: `ch` scales with font-size, so 80ch at the shipped prose size
+(15–16.5px) is ≈700–740px of line, well past comfortable. The design of record caps each block
+explicitly instead.
+
 ```css
+/* prototype — historical */
 --sw: 1040px;   /* content column. Tweakable 840–1320 in the prototype */
 --tm: 80ch;     /* reading measure; sections cap at --tm, --tm ± 2–8ch. Fallback literal 58ch */
 --hs: 1.4;      /* hero scale, applied only at ≥1100px; 1 below that */
 ```
+
+```css
+/* ship these */
+--sw: 1180px;   /* content column, side padding 24px */
+--hs: 1.4;      /* hero scale, only at ≥1100px; 1 below that */
+```
+
+No global `--tm`. Per-block caps, as measured off `SFWF Home.dc.html` / `SFWF Programme.dc.html`:
+
+| Block | Cap |
+|---|---|
+| Centred intro prose, hero | `620px` |
+| Centred section prose (what it is, acknowledgement) | `660px` |
+| Left-aligned purpose column | `680px` |
+| Programme intro line | `32em` |
+| Open bubble description | `900px` |
+| Open bubble title | `26em` |
+| Script sign-off | `24em` |
+| Hero `h1` / programme `h1` | `15em` / `16em` |
 
 Gutter `clamp(18px, 5vw, 52px)` · Program gutter `clamp(24px, 7vw, 76px)` inside
 `calc(var(--sw) - 60px)` · section rhythm `clamp(34px, 4.6vw, 54px)` top padding, with the
@@ -432,8 +486,9 @@ divider except where noted.
    (`clamp(13.5px, .22vw + 12.67px, 15.5px)/1.55`, `.01em`) — "THE SIARGAO FOOD & WINE FESTIVAL IS
    HELD ON THE LAND AND WATERS OF THE PEOPLE OF SIARGAO." — then two prose paragraphs. It sits **on
    the dye**; no beige band, no box.
-6. **Partners.** Eyebrow `OFFICIAL PARTNERS AND SPONSORS`, the four sponsor marks
-   (`assets/sponsors/`: Happy Living, Modulus, Destileria Limtuaco, Galatea Tours) knocked to beige
+6. **Partners.** Eyebrow `OFFICIAL PARTNERS AND SPONSORS`, the ten sponsor marks
+   (`assets/sponsors/`: Happy Living, Masterplan Global, Modulus, Destileria Limtuaco, Galatea Tours,
+   Greenhouse, Ripple, The Henry, Coconut Cruisers, Tropika) knocked to beige
    at `height: clamp(24px,2.8vw,32px)`, `gap: clamp(22px,3.6vw,38px)`. The same row repeats on Press.
 7. **Why we do this.** The one left-aligned block, `max-width: calc(var(--tm) + 4ch)`.
    Eyebrow → h2 *"Siargao grows less of its own food every year."* → two chapters, each:
@@ -443,8 +498,8 @@ divider except where noted.
    grow."* (Arimo 700 `clamp(15.5px, .6vw + 13.2px, 18.5px)`), a closing line, and the orange
    **See the Program** CTA. **No root-system drawing and no scroll reveal** — this is copy, not
    linework; the live site's `.purpose .rv.on .cr path` machinery is not used here.
-8. **Host logos.** Eyebrow `HOSTED ACROSS THE ISLAND BY`, fifteen beige venue logos plus two
-   type-set names (Hiyas Farm, Tropical Academy) in Beth Ellen 20px. The row is **not a link** —
+8. **Host logos.** Eyebrow `HOSTED ACROSS THE ISLAND BY`, fifteen beige venue logos plus one
+   type-set name (Tropical Academy) in Beth Ellen 20px. The row is **not a link** —
    the prototype wraps it in one to `/venues`, which no longer exists. Per-logo widths are in the prototype markup and are hand-tuned for optical weight —
    copy them (`wild 30 · alma 84 · lokal-lab 66 · lyma 64 · kermit 60 · bravo 42 · roots 98 ·
    lamari 92 · hue 62 · sagana 58 · paraluman 78 · isla-panciteria 74 · cev 72 · lunares 48 ·
@@ -626,7 +681,7 @@ width.
 
 ### AUG 27 · THU 27 · "ocean day" — icon `fish` (40px)
 - **SIARGAO CORNER CAFÉ** · 8AM – 11AM · *Brewed by the Pioneers* · FREE
-- **GL PUBLIC MARKET** · TIME TBD · *Wet market experience by Roots* · À LA CARTE
+- **GL PUBLIC MARKET** · 4PM – 6PM · *Wet market experience by Roots* · À LA CARTE
 - **ALMA** · 1ST SEATING 5PM · 2ND 8PM · *Alma × CMD Supper Club tasting menu* · TBD
 
 ### AUG 28 · FRI 28 · "coconut day" — icon `coconut` (32px)
@@ -637,12 +692,12 @@ width.
 
 ### AUG 29 · SAT 29 · "producer day" — icon `dish` (34px)
 - **TROPICAL ACADEMY SAN ISIDRO** · DAYTIME · *Island meets the Outback* · TBD
-- **KERMIT** · TIME TBD · *Kermit pizza eating contest!* · TBD · no line-up on record
+- **KERMIT** · 4PM · *Kermit pizza eating contest!* · TBD · no line-up on record
 - **LAMARI** · 6:30PM · *Lamari presents "The Bounty of Siargao"* · ₱1,500
 - **PARALUMAN** · 9PM – 1AM · *After dinner bar feature* · TBD · **no line-up, no description**
 
 ### AUG 30 · SUN 30 · "community day" — icon `ukulele` (22px)
-- **MAM-ON ISLAND** · MORNING · *Island style chef's table* · ₱6,000 / HEAD
+- **MAM-ON ISLAND** · 9AM – 5PM · *Island style chef's table* · ₱6,000 / HEAD
 - **BRAVO** · 4PM – 9PM · *Siargao Mercado* · OPEN FOR ALL
 - **SAGANA** · 4PM – 11PM · *Salo salo sa Sagana* · ₱2,000
 
@@ -714,7 +769,7 @@ under the same relative paths the prototypes use.
 | `assets/photography/*.png` | Four festival photographs |
 | `assets/dye-hr/violet-orange-hr.jpg` | Baked dye fallback for static contexts |
 | `design_handoff_dye_flow_background/assets/indigo-shibori.png` | **The source cloth — it is blue.** Nothing on the site is blue: the remap in §4 turns it violet + orange at runtime. `assets/dye-hr/ground-rendered.png` is what it becomes |
-| `assets/sponsors/*` | The four sponsor marks used in "OFFICIAL PARTNERS AND SPONSORS": Happy Living, Modulus, Destileria Limtuaco, Galatea Tours (also present in `assets/venues/beige/`) |
+| `assets/sponsors/*` | The ten sponsor marks used in "OFFICIAL PARTNERS AND SPONSORS": Happy Living, Masterplan Global, Modulus, Destileria Limtuaco, Galatea Tours, Greenhouse, Ripple, The Henry, Coconut Cruisers, Tropika (also present in `assets/venues/beige/`) |
 
 **Rules.** The doodles and the wobble strokes are hand-drawn — no Lucide, no Heroicons, no redrawn
 SVGs, no emoji: the wobble *is* the brand. Venue marks are always the beige knockout on the dye,
@@ -742,7 +797,7 @@ superseded system.
 | `support.js`, `image-slot.js` | Prototype runtime and the image drop-zone. **Do not port** |
 | `_shots/` | Full-page screenshots, one per screen per breakpoint (390 · 900 · 1440) + an opened-bubble state. `_shots/README.md` explains the capture caveats |
 | `assets/dye-hr/ground-rendered.png` | The dye ground as actually rendered — violet with orange stains. Use this to sanity-check your remap output |
-| `assets/sponsors/` | The four sponsor marks, split out of `assets/venues/beige/` for clarity |
+| `assets/sponsors/` | The ten sponsor marks, split out of `assets/venues/beige/` for clarity |
 
 Prototype tweaks, and where they land: `heroScale 1.4` → `--hs` above 1100px · `readingWidth 80ch`
 → `--tm` · `contentWidth 1040px` → `--sw` · `multiOpen true` → independent bubbles · `showDoodles true` → day markers on ·

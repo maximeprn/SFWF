@@ -21,8 +21,8 @@ export function HostRow() {
           /* A touch more than the sponsors' — fifteen marks over three lines is a denser
              block, and the label has to clear it. */
           margin: "0 0 clamp(28px,3.4vw,40px)",
-          fontSize: 11.55,
-          letterSpacing: ".2em",
+          fontSize: 11,
+          letterSpacing: ".22em",
           color: "var(--beige)",
           textAlign: "center",
         }}
@@ -35,8 +35,8 @@ export function HostRow() {
           flexWrap: "wrap",
           alignItems: "center",
           justifyContent: "center",
-          gap: "clamp(16px,2.6vw,30px)",
-          maxWidth: 880,
+          gap: "clamp(20px,3.4vw,42px)",
+          maxWidth: 980,
           margin: "0 auto",
         }}
       >
