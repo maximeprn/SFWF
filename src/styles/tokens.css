@@ -65,7 +65,21 @@
      restores content-box, which the 440px bubble cap depends on — see globals.css. */
   --sw: 1132px; /* content column; 1180px frame less its two gutters */
   --gutter: 24px;
-  --sec: clamp(40px, 5.4vw, 62px);
+  /* The gap between two sections.
+   *
+   * Written as an offset rather than a bare `vw` term for a reason: a bare term collapses on
+   * a phone — 5.4vw is 20px at 375, so the old value sat on its 40px floor across every
+   * mobile width while desktop took 62. That is backwards. Stacked in one column with no
+   * horizontal separation to help them, sections need *more* air to read as separate blocks,
+   * not less. The floor is now the number that matters and the ramp only adds to it. */
+  --sec: clamp(94px, 3.45vw + 80.6px, 125px);
+
+  /* The air a section flourish carries on each side. The flourish owns both halves — see
+     `WobbleFlourish` — because when the space above it belonged to the section's padding and
+     the space below it to the flourish's own margin, the two had no way to agree and the
+     wave sat 71px under the last logo and 27px over the next label. Half a break, so a
+     decorated boundary still measures one `--sec` plus the wave's own height. */
+  --flourish-air: calc(var(--sec) / 2);
 
   /* ── motion ───────────────────────────────────────────────────────────── */
   --ease: cubic-bezier(0.22, 0.75, 0.2, 1);

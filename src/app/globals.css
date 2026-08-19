@@ -71,6 +71,36 @@ a {
   display: none;
 }
 
+/* The last-year strip.
+ *
+ * Below the breakpoint the first clip is centred, so a phone opens on one whole clip with
+ * the next peeking in. At 860px and up it sits flush with the content column, in line with
+ * the eyebrow above it and with every other section on the page.
+ *
+ * The snap alignment has to move with it. Under `x mandatory`, `center` is what makes the
+ * centred first clip a resting position; leave it on at desktop and the first touch drags a
+ * left-aligned strip back to the middle. `start` is the same promise for a flush strip. */
+.last-year-rail {
+  display: flex;
+  gap: 36px;
+  scroll-snap-type: x mandatory;
+  padding-inline: calc((100% - var(--clip-w)) / 2);
+}
+
+.last-year-rail > * {
+  scroll-snap-align: center;
+}
+
+@media (min-width: 860px) {
+  .last-year-rail {
+    padding-inline: 0;
+  }
+
+  .last-year-rail > * {
+    scroll-snap-align: start;
+  }
+}
+
 /* Focus is never removed, only restyled. Nearly every focusable thing sits on the violet
    ground, where beige is the only ink that clears contrast; the one exception is the
    booking button inside a beige bubble, whose ring lands on beige. */

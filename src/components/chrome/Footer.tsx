@@ -10,8 +10,11 @@ import { SocialMark } from "./SocialMark";
  * system where the only other moving thing is the dye.
  */
 export function Footer() {
+  /* The last section boundary on the page, so it takes the same rhythm as every other one.
+     Its own clamp collapsed to 50px on a phone, which read as the footer riding up into the
+     content while the sections above it had 72px of air. */
   return (
-    <footer style={{ marginTop: "clamp(50px,6.4vw,80px)" }}>
+    <footer style={{ marginTop: "var(--sec)" }}>
       <div
         style={{
           maxWidth: "calc(var(--sw) + 60px)",

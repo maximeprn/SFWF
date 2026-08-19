@@ -78,6 +78,12 @@ export function WobbleKicker() {
 /**
  * The two decorative section flourishes. Each carries its own slight rotation so no two
  * sit level — that tilt is the point, not a rounding error.
+ *
+ * A flourish owns the air on *both* sides of itself, and owns it as a two-value margin —
+ * `<air> auto` — so the two halves cannot drift apart: there is no third value to set. A
+ * section that opens with one therefore takes no top padding of its own, or the space above
+ * would be the section's and the space below the flourish's, which is exactly how this ended
+ * up 71px over and 27px under. `tests/design.test.ts` holds both halves of that rule.
  */
 const FLOURISHES = [
   {
@@ -96,9 +102,44 @@ const FLOURISHES = [
     opacity: 0.72,
     rotate: -1.2,
   },
+  {
+    d:
+      "M2 14 C 18 4 34 20 50 9 C 64 1 78 18 96 12 C 112 7 122 20 140 10 " +
+      "C 154 3 168 17 184 11 C 196 8 204 14 214 9",
+    width: 1.8,
+    opacity: 0.74,
+    rotate: 0.9,
+  },
+  {
+    d:
+      "M3 9 C 14 19 28 3 42 13 C 58 22 70 5 88 15 C 104 23 118 6 136 14 " +
+      "C 150 20 162 4 178 12 C 192 18 202 8 214 13",
+    width: 1.85,
+    opacity: 0.73,
+    rotate: -0.7,
+  },
+  {
+    d:
+      "M2 11 C 14 21 28 2 44 13 C 58 22 72 3 88 13 C 104 22 118 4 136 13 " +
+      "C 152 21 166 3 182 12 C 196 19 206 9 214 12",
+    width: 1.8,
+    opacity: 0.75,
+    rotate: 1.1,
+  },
+  {
+    d:
+      "M3 13 C 15 3 27 22 40 11 C 54 1 68 20 84 9 C 100 1 114 19 132 10 " +
+      "C 148 2 162 18 178 9 C 192 2 202 17 214 11",
+    width: 1.75,
+    opacity: 0.71,
+    rotate: -1.1,
+  },
 ] as const;
 
-export function WobbleFlourish({ variant }: { readonly variant: 0 | 1 }) {
+/** Every flourish the product draws. No two adjacent boundaries take the same one. */
+export type FlourishVariant = 0 | 1 | 2 | 3 | 4 | 5;
+
+export function WobbleFlourish({ variant }: { readonly variant: FlourishVariant }) {
   const f = FLOURISHES[variant];
   return (
     <svg
@@ -107,7 +148,7 @@ export function WobbleFlourish({ variant }: { readonly variant: 0 | 1 }) {
       aria-hidden="true"
       style={{
         display: "block",
-        margin: "0 auto clamp(28px,4vw,44px)",
+        margin: "var(--flourish-air) auto",
         width: "clamp(120px,22vw,200px)",
         transform: `rotate(${f.rotate}deg)`,
       }}

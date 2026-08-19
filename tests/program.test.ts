@@ -71,14 +71,14 @@ describe("access", () => {
   });
 
   it("falls back to the festival's own account only where no handle is on record", () => {
-    // Three venues have none. Two are walk-in so it costs nothing; Sagana is a ₱2,000
-    // dinner and still needs a real handle before launch.
+    // Two venues have none. Sagana was the one that mattered — a ₱2,000 dinner whose booking
+    // pointed at the festival's own account — and the festival confirmed @saganasiargao on
+    // 19 Aug 2026. Of the two left, Siargao Corner Café is free and so costs nothing; Lunares
+    // Café still shows RESERVE, because its price is TBD rather than confirmed free. If that
+    // price lands as a real figure it needs a real handle with it.
     const unhandled = Object.entries(VENUES).filter(([, v]) => v.handle === null);
-    expect(unhandled.map(([key]) => key).sort()).toEqual([
-      "LUNARES CAFÉ",
-      "SAGANA",
-      "SIARGAO CORNER CAFÉ",
-    ]);
+    expect(unhandled.map(([key]) => key).sort()).toEqual(["LUNARES CAFÉ", "SIARGAO CORNER CAFÉ"]);
+    expect(access(ALL_EVENTS.find((e) => e.venue === "SIARGAO CORNER CAFÉ")!).word).toBe("WALK IN");
     for (const [key] of unhandled) {
       expect(instagramUrl(key as keyof typeof VENUES)).toContain(FALLBACK_HANDLE);
     }

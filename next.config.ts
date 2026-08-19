@@ -27,6 +27,11 @@ const nextConfig: NextConfig = {
        AVIF in software on the phone. Chrome, negotiating WebP, was fast; Safari read as
        broken. One format for everyone beats a smaller one for some. */
     formats: ["image/webp"],
+    /* Mux's thumbnail service, which cuts the poster frame for every clip. The frames are
+       requested `unoptimized` — Mux already returns WebP at the width asked for, so routing
+       them through the optimizer would re-encode an encode and bill a transform for it.
+       The pattern is declared anyway, so the images keep working if that ever changes. */
+    remotePatterns: [{ protocol: "https", hostname: "image.mux.com", pathname: "/**" }],
     /* The photographs never change under a given path — they're the festival's own files,
        replaced by name, not versioned. A year of edge caching costs nothing here. */
     minimumCacheTTL: 31536000,

@@ -47,3 +47,6 @@ next-env.d.ts
 
 # project
 CLAUDE.local.md
+
+# video masters + web encodes — hosted on Mux, never committed
+/video-source

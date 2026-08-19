@@ -55,7 +55,7 @@ export function NavBand({
                 position: "relative",
                 display: "block",
                 paddingBottom: 6,
-                font: "400 13px/1 var(--font-display)",
+                font: "400 17px/1 var(--font-display)",
                 color: link.href === route ? "var(--orange)" : "var(--beige)",
                 transition: "color var(--hover)",
               }}

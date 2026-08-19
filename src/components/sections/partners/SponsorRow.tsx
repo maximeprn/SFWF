@@ -9,7 +9,9 @@ export function SponsorRow() {
       style={{
         maxWidth: "var(--sw)",
         margin: "0 auto",
-        padding: "var(--sec) var(--gutter) 0",
+        /* No top padding of its own: the flourish it opens with carries this boundary, and
+           carries it on both sides. */
+        padding: "0 var(--gutter)",
         textAlign: "center",
       }}
     >

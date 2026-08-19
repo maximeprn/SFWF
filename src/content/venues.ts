@@ -35,7 +35,7 @@ export const VENUES: Readonly<Record<VenueKey, Venue>> = {
   PARALUMAN: { place: "Paraluman", handle: "paraluman.ph" },
   "MAM-ON ISLAND": { place: "Mam-on Island", handle: "cevsiargao", bookName: "Cev" },
   BRAVO: { place: "Bravo", handle: "bravosiargao" },
-  SAGANA: { place: "Sagana", handle: null },
+  SAGANA: { place: "Sagana", handle: "saganasiargao" },
   "HUE HOTEL": { place: "Hue Hotel", handle: "huesiargao" },
 };
 

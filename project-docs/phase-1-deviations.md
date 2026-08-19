@@ -59,6 +59,10 @@ Nothing on the page is now under 11px.
 | Bubble grid `minmax(min(100%,280px),1fr)` inside `calc(--sw - 148px)` | `minmax(min(100%,380px),1fr)` at the full frame, no cap on the grid | The 440px cap on each bubble is what holds the row; capping the grid as well only reintroduces the difference, because a collapsed auto-fit track hands a lone bubble the whole row. Every bubble now renders at 516px (440 content + its padding) on every day. The old 280px minimum drew four columns of 249px, which a 21px open title cannot live in. |
 | Booking button: beige on orange | **Cream `#F7F3E4` on violet `#4F3F79`** | `PHASE-1-TYPE-SCALE.md` §6 and the design of record both. Beige on orange is 1.9:1 — it put the one thing you are meant to press below the legibility of the prose above it. This retires `--orange-hover-in-bubble`; the hover is now `--ink-title`. |
 | Programme standfirst capped at 16px (`PHASE-1-TYPE-SCALE.md` §3) | `clamp(15.5px, .72vw + 11.1px, 20px)` | Raised at the festival's request. It is the only prose on the one-pager and the one instruction anybody has to read; at 16px on an 1180px frame it read as a caption. 32em at 20px is 640px of line, inside the 660px the same document caps centred prose at. |
+| `--sec: clamp(40px, 5.4vw, 62px)` | `clamp(72px, 2.65vw + 62px, 96px)` | Raised at the festival's request — the page read as cramped on a phone. The old value was the reason: a bare `vw` term collapses on a narrow screen, so 5.4vw is 20px at 375 and the token sat on its 40px floor across every mobile width while desktop took 62. That is backwards; stacked in one column with no horizontal separation to help them, sections need more air to read as separate blocks, not less. Written as an offset now, so the floor is the number that matters and the ramp only adds to it. Then lifted a further 30%, again at the festival's request. **Mobile 40 → 94, desktop 62 → 125.** All three terms of the clamp were scaled, the `vw` coefficient included, so the mobile-to-desktop curve keeps its shape and only sits higher — the same method the type scale's 10% lift used. Everything downstream is expressed against this token — the flourish air, the film's opening gap, the footer — so none of them had to be touched. |
+| Hero bottom padding `clamp(30px,4vw,44px)`, headline bottom margin `clamp(52px,7.2vw,80px)`, film top padding | All three removed; the dateline carries `var(--sec)` on each side | The dateline had the flourish bug mirrored: **80px under "ani sang Siargao" and 126px over the film** at 1280, because the space above it was the headline's margin and the space below it was the hero's padding plus the film's — three owners for two gaps. All of it is the dateline's now, as a two-value margin (`var(--sec) auto`) so there is no third value to set the halves apart. The value is `--sec` rather than the flourishes' half, because the gap below it already measured one `--sec` — raising the short side to meet the long one keeps the air the festival asked for instead of halving it. Measures 94/94 at 375 and 125/125 at 1280. **Held by the same test**, which was checked by breaking it. The hero's *top* padding is deliberately untouched: it is the page's opening inset under the nav band, not a boundary between two blocks, and lifting it only pushes the wordmark down the first screen. |
+| The film carried `var(--sec)` *below* it, and the footer its own `clamp(50px,6.4vw,80px)` | Both on the page rhythm — film spacing on top only, footer `var(--sec)` | The rhythm was uneven before anyone raised it: 46 · 80 · 40 · 40 · 50 on a phone. The film's bottom padding silently doubled one gap against `HostRow`'s top padding while every other break sat on the floor, and the footer's own clamp collapsed to 50px, which read as it riding up into the content. Every boundary is now one `--sec`: 70 · 72 · 72 · 72 · 72 at 375, 97 · 96 · 96 · 96 · 96 at 1280. The film keeps `calc(var(--sec) * 0.55)` above it, because it is the hero's closing statement rather than the next subject. |
+| Flourish margin `0 auto clamp(28px,4vw,44px)`, section padding above it | `--flourish-air` on both sides, section padding removed | The wave sat **71px under the last logo and 27px over the next label**. Nothing in the source looked wrong, because the two halves had different owners: the space above belonged to the section's `padding-top`, the space below to the flourish's own margin, and two owners cannot agree. Both halves are the flourish's now, written as a two-value margin (`var(--flourish-air) auto`) so there is no third value to set them apart, and a section that opens with a flourish takes no top padding. Measures 35/35 at 375 and 46/46 at 1280. A decorated boundary is therefore one `--sec` plus the wave's own height; a plain one is `--sec`. **Both halves are held by a test** — `tests/design.test.ts`, "gives every flourish equal air above and below it" — which was checked by breaking each half in turn and confirming it fails, naming the offending file. |
 | Access dot at 8px | 10px | The design of record draws it at 10px in both bubble states. Supersedes the 8px figure in `CLAUDE.md`. |
 | Grain overlay in the display shader (64px noise tile, overlay-blended at 0.42, boosted to 1.9× in a stirred wake) | Removed | Instructed: no grain, noise or film over anything. The dye cloth is the only texture. |
 | Two dye samples at different scales, soft-light blended at 70%; result multiplied up to ~15% brighter | One sample, written unmodified | Instructed: no colour push. Every rendered pixel now lies on the line between `#4F3F79` and `#E9622D` — measured across 4096 live canvas pixels, max deviation 1.16/255, which is 8-bit rounding. This overrides CLAUDE.md's "shader constants are frozen" for colour only; the motion constants (`tau`, `visc`, `disp`, `curl`, `push`) are untouched. |
@@ -81,17 +85,66 @@ Nothing on the page is now under 11px.
 
 ## Not built yet, on purpose
 
-The film frame, the island intro, the stats row, the acknowledgement, "why we do this", the
-last-year strip, Press, the nav band, the mobile menu and the fade mask are all phase 2. The
-bubble, the day filter, the dye mount, the tokens and the footer are built to carry over unchanged.
+The island intro, the stats row, the acknowledgement and "why we do this" are still to come. The
+film frame and the last-year strip are now built — see the section below. Press, the nav band, the
+mobile menu and the fade mask have landed. The bubble, the day filter, the dye mount, the tokens
+and the footer carried over unchanged.
+
+## Video hosting and the two media frames
+
+The festival's footage is hosted on **Mux**, not on Vercel: the clips total 320 MB and Vercel's
+bandwidth is the account's scarcest resource. Cloudflare Stream costs ~$12.50/month for the same
+job; Cloudflare R2 is also free but serves one fixed file, and it needs the domain's nameservers
+moved off Hostinger. Mux's free plan covers 100k delivery minutes a month against roughly 7.5k
+expected, and it builds the adaptive ladder — 270x480 at 465 kbps up to 1080x1920 at 4.33 Mbps —
+which is the whole point for an audience on Philippine mobile data.
+
+The plan caps at **10 stored videos**; seven are used. `video-source/` holds the masters and the
+encodes and is gitignored — Mux is a delivery layer, not an archive.
+
+| Handoff says | Built | Why |
+|---|---|---|
+| Film frame at `border-radius: 16px` with a drop shadow (§2) | One of the six hand-cut outlines, no shadow | `CLAUDE.md` is explicit on both: every surface takes a `soft()` clip, and `box-shadow` is not used in this release. A rounded rectangle on the one photographic surface would be the only unclipped box on the page. |
+| Film caption at mono `10.5px` (`PHASE-1-TYPE-SCALE.md` §2) | `11px` | The same document's floor is "nothing under 11px". It contradicts itself in one row; the floor wins. |
+| `THE FILM · 2026` set over the frame's own scrim | Dropped entirely | Removed at the festival's request: a poster frame sitting under the festival's own name does not need to be told it is the film. The line inside the frame already says the only thing a still cannot — that this is a video, and how long it runs. The section keeps the eyebrow's top padding so the frame lands where the design puts it. |
+| Poster frame left to Mux | An explicit `time` per clip, on `Clip.posterTime` | Mux's own pick is not always the one that sells the clip. Two of the six open on black — Restaurant Bravo and the fashion show — so an early frame is a dead poster, and the film's default was a seedling tray. The film is set to 1:13, the aerial over the palms and the water, chosen by the festival — it reads as the island rather than as one plate, and its mid-tones leave the play mark legible dead centre. Chosen against a contact sheet cut from each master. |
+| Three clips in the last-year strip (§9) | Six | Six exist, and the strip was always built to scroll. Six never fit the column, so `SWIPE` always shows today — the overflow measurement stays anyway, so the instruction stops appearing on its own the day it stops being true. |
+| Strip centres the first clip at scroll 0 (§9) | Only below 860px | At desktop the first clip sits flush with the content column, in line with the eyebrow above it and with every other section — measured at 1280, all of them land on 74px. Centring is kept on a phone, where it opens on one whole clip with the next peeking in. The snap alignment moves with it: under `x mandatory`, `center` is what makes a centred first clip a resting position, so leaving it on at desktop would drag the flush strip back to the middle on the first touch. `start` is the same promise for a flush strip. |
+| — | The section spaces itself with `var(--sec)` above and nothing below | The convention every other block on the page follows — `HostRow` and `SponsorRow` both use `var(--sec) var(--gutter) 0`, and the footer brings its own top margin. The strip originally carried its padding on the bottom and none on top, which left it butted against the sponsor marks. |
+| — | A hand-drawn play triangle, centred | Asked for by the festival. It is drawn the way every other stroke in the product is — edges that bow, corners cut unevenly, a degree and a half off level, the same tilt the section flourishes carry — so it reads as the festival's hand rather than as an icon lifted from a set. Beige fill with a violet drawn edge: the fill carries it over dark footage, the edge over a bright sky, and between them no shadow is needed. It lives in `src/components/ui/PlayMark.tsx`; nudge its control points if it ever needs adjusting, never "tidy" it into a clean triangle. |
+| Bottom scrim on the film frame, `linear-gradient(transparent, rgba(20,14,40,.66))` (§2) | Removed, with the `--scrim` token and the `.media-cap` class | The scrim existed to hold a mono caption legible over footage. With the caption gone and the play mark centred, it paints a wash that nothing sits on — and an unjustified gradient is exactly what the allowlist in `tests/design.test.ts` exists to prevent. The duration it used to print still reaches anyone who cannot see the mark, through the button's accessible name. |
+| — | Nothing autoplays; the player loads on the click | Motion is response, not ambience. It also spends no one's mobile data before they have asked for it: the poster is a single WebP and `hls.js` is fetched only by browsers without native HLS, only after a press. |
+
+Poster frames come from `image.mux.com`, which is free on every plan, so no still is cut by hand or
+stored in `public/`. They are requested `unoptimized` — Mux already returns WebP at the width asked
+for, and routing them through Vercel's optimizer would re-encode an encode and bill a transform.
+
+**One incident on the record.** The first upload run had two processes going at once, which put 13
+assets on a 10-video account and left the manifest naming one asset while its twin sat there
+unreferenced. Six duplicates were deleted and the manifest was rebuilt from the Mux API by matching
+each local encode to its asset on duration. `scripts/mux-upload.mjs` now takes an atomic lock.
 
 ## Still open with the festival
 
 These are §13 items that touch what shipped. None were invented around.
 
-1. **Sagana has no Instagram handle on record** and its booking button therefore points at the
-   festival's own account. It is a ₱2,000 dinner, so this one actually costs something. Siargao
-   Corner Café and Lunares Café are also unhandled but are walk-in.
+0. **The six last-year captions are ours, not the festival's.** "Opening night at Wild", "The
+   gathering at Alma", "Restaurant Bravo", "Day one", "The fashion show", "The final night" are
+   read off the file names the festival sent. Wild, Alma and Bravo are host venues, so the three
+   that name a venue are safe; the other three are descriptions of a clip, not confirmed titles.
+   The film's own caption was dropped, so nothing now claims a year for it.
+0b. **Two clips carry burned-in marks that the site cannot remove.** The film has the festival's
+   own seal across the lower third of every frame — harmless now that the caption is gone and the
+   play mark sits centred, but it is burned in and cannot be moved. More important: **`relive-day-1` carries a
+   photographer's credit, `By: @shotsbyarianne_`, burned into the picture.** That is someone
+   else's footage. Confirm permission and whether the credit needs to be repeated in the caption
+   before this ships publicly — it is the one item here with a rights question attached.
+1. ~~Sagana has no Instagram handle.~~ **Settled 19 Aug 2026: `@saganasiargao`.** Its ₱2,000
+   dinner now books with the venue rather than through the festival's own account, which is the
+   whole booking model working as designed. Two venues are still unhandled: Siargao Corner Café,
+   which is free and therefore walk-in, and **Lunares Café, which is not** — its price is `TBD`
+   rather than confirmed free, so its bubble reads RESERVE and that reservation goes to the
+   festival account. If that price lands as a real figure it needs a real handle with it.
 2. **`@tropicalacademyiao`** is shorter than every other handle on the list and may be truncated at
    source. Shipped as given.
 3. **Seven events have no confirmed price** and one (Paraluman) has neither line-up nor description.

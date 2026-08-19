@@ -20,7 +20,7 @@ export function Hero() {
       style={{
         maxWidth: "var(--sw)",
         margin: "0 auto",
-        padding: "clamp(44px,7vw,86px) var(--gutter) clamp(30px,4vw,44px)",
+        padding: "clamp(44px,7vw,86px) var(--gutter) 0",
         textAlign: "center",
       }}
     >
@@ -59,7 +59,7 @@ export function Hero() {
       {/* Lowercase is the voice, not a text-transform — the festival writes it this way. */}
       <h1
         style={{
-          margin: "clamp(14px,2.4vw,22px) auto clamp(52px,7.2vw,80px)",
+          margin: "clamp(14px,2.4vw,22px) auto 0",
           maxWidth: "15em",
           font: "400 clamp(46px,8.4vw,88px)/1.06 var(--font-display)",
           color: "var(--orange)",
@@ -69,9 +69,14 @@ export function Hero() {
         {SITE.edition}
       </h1>
 
+      {/* The dateline owns the air on both sides of itself, as a two-value margin, for the
+          reason the flourishes do: when the space above belonged to the headline's margin and
+          the space below to the hero's padding plus the film's, the two could not agree and it
+          sat 80px under "ani sang Siargao" and 126px over the film. There is no third value
+          here to set them apart. `tests/design.test.ts` holds it. */}
       <div
         style={{
-          margin: "0 auto",
+          margin: "var(--sec) auto",
           width: "fit-content",
           maxWidth: "100%",
           display: "flex",

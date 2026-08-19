@@ -86,6 +86,36 @@ describe("stylesheet rules", () => {
     }
   });
 
+  it("gives every decorated boundary equal air above and below it", () => {
+    // This drifted once and could not be seen in the source: the wave sat 71px under the
+    // last host logo and 27px over the next label, because the space above it belonged to
+    // the section's `padding-top` and the space below it to the flourish's own margin. Two
+    // owners cannot agree. Both halves are the flourish's now, and they are written as a
+    // two-value margin — there is no third value to set, so they cannot come apart.
+    const wobble = sources.find(([path]) => path === "components/ui/Wobble.tsx")?.[1] ?? "";
+    const flourish = wobble.split("export function WobbleFlourish")[1] ?? "";
+    expect(flourish).toMatch(/margin: "var\(--flourish-air\) auto"/);
+    expect(flourish).not.toMatch(/marginTop|marginBottom|marginBlockStart|marginBlockEnd/);
+
+    // The other half of the rule: a section that opens with a flourish takes no top padding
+    // of its own, or the gap above the wave grows by that padding and the gap below it does
+    // not — which is the exact shape of the original bug.
+    for (const [path, text] of sources) {
+      if (path === "components/ui/Wobble.tsx" || !text.includes("<WobbleFlourish")) continue;
+      expect(text, `${path} pads above its flourish`).not.toMatch(/padding:\s*"var\(--sec\)/);
+    }
+
+    // The hero's dateline is the same kind of element and had the same kind of bug, mirrored:
+    // 80px under "ani sang Siargao" and 126px over the film, because the space above was the
+    // headline's margin and the space below was the hero's padding plus the film's.
+    const hero = sources.find(([path]) => path === "components/sections/home/Hero.tsx")?.[1] ?? "";
+    const film = sources.find(([path]) => path === "components/sections/home/TheFilm.tsx")?.[1] ?? "";
+    expect(hero, "the dateline no longer owns both sides").toMatch(/margin: "var\(--sec\) auto"/);
+    expect(hero, "the headline took its bottom margin back").toMatch(/auto 0"/);
+    expect(hero, "the hero pads below its dateline again").toMatch(/var\(--gutter\) 0"/);
+    expect(film, "the film pads above itself again").toMatch(/padding: "0 var\(--gutter\)"/);
+  });
+
   it("carries the 2026 palette and nothing of the 2025 one", () => {
     expect(tokens).toMatch(/#4f3f79/i); // violet ground
     expect(tokens).toMatch(/#e9622d/i); // orange

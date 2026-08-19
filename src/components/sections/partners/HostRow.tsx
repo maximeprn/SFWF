@@ -12,7 +12,9 @@ import { HOST_LOGOS } from "@/content/site";
 export function HostRow() {
   return (
     <section
-      style={{ maxWidth: "var(--sw)", margin: "0 auto", padding: "var(--sec) var(--gutter) 0" }}
+      /* No top padding of its own: the flourish it opens with carries this boundary, and
+         carries it on both sides. */
+      style={{ maxWidth: "var(--sw)", margin: "0 auto", padding: "0 var(--gutter)" }}
     >
       <WobbleFlourish variant={0} />
       <p
