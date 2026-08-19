@@ -39,9 +39,12 @@ export function BubbleDetail({
           textTransform: "uppercase",
         }}
       >
-        {/* `--orange` is 2.67:1 on beige. The design system names the substitute for exactly
-            this case and this is the line that needed it most. */}
-        <span style={{ color: "var(--orange-on-light)" }}>{placeOf(event.venue)}</span> ·{" "}
+        {/* The bright orange, as the prototype draws it — and knowingly: it is 2.67:1 on
+            beige, and §3 says `--orange-on-light` belongs on light grounds. Overruled on
+            purpose. The place name is repeated in the kicker and in the booking button, so
+            nothing here is only available in this colour. Raise it with the festival, not
+            in this file. */}
+        <span style={{ color: "var(--orange)" }}>{placeOf(event.venue)}</span> ·{" "}
         {hintRest(event)}
       </p>
 
