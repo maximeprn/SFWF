@@ -31,21 +31,14 @@ export function ProgramSection() {
 
   return (
     <>
+      {/* No "the six-day journey" headline here. It is the Program *page's* h1, and on a
+          single page it lands directly under "ani sang Siargao" — two script headlines in a
+          row, and a second h1 on a document that already has one. The standfirst carries the
+          instruction on its own; the dateline above already says how long the week is. */}
       <section style={{ ...FRAME, padding: "clamp(28px,4vw,46px) var(--gutter-program) 0", textAlign: "center" }}>
-        <h1
-          style={{
-            margin: "0 auto",
-            maxWidth: "16em",
-            font: "400 clamp(27px,3.8vw,40px)/1.12 var(--font-display)",
-            color: "var(--orange)",
-            textWrap: "pretty",
-          }}
-        >
-          the six-day journey
-        </h1>
         <p
           style={{
-            margin: "11px auto 0",
+            margin: "0 auto",
             maxWidth: "calc(var(--tm) - 8ch)",
             font: "400 clamp(12.8px,0.19vw + 12.1px,14.5px)/1.66 var(--font-body)",
             color: "var(--beige)",
