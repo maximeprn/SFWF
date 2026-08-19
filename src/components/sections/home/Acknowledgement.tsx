@@ -6,19 +6,15 @@ import { ACKNOWLEDGEMENT } from "@/content/home";
  * would make it a callout — a thing the page is quoting — and it is the page speaking.
  *
  * The statement is Arimo 700 uppercase rather than the script: it is the one line here that
- * is a statement rather than a voice.
+ * is a statement rather than a voice. It carries no eyebrow — a mono label reading
+ * ACKNOWLEDGEMENT over a sentence that is plainly an acknowledgement only announces the
+ * genre of what follows.
  */
 export function Acknowledgement() {
   return (
     <section style={{ maxWidth: "var(--sw)", margin: "0 auto", padding: "0 var(--gutter)" }}>
       <WobbleFlourish variant={3} />
       <div style={{ maxWidth: 660, margin: "0 auto", textAlign: "center" }}>
-        <p
-          className="mono"
-          style={{ margin: "0 0 16px", fontSize: 11.5, letterSpacing: ".2em", color: "var(--beige)" }}
-        >
-          ACKNOWLEDGEMENT
-        </p>
         <p
           style={{
             margin: 0,
