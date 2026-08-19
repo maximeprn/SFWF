@@ -26,9 +26,10 @@ export const soft = (i: number): string => `url(#pb${i % BLOB_PATHS.length})`;
  *
  * It is the same irregular hand as the six above with far less bite at the corners, and it
  * is one shape rather than a round-robin because a frame must not change shape when it is
- * tapped. The reason it is shallow at all is the native video controls: they sit hard
- * against the bottom edge, and the six bubble outlines curve inward there enough to clip the
- * scrubber's ends and its timecodes away.
+ * tapped. It was cut shallow for the browser's own controls, which sat hard against the
+ * bottom edge where the six bubble outlines curve inward enough to clip a scrubber's ends
+ * away. Those are gone — the bar is ours now and sits `MEDIA_SAFE` inside this boundary —
+ * but the shape stays as tuned, and the clearance is a test rather than a memory.
  *
  * It is the first of those six with its corner-region coordinates pulled a quarter of the way to
  * the box, and nothing else touched: the corner now meets the right edge at 0.898 where the
@@ -54,6 +55,20 @@ export const MEDIA_BLOB_PATH =
   "Z";
 
 export const mediaFrame = (): string => "url(#pbMedia)";
+
+/**
+ * How far inside a media frame a control has to sit to clear `MEDIA_BLOB_PATH`'s corners.
+ *
+ * A fraction of the box, not a pixel count, because the clip is authored in
+ * objectBoundingBox units: percentage insets are the only ones that stay correct at both the
+ * film's 268px and the strip's 208px, and at every viewport in between. The bottom corners
+ * are the tight pair — the boundary leaves the bottom edge at x=0.8305 and does not reach the
+ * right edge until y=0.8980 — so the sides carry twice the clearance the bottom does.
+ *
+ * `tests/design.test.ts` flattens the path and holds the four corners of this rectangle
+ * inside it, so nudging either one fails loudly instead of quietly cutting a control off.
+ */
+export const MEDIA_SAFE = { side: 0.08, bottom: 0.04 } as const;
 /**
  * Which silhouette a bubble and its booking button take. Both are deliberately coprime-ish
  * walks over the six outlines, so neighbours in the grid never match and a button never

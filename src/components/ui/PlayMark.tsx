@@ -9,8 +9,11 @@
  * Beige fill with a violet edge, because this lands on a photograph and neither ink can be
  * trusted alone: the fill carries it over dark footage, the drawn edge over a bright sky.
  * That edge is also the reason there is no shadow here — this system draws outlines instead.
+ *
+ * The path is exported because the control bar draws the same triangle at a sixth of the size.
+ * One hand, two sizes — a second, tidier play glyph next to this one would read as an icon set.
  */
-const PLAY_PATH =
+export const PLAY_PATH =
   "M 27.6 13.4 C 25.6 10.1 29.4 6.9 32.4 9.3 " +
   "C 44.2 17.1 56.4 24.9 69.8 34.2 " +
   "C 75.4 38.1 81.6 41.2 85.1 45.1 " +

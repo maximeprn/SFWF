@@ -91,6 +91,54 @@ a {
   scroll-snap-align: start;
 }
 
+/* The film's scrubber.
+ *
+ * A real range input, laid transparent over the drawn track: arrow keys, Home/End, touch
+ * drag and the slider role all arrive with the native element, and none of them is worth
+ * rebuilding by hand. Every visible part of it is the two wobble paths underneath, so the
+ * track, the progress fill and the thumb are all painted out here — a default thumb is a
+ * circle, which this product allows in exactly one place and this is not it. */
+.scrub {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.scrub::-webkit-slider-runnable-track {
+  height: 100%;
+  background: transparent;
+}
+
+.scrub::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 0;
+  background: transparent;
+}
+
+.scrub::-moz-range-track,
+.scrub::-moz-range-progress {
+  height: 100%;
+  background: transparent;
+}
+
+.scrub::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  background: transparent;
+}
+
 /* Focus is never removed, only restyled. Nearly every focusable thing sits on the violet
    ground, where beige is the only ink that clears contrast; the one exception is the
    booking button inside a beige bubble, whose ring lands on beige. */
@@ -101,6 +149,16 @@ a {
 
 .on-beige:focus-visible {
   outline-color: var(--orange-on-light);
+}
+
+/* The two controls that live inside a clipped surface. Everywhere else the ring stands 3px
+   off the element, which is right on an open page; inside the video bar an outward ring walks
+   into the plate's own hand-cut corner and comes back with a bite out of it. Drawn inward it
+   is always whole, whatever height the bar is set to — and against beige it is the same
+   orange every other mark on a light ground takes. */
+.media-key:focus-visible,
+.scrub:focus-visible {
+  outline-offset: -2px;
 }
 
 /* ── the dye layer ────────────────────────────────────────────────────────
@@ -189,6 +247,11 @@ a {
   .day-chip-off:hover {
     opacity: 1;
   }
+  /* The control bar's ink, on its beige plate — the same orange every other mark on a light
+     ground takes. Colour only, like every hover in this product. */
+  .media-key:hover {
+    color: var(--orange-on-light);
+  }
   /* The one deliberate overshoot in the product: the marks stand upright and step forward. */
   .social-mark:hover {
     transform: rotate(0deg) scale(1.14);
@@ -235,7 +298,9 @@ a {
   }
   .bubble,
   .reveal,
-  .social-mark {
+  .social-mark,
+  .media-key,
+  .video-controls {
     transition: none;
   }
   html {

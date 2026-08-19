@@ -1,11 +1,15 @@
 "use client";
 
-import Image from "next/image";
-import { useState } from "react";
-import { PlayMark } from "@/components/ui/PlayMark";
+import { useRef, useState } from "react";
+import { PosterFace } from "@/components/ui/PosterFace";
+import { VideoControls } from "@/components/ui/VideoControls";
 import { mediaFrame } from "@/lib/design/shapes";
-import { useHlsPlayback } from "@/lib/media/useHlsPlayback";
-import { type Clip, posterUrl, streamUrl } from "@/content/videos";
+import { useFullscreen } from "@/lib/media/useFullscreen";
+import { usePlayback } from "@/lib/media/usePlayback";
+import { useIdleControls } from "@/lib/media/useIdleControls";
+import { useVideoControls } from "@/lib/media/useVideoControls";
+import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
+import { type Clip, streamUrl } from "@/content/videos";
 
 interface VideoFrameProps {
   readonly clip: Clip;
@@ -16,64 +20,8 @@ interface VideoFrameProps {
   readonly priority?: boolean;
   /** The film's name is already its section eyebrow; the strip captions each clip. */
   readonly showCaption?: boolean;
-}
-
-/** `1:53`. Mono, so the colon lines up down a scrolling strip. */
-const clock = (seconds: number): string =>
-  `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
-
-/**
- * The resting state: Mux's poster frame under a hand-drawn play triangle.
- *
- * The mark is the whole affordance — no caption over a scrim, and no duration printed on the
- * picture. The clip's length still reaches anyone who cannot see the mark, through the
- * button's accessible name.
- */
-function PosterFace({
-  clip,
-  posterWidth,
-  priority,
-  onPlay,
-}: {
-  readonly clip: Clip;
-  readonly posterWidth: number;
-  readonly priority?: boolean;
-  readonly onPlay: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onPlay}
-      aria-label={`Play ${clip.caption}, ${clock(clip.seconds)}`}
-      style={{
-        display: "block",
-        position: "relative",
-        width: "100%",
-        height: "100%",
-        padding: 0,
-        border: 0,
-        background: "none",
-        cursor: "pointer",
-        font: "inherit",
-        color: "inherit",
-        textAlign: "left",
-      }}
-    >
-      <Image
-        src={posterUrl(clip, posterWidth * 2)}
-        alt=""
-        width={posterWidth}
-        height={Math.round((posterWidth * 16) / 9)}
-        priority={priority}
-        loading={priority ? undefined : "lazy"}
-        /* Mux already cut this to the rendered width, in WebP. Sending it through the
-           optimizer a second time re-encodes an encode and bills a transform for it. */
-        unoptimized
-        style={{ display: "block", width: "100%", height: "100%" }}
-      />
-      <PlayMark />
-    </button>
-  );
+  /** Whether the bar carries a scrubber. Only the film is wide enough for one. */
+  readonly scrub?: boolean;
 }
 
 /**
@@ -82,6 +30,14 @@ function PosterFace({
  * Nothing plays on its own. Motion is response, not ambience — an autoplaying loop behind
  * the copy is the one thing this brand does not do, and it would also spend a viewer's
  * mobile data before they have decided they want it.
+ *
+ * The browser's own controls are gone. They could not be styled, they were grey, and they
+ * were the whole reason the frame's outline had to be cut shallow — see `MEDIA_BLOB_PATH`.
+ * `VideoControls` replaces them with a drawn bar held `MEDIA_SAFE` inside that outline.
+ *
+ * Nothing here writes to the element. `usePlayback` constructs the ref, so it is also the
+ * only thing allowed to change what it points at — the compiler's immutability rule draws
+ * that line in both directions. Everything else on this frame reads and listens.
  */
 export function VideoFrame({
   clip,
@@ -89,30 +45,66 @@ export function VideoFrame({
   posterWidth,
   priority,
   showCaption,
+  scrub,
 }: VideoFrameProps) {
+  const frame = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(false);
-  const video = useHlsPlayback(playing, streamUrl(clip.playbackId));
+  const [focused, setFocused] = useState(false);
+
+  const { video, toggle, toggleMute, seek } = usePlayback(playing, streamUrl(clip.playbackId));
+  const { paused, muted } = useVideoControls(video, playing);
+  const fullscreen = useFullscreen(frame, video);
+  const reduced = usePrefersReducedMotion();
+  /* The bar only counts itself down while a clip is genuinely running unattended. Stopped,
+     focused, or under a reduced-motion preference, it stays up. */
+  const { awake, revive } = useIdleControls(playing && !paused && !focused && !reduced);
 
   return (
     <figure style={{ margin: 0, width, maxWidth: "100%" }}>
       <div
+        ref={frame}
+        onPointerMove={revive}
+        onPointerDown={revive}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
         style={{
           position: "relative",
-          aspectRatio: "9 / 16",
           /* One outline, paused and playing alike: a frame must not change shape when it
-             is tapped. See MEDIA_BLOB_PATH for why it is shallower than the six. */
-          clipPath: mediaFrame(),
-          background: "var(--chip-well)",
+             is tapped. Fullscreen is the one release — the clip and the 9:16 box both come
+             off, or the browser would paint a hand-cut letterbox across a whole screen. */
+          aspectRatio: fullscreen.on ? undefined : "9 / 16",
+          height: fullscreen.on ? "100%" : undefined,
+          clipPath: fullscreen.on ? undefined : mediaFrame(),
+          background: fullscreen.on ? "var(--ground)" : "var(--chip-well)",
         }}
       >
         {playing ? (
-          <video
-            ref={video}
-            controls
-            playsInline
-            aria-label={clip.caption}
-            style={{ display: "block", width: "100%", height: "100%" }}
-          />
+          <>
+            <video
+              ref={video}
+              playsInline
+              aria-label={clip.caption}
+              style={{
+                display: "block",
+                width: "100%",
+                height: "100%",
+                /* A no-op in the frame, where box and footage are both 9:16, and the thing
+                   that stops a vertical clip being stretched across a landscape screen. */
+                objectFit: "contain",
+              }}
+            />
+            <VideoControls
+              shown={awake}
+              paused={paused}
+              muted={muted}
+              scrub={scrub}
+              video={video}
+              fullscreen={fullscreen}
+              onToggle={toggle}
+              onToggleMute={toggleMute}
+              onSeek={seek}
+            />
+          </>
         ) : (
           <PosterFace
             clip={clip}

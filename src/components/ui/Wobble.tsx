@@ -13,7 +13,8 @@ const STRETCH_RULE =
   "M2 4.6 C 46 1.4 88 5.8 132 3.2 C 176 0.6 210 6.2 256 4.4 C 300 2.6 332 0.4 " +
   "378 2.8 C 420 5 452 6.4 496 3.4 C 534 0.8 562 5.4 598 2.2";
 
-const BUBBLE_RULE =
+/** Exported: the scrubber draws its track and its elapsed run from this same hand. */
+export const BUBBLE_RULE =
   "M2 3.8 C 52 1.2 104 5.6 160 3.4 C 214 1.4 262 5.8 316 3.6 C 352 2.2 378 4.6 398 3";
 
 const KICKER_RULE = "M1 3.6 C 34 1.2 68 5 100 2.8 C 134 0.7 168 4.8 199 2.2";

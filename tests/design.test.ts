@@ -1,7 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { BLOB_PATHS, bubbleShape, buttonShape, soft } from "@/lib/design/shapes";
+import {
+  BLOB_PATHS,
+  MEDIA_BLOB_PATH,
+  MEDIA_SAFE,
+  bubbleShape,
+  buttonShape,
+  soft,
+} from "@/lib/design/shapes";
 import { NAV_CTA, NAV_LINKS } from "@/content/nav";
 
 const SRC = new URL("../src/", import.meta.url).pathname;
@@ -247,5 +254,63 @@ describe("chrome", () => {
     expect(NAV_LINKS.map((l) => l.href)).toEqual(["/", "/program", "/press"]);
     expect(NAV_CTA.label).toBe("View Program");
     expect(NAV_CTA.href).toBe("/program");
+  });
+});
+
+/**
+ * The media frames. The browser's own controls used to sit hard against the bottom edge, and
+ * the outline was cut shallow to stop them being clipped; the bar is drawn now, so the rule
+ * runs the other way — the outline is fixed and the controls have to stay inside it.
+ */
+describe("media frames", () => {
+  /** The path as a polygon, so a point can be tested against it. */
+  const flatten = (d: string, steps = 64): readonly (readonly [number, number])[] => {
+    const n = (d.match(/-?\d*\.?\d+/g) ?? []).map(Number);
+    const points: [number, number][] = [[n[0]!, n[1]!]];
+    let [px, py] = [n[0]!, n[1]!];
+    for (let i = 2; i + 5 < n.length; i += 6) {
+      const [x1, y1, x2, y2, x, y] = n.slice(i, i + 6) as [number, number, number, number, number, number];
+      for (let s = 1; s <= steps; s++) {
+        const t = s / steps;
+        const u = 1 - t;
+        points.push([
+          u ** 3 * px + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t ** 3 * x,
+          u ** 3 * py + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t ** 3 * y,
+        ]);
+      }
+      [px, py] = [x, y];
+    }
+    return points;
+  };
+
+  const inside = (poly: readonly (readonly [number, number])[], x: number, y: number): boolean => {
+    let hit = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const [xi, yi] = poly[i]!;
+      const [xj, yj] = poly[j]!;
+      if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) hit = !hit;
+    }
+    return hit;
+  };
+
+  it("holds the drawn control bar inside the outline, at every frame width", () => {
+    // Both are in objectBoundingBox units, which is the whole point: one comparison covers
+    // the film at 268px, the strip at 208px, and every viewport between them.
+    const outline = flatten(MEDIA_BLOB_PATH);
+    const { side, bottom } = MEDIA_SAFE;
+    for (const x of [side, 1 - side]) {
+      // Down from mid-height, so a bar that grows taller is covered too — though it is the
+      // two bottom corners that the outline actually bites at.
+      for (const y of [0.5, 0.8, 1 - bottom]) {
+        expect(inside(outline, x, y), `control corner ${x} , ${y}`).toBe(true);
+      }
+    }
+  });
+
+  it("hands the browser's own controls back", () => {
+    // A bare `controls` attribute returns the grey scrubber the hand-cut edge was flattened
+    // for, and puts two players on one frame.
+    const frame = sources.find(([path]) => path === "components/ui/VideoFrame.tsx")?.[1] ?? "";
+    expect(frame).not.toMatch(/^\s*controls\s*$/m);
   });
 });
