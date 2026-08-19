@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import { BlobDefs } from "@/components/ui/BlobDefs";
 import { SiteShell } from "@/components/chrome/SiteShell";
 import { DYE_TEXTURE, LOADER_SEAL } from "@/content/photos";
-import { FESTIVAL_DATES, SITE } from "@/content/site";
+import { FESTIVAL_DATES, SITE, SITE_URL } from "@/content/site";
 import "./globals.css";
 
 /* The festival's real faces, supplied Aug 2026. The variable cut covers 300–700, which is
@@ -23,7 +23,7 @@ const wigglye = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://siargaofoodfest.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: `${SITE.name} — ${FESTIVAL_DATES.label}`,
     template: `%s · ${SITE.shortName}`,

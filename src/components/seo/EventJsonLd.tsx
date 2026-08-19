@@ -1,7 +1,7 @@
 import { DAYS } from "@/content/events";
-import { FESTIVAL_DATES, SITE } from "@/content/site";
+import { FESTIVAL_DATES, SITE, SITE_URL } from "@/content/site";
 
-const BASE = "https://siargaofoodfest.com";
+const BASE = SITE_URL;
 
 /**
  * Structured data for the festival and its programme. A festival is exactly what

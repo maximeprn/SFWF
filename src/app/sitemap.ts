@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { CRAWL_KEYS } from "@/content/crawls";
+import { SITE_URL } from "@/content/site";
 
-const BASE = "https://siargaofoodfest.com";
+const BASE = SITE_URL;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages = [
