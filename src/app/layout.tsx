@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Arimo, Baloo_2, Beth_Ellen } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { BlobDefs } from "@/components/ui/BlobDefs";
 import { BloomLayer } from "@/components/background/BloomLayer";
 import { Footer } from "@/components/chrome/Footer";
@@ -32,6 +33,12 @@ const baloo = Baloo_2({
   variable: "--font-baloo-src",
   display: "swap",
 });
+
+/* GA4. Read at build time — `NEXT_PUBLIC_` values are inlined, so this has to be the whole
+   `process.env.NEXT_PUBLIC_GA_ID` expression and not a destructure. Unset means no tag and no
+   requests to Google at all, which is what every local `npm run dev` and every preview
+   deployment should be: the measurement ID belongs to production only. */
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 const TITLE = `${SITE.name} — Ani sang Siargao, the six-day journey, ${FESTIVAL_DATES.label}`;
 
@@ -100,6 +107,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Footer />
         </div>
         <BackToTop />
+        {/* Last in the body, and `afterInteractive` inside the component — the dye, the fonts
+            and the programme all load ahead of it. GA4's own enhanced measurement covers the
+            page_view; there is one route here, so there is nothing else to send. */}
+        {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
       </body>
     </html>
   );
