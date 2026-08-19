@@ -71,34 +71,24 @@ a {
   display: none;
 }
 
-/* The last-year strip.
+/* The last-year strip: flush with the content column at every width, in line with the
+ * eyebrow above it and with every other section on the page.
  *
- * Below the breakpoint the first clip is centred, so a phone opens on one whole clip with
- * the next peeking in. At 860px and up it sits flush with the content column, in line with
- * the eyebrow above it and with every other section on the page.
+ * It used to centre the first clip below 860px, which is only sane while the clip is nearly
+ * as wide as the row. The clip caps at 208px and the row keeps growing, so by 700px the
+ * centring was pushing the strip 220px clear of its own heading. Flush left has no width at
+ * which it goes wrong.
  *
- * The snap alignment has to move with it. Under `x mandatory`, `center` is what makes the
- * centred first clip a resting position; leave it on at desktop and the first touch drags a
- * left-aligned strip back to the middle. `start` is the same promise for a flush strip. */
+ * `start` is the matching snap: under `x mandatory`, `center` would drag a left-aligned
+ * strip back to the middle on the first touch. */
 .last-year-rail {
   display: flex;
   gap: 36px;
   scroll-snap-type: x mandatory;
-  padding-inline: calc((100% - var(--clip-w)) / 2);
 }
 
 .last-year-rail > * {
-  scroll-snap-align: center;
-}
-
-@media (min-width: 860px) {
-  .last-year-rail {
-    padding-inline: 0;
-  }
-
-  .last-year-rail > * {
-    scroll-snap-align: start;
-  }
+  scroll-snap-align: start;
 }
 
 /* Focus is never removed, only restyled. Nearly every focusable thing sits on the violet

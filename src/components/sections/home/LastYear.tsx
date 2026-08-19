@@ -15,10 +15,8 @@ const CLIP = "min(58vw,208px)";
  * the section's, not the header's, so the eyebrow sits on the same left edge as every other
  * eyebrow and paragraph in the product.
  *
- * Where the first clip sits, and what the strip snaps to, are both CSS and both change at
- * the one breakpoint — see `.last-year-rail` in `globals.css`. They have to move together:
- * mandatory snapping would drag a left-aligned first clip back to the centre the moment the
- * strip was touched.
+ * The strip is flush with the content column at every width — see `.last-year-rail` in
+ * `globals.css`.
  *
  * `SWIPE` appears only when the strip actually overflows. Six clips never fit the column, so
  * today it always shows — the measurement stays because the day it stops being true, the
@@ -89,7 +87,6 @@ export function LastYear() {
       <div
         ref={rail}
         className="rail last-year-rail"
-        style={{ "--clip-w": CLIP } as React.CSSProperties}
       >
         {LAST_YEAR.map((clip, i) => (
           <div key={clip.id} style={{ flex: "0 0 auto" }}>
