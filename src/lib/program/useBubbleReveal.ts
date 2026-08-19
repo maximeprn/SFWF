@@ -44,6 +44,18 @@ export function useBubbleReveal() {
     [phases, set],
   );
 
+  /**
+   * Replace the whole view at once: every key given lands `open` with no reveal, and
+   * everything else closes.
+   *
+   * Deliberately not the two-step. Picking a day is a jump to a different view, not a tap
+   * on a bubble — four reveals firing together would be motion nobody asked for, and the
+   * day chips themselves swap instantly for the same reason.
+   */
+  const showOpen = useCallback((keys: readonly string[]) => {
+    setPhases(Object.fromEntries(keys.map((key) => [key, "open" as Phase])));
+  }, []);
+
   useEffect(() => {
     const pending = timers.current;
     /* Cancel only what has moved on. Rescheduling every key on every change would restart
@@ -73,7 +85,7 @@ export function useBubbleReveal() {
     };
   }, []);
 
-  return { phases, toggle };
+  return { phases, toggle, showOpen };
 }
 
 /** Two frames: one to commit the 0fr mount, one for the browser to see 1fr as a change. */

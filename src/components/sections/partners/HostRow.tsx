@@ -14,11 +14,13 @@ export function HostRow() {
     <section
       style={{ maxWidth: "var(--sw)", margin: "0 auto", padding: "var(--sec) var(--gutter) 0" }}
     >
-      <WobbleFlourish variant={1} />
+      <WobbleFlourish variant={0} />
       <p
         className="mono"
         style={{
-          margin: "0 0 18px",
+          /* A touch more than the sponsors' — fifteen marks over three lines is a denser
+             block, and the label has to clear it. */
+          margin: "0 0 clamp(28px,3.4vw,40px)",
           fontSize: 10.5,
           letterSpacing: ".2em",
           color: "var(--beige)",

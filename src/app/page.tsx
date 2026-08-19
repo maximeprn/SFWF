@@ -17,8 +17,10 @@ export default function HomePage() {
       <EventJsonLd />
       <Hero />
       <ProgramSection />
-      <SponsorRow />
+      {/* Hosts before sponsors: the programme has just named these venues sixteen times,
+          so the logo wall reads as the same list at a glance, and the money follows. */}
       <HostRow />
+      <SponsorRow />
     </>
   );
 }

@@ -15,12 +15,20 @@ const FRAME = {
  * The programme. Six days, sixteen gatherings, a filter, and nothing for sale anywhere in
  * it — every action is an Instagram DM to the venue hosting that event.
  *
- * Filtering does not reset which bubbles are open: the state is keyed by event id, so a
- * gathering you opened is still open when you come back to its day.
+ * The filter sets what is open. Across the whole week every bubble is shut, because sixteen
+ * open ones is a wall of text and the closed chip is the scannable thing. Narrow to a single
+ * day and that day arrives already open — picking a day is asking to read it, and making
+ * someone tap four more times to do that is the site arguing with them. Taps still work
+ * either way; the next pick just takes the view back.
  */
 export function ProgramSection() {
   const [pick, setPick] = useState<DayPick>("all");
-  const { phases, toggle } = useBubbleReveal();
+  const { phases, toggle, showOpen } = useBubbleReveal();
+
+  const onPick = (day: DayPick) => {
+    setPick(day);
+    showOpen(day === "all" ? [] : DAYS[day]!.events.map((event) => event.id));
+  };
 
   const shown = pick === "all" ? DAYS : [DAYS[pick]!];
   /* On a single day the date says enough; the count is a summary of the whole week. */
@@ -51,7 +59,7 @@ export function ProgramSection() {
       </section>
 
       <section style={{ ...FRAME, padding: "clamp(22px,3.2vw,34px) var(--gutter-program) 0" }}>
-        <DayFilter pick={pick} onPick={setPick} />
+        <DayFilter pick={pick} onPick={onPick} />
         <p
           className="mono"
           style={{
