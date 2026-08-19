@@ -10,6 +10,9 @@ const FRAME = {
   padding: "var(--sec) var(--gutter) 0",
 } as const;
 
+/* The first section on a page answers to the nav band above it, not to a section before it. */
+const TOP = { ...FRAME, padding: "var(--page-top) var(--gutter) 0" } as const;
+
 const HEADING = "400 clamp(24px,3.4vw,32px)/1.2 var(--font-display)";
 const PROSE = "400 clamp(14.5px,0.5vw + 13.1px,16px)/1.7 var(--font-body)";
 
@@ -32,7 +35,7 @@ const SPREAD = [
 export function PressSection() {
   return (
     <>
-      <section style={FRAME}>
+      <section style={TOP}>
         <h1 style={{ margin: 0, font: HEADING, color: "var(--beige)", textWrap: "pretty" }}>
           {MEDIA_KIT.heading}
         </h1>

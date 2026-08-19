@@ -44,12 +44,12 @@ export function ProgramSection() {
           on a document that already had one. The reason it gave for going was that it is the
           Program *page's* h1, and this is now that page: without it the route had no heading
           element at all, only the six day names. */}
-      <section style={{ ...FRAME, padding: "var(--sec) var(--gutter) 0", textAlign: "center" }}>
+      <section style={{ ...FRAME, padding: "var(--page-top) var(--gutter) 0", textAlign: "center" }}>
         <h1
           style={{
             margin: "0 auto",
             maxWidth: "16em",
-            font: "400 clamp(38px,7vw,74px)/1.1 var(--font-display)",
+            font: "400 clamp(30px,7vw,74px)/1.1 var(--font-display)",
             color: "var(--orange)",
             textWrap: "pretty",
           }}
@@ -64,7 +64,10 @@ export function ProgramSection() {
                is 640px of line — still inside the 660px the design caps centred prose at.
                The measure is per block now; there is no --tm, because a `ch` cap grew this
                column every time the type did. */
-            margin: "clamp(14px,1.6vw,20px) auto 0",
+            /* The script's descenders reach a long way below its baseline — "journey" hangs
+               into whatever follows it — so this gap has to clear the letterform, not the
+               line box. */
+            margin: "clamp(22px,2.6vw,38px) auto 0",
             maxWidth: "32em",
             font: "400 clamp(15.5px,0.72vw + 11.1px,20px)/1.66 var(--font-body)",
             color: "var(--beige)",
