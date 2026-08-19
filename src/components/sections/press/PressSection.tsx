@@ -116,7 +116,7 @@ export function PressSection() {
       </section>
 
       <section style={{ ...FRAME, padding: "clamp(50px,6.4vw,76px) var(--gutter) 0", textAlign: "center" }}>
-        <p
+        <h2
           style={{
             margin: "0 auto",
             maxWidth: "22em",
@@ -125,8 +125,8 @@ export function PressSection() {
             textWrap: "pretty",
           }}
         >
-          Covering the festival?
-        </p>
+          Covering the Festival?
+        </h2>
         <p
           style={{
             margin: "16px auto 0",
@@ -138,23 +138,22 @@ export function PressSection() {
         >
           Tell us what you’re working on and we’ll put you with the right people on the island.
         </p>
-        <a
-          href={`mailto:${CONTACT_EMAIL}`}
-          className="cta"
-          style={{
-            display: "inline-block",
-            marginTop: 20,
-            clipPath: soft(1),
-            padding: "16px 32px 19px",
-            background: "var(--orange)",
-            color: "var(--button-ink)",
-            font: "700 15px/1 var(--font-button)",
-            letterSpacing: ".02em",
-            transition: "background var(--hover)",
-          }}
-        >
-          {CONTACT_EMAIL}
-        </a>
+        {/* The address is set, not boxed. README §6 ends this page on "the email in Beth
+            Ellen", and the prototype draws it as a plain script link that turns orange —
+            a button here would be the third primary CTA on one page, after the nav's and
+            the accreditation card's, and this is an invitation rather than an action. */}
+        <p style={{ margin: "16px 0 0" }}>
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            style={{
+              font: "400 clamp(20px,1.4vw + 15.6px,24px)/1 var(--font-display)",
+              color: "var(--beige)",
+              transition: "color var(--hover)",
+            }}
+          >
+            {CONTACT_EMAIL}
+          </a>
+        </p>
       </section>
     </>
   );

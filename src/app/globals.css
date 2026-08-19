@@ -192,7 +192,7 @@ a {
     background: var(--orange-hover);
   }
   .cta-in-bubble:hover {
-    background: var(--ink-title);
+    background: var(--orange-hover-in-bubble);
   }
   .day-chip-off:hover {
     opacity: 1;

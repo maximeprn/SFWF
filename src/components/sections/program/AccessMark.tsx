@@ -27,7 +27,7 @@ export function AccessMark({
         {dot && (
           <span
             aria-hidden="true"
-            style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--orange)" }}
+            style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--orange)" }}
           />
         )}
         <span

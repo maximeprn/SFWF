@@ -36,6 +36,7 @@
   --cream: #f7f3e4; /* the one ink that clears contrast on violet (8.4:1) */
   --bubble-hover: #f2f0d4;
   --orange-hover: #f27a49; /* primary buttons */
+  --orange-hover-in-bubble: #d4551f;
   --hairline-beige: rgba(233, 231, 194, 0.4); /* drawn rules on the ground */
   --hairline-beige-strong: rgba(233, 231, 194, 0.5);
   --chip-edge: rgba(233, 231, 194, 0.45); /* the day filter's drawn chip edge */

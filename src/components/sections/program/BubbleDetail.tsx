@@ -107,11 +107,13 @@ export function BubbleDetail({
               flex: "none",
               clipPath: soft(buttonShapeIndex),
               padding: "16px 28px",
-              /* Violet fill, cream label — 8.4:1. The earlier beige-on-orange was 1.9:1,
-                 which put the one thing in the bubble you are meant to press below the
-                 legibility of the prose above it. */
-              background: "var(--ink-body)",
-              color: "var(--cream)",
+              /* Orange, with the near-black every other orange button in the product uses.
+                 README §3's colour table is explicit — "Button label #191218, on orange and
+                 beige buttons" — and it is the reading that survives contrast: the canonical
+                 prototype draws a beige label here, which is 1.9:1 and puts the one thing you
+                 are meant to press below the prose above it. */
+              background: "var(--orange)",
+              color: "var(--button-ink)",
               font: "700 14.5px/1.2 var(--font-body)",
               cursor: "pointer",
               transition: "background var(--hover)",
