@@ -4,6 +4,7 @@ import type { FestivalEvent } from "@/content/types";
 import { soft } from "@/lib/design/shapes";
 import type { Phase } from "@/lib/program/useBubbleReveal";
 import { AccessMark } from "./AccessMark";
+import { Chevron } from "./Chevron";
 import { BubbleDetail } from "./BubbleDetail";
 
 /**
@@ -76,7 +77,7 @@ export function EventBubble({
           >
             {event.title}
           </p>
-          <AccessMark event={event} chevron="▴" />
+          <Chevron open />
         </div>
       ) : (
         <div
@@ -112,7 +113,10 @@ export function EventBubble({
               {event.title}
             </p>
           </div>
-          <AccessMark event={event} chevron="▾" />
+          <div style={{ flex: "none", display: "flex", alignItems: "center", gap: 13 }}>
+            <AccessMark event={event} />
+            <Chevron />
+          </div>
         </div>
       )}
 
