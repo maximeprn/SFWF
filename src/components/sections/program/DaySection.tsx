@@ -52,7 +52,7 @@ export function DaySection({
       >
         <p
           className="mono"
-          style={{ margin: 0, fontSize: 10, letterSpacing: ".2em", color: "var(--beige)" }}
+          style={{ margin: 0, fontSize: 11, letterSpacing: ".2em", color: "var(--beige)" }}
         >
           {day.date}
         </p>
@@ -60,7 +60,7 @@ export function DaySection({
           <h2
             style={{
               margin: 0,
-              font: "400 clamp(18px,2.2vw,22px)/1.16 var(--font-display)",
+              font: "400 clamp(19.8px,2.42vw,24.2px)/1.16 var(--font-display)",
               color: "var(--beige)",
             }}
           >

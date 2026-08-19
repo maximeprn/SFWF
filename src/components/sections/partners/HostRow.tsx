@@ -21,7 +21,7 @@ export function HostRow() {
           /* A touch more than the sponsors' — fifteen marks over three lines is a denser
              block, and the label has to clear it. */
           margin: "0 0 clamp(28px,3.4vw,40px)",
-          fontSize: 10.5,
+          fontSize: 11.55,
           letterSpacing: ".2em",
           color: "var(--beige)",
           textAlign: "center",

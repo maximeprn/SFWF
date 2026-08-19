@@ -69,7 +69,7 @@ export function EventBubble({
             style={{
               margin: 0,
               maxWidth: "22em",
-              font: "700 clamp(15px,0.2vw + 14.25px,16.5px)/1.3 var(--font-body)",
+              font: "700 clamp(16.5px,0.22vw + 15.675px,18.15px)/1.3 var(--font-body)",
               color: "var(--ink-title)",
               textWrap: "pretty",
             }}
@@ -92,7 +92,7 @@ export function EventBubble({
               className="mono"
               style={{
                 margin: "0 0 7px",
-                fontSize: 10,
+                fontSize: 11,
                 lineHeight: 1.5,
                 letterSpacing: ".14em",
                 color: "var(--ink-body)",
@@ -104,7 +104,7 @@ export function EventBubble({
             <p
               style={{
                 margin: 0,
-                font: "700 clamp(13.2px,0.14vw + 12.7px,14.5px)/1.35 var(--font-body)",
+                font: "700 clamp(14.52px,0.154vw + 13.97px,15.95px)/1.35 var(--font-body)",
                 color: "var(--ink-title)",
                 textWrap: "pretty",
               }}

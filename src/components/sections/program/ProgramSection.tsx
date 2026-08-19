@@ -48,7 +48,7 @@ export function ProgramSection() {
           style={{
             margin: "0 auto",
             maxWidth: "calc(var(--tm) - 8ch)",
-            font: "400 clamp(12.8px,0.19vw + 12.1px,14.5px)/1.66 var(--font-body)",
+            font: "400 clamp(14.08px,0.209vw + 13.31px,15.95px)/1.66 var(--font-body)",
             color: "var(--beige)",
             textWrap: "pretty",
           }}
@@ -64,7 +64,7 @@ export function ProgramSection() {
           className="mono"
           style={{
             margin: "clamp(26px,3.4vw,38px) 0 0",
-            fontSize: 10,
+            fontSize: 11,
             letterSpacing: ".2em",
             color: "var(--beige)",
           }}
@@ -90,7 +90,7 @@ export function ProgramSection() {
           style={{
             margin: "0 auto",
             maxWidth: "24em",
-            font: "400 clamp(19px,2.4vw,25px)/1.28 var(--font-display)",
+            font: "400 clamp(20.9px,2.64vw,27.5px)/1.28 var(--font-display)",
             color: "var(--beige)",
             textWrap: "pretty",
           }}

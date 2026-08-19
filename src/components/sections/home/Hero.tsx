@@ -44,7 +44,7 @@ export function Hero() {
             bottom: "calc(100% + 2px)",
             right: 0,
             margin: 0,
-            font: "400 calc(clamp(15px,2vw,20px) * var(--hs))/1 var(--font-display)",
+            font: "400 calc(clamp(16.5px,2.2vw,22px) * var(--hs))/1 var(--font-display)",
             color: "var(--beige)",
             whiteSpace: "nowrap",
             transform: "rotate(-4deg)",
@@ -60,7 +60,7 @@ export function Hero() {
         style={{
           margin: "calc(14px * var(--hs)) auto calc(clamp(26px,4vw,40px) * var(--hs))",
           maxWidth: "14em",
-          font: "400 calc(clamp(32px,5.4vw,56px) * var(--hs))/1.1 var(--font-display)",
+          font: "400 calc(clamp(35.2px,5.94vw,61.6px) * var(--hs))/1.1 var(--font-display)",
           color: "var(--orange)",
           textWrap: "pretty",
         }}
@@ -82,7 +82,7 @@ export function Hero() {
           className="mono"
           style={{
             margin: 0,
-            fontSize: "calc(clamp(10px,1.4vw,11.5px) * var(--hs))",
+            fontSize: "calc(clamp(11px,1.54vw,12.65px) * var(--hs))",
             letterSpacing: ".22em",
             color: "var(--beige)",
             whiteSpace: "nowrap",

@@ -81,19 +81,19 @@ export function DayFilter({
             >
               {pick === tab.key ? (
                 <span style={{ display: "block", background: "var(--beige)", clipPath: soft(i), padding: "7px 13px 9px" }}>
-                  <span className="mono" style={{ display: "block", fontSize: 8.5, letterSpacing: ".14em", color: "var(--orange-on-light)" }}>
+                  <span className="mono" style={{ display: "block", fontSize: 9.35, letterSpacing: ".14em", color: "var(--orange-on-light)" }}>
                     {tab.date}
                   </span>
-                  <span style={{ display: "block", marginTop: 1, font: "400 16px/1.1 var(--font-display)", color: "var(--ink-title)", whiteSpace: "nowrap" }}>
+                  <span style={{ display: "block", marginTop: 1, font: "400 17.6px/1.1 var(--font-display)", color: "var(--ink-title)", whiteSpace: "nowrap" }}>
                     {tab.name}
                   </span>
                 </span>
               ) : (
                 <span className="day-chip-off" style={{ display: "block", padding: "7px 9px 9px", opacity: 0.7, transition: "opacity var(--hover)" }}>
-                  <span className="mono" style={{ display: "block", fontSize: 8.5, letterSpacing: ".14em", color: "var(--beige)" }}>
+                  <span className="mono" style={{ display: "block", fontSize: 9.35, letterSpacing: ".14em", color: "var(--beige)" }}>
                     {tab.date}
                   </span>
-                  <span style={{ display: "block", marginTop: 1, font: "400 clamp(12px,0.5vw + 8.4px,14.5px)/1.1 var(--font-display)", color: "var(--beige)", whiteSpace: "nowrap" }}>
+                  <span style={{ display: "block", marginTop: 1, font: "400 clamp(13.2px,0.55vw + 9.24px,15.95px)/1.1 var(--font-display)", color: "var(--beige)", whiteSpace: "nowrap" }}>
                     {tab.name}
                   </span>
                 </span>
@@ -115,11 +115,11 @@ export function DayFilter({
             style={{ flex: "none", padding: 0, background: "transparent", border: 0, cursor: "pointer" }}
           >
             {pick === tab.key ? (
-              <span className="mono" style={{ display: "block", padding: "8px 13px 9px", clipPath: soft(i), background: "var(--orange)", fontSize: 11, letterSpacing: ".1em", color: "var(--beige)" }}>
+              <span className="mono" style={{ display: "block", padding: "8px 13px 9px", clipPath: soft(i), background: "var(--orange)", fontSize: 12.1, letterSpacing: ".1em", color: "var(--beige)" }}>
                 {tab.short}
               </span>
             ) : (
-              <span className="mono day-chip-off" style={{ display: "block", margin: "1px 0", padding: "6px 11px 7px", clipPath: soft(i), background: "var(--chip-well)", fontSize: 10, letterSpacing: ".1em", color: "var(--beige)", opacity: 0.72, transition: "opacity var(--hover)" }}>
+              <span className="mono day-chip-off" style={{ display: "block", margin: "1px 0", padding: "6px 11px 7px", clipPath: soft(i), background: "var(--chip-well)", fontSize: 11, letterSpacing: ".1em", color: "var(--beige)", opacity: 0.72, transition: "opacity var(--hover)" }}>
                 {tab.short}
               </span>
             )}

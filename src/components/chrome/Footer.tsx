@@ -61,7 +61,7 @@ export function Footer() {
           <a
             href={`mailto:${CONTACT_EMAIL}`}
             style={{
-              font: "400 16px/1 var(--font-display)",
+              font: "400 17.6px/1 var(--font-display)",
               color: "var(--beige)",
               transition: "color var(--hover)",
             }}
@@ -73,7 +73,7 @@ export function Footer() {
           className="mono"
           style={{
             margin: 0,
-            fontSize: 10,
+            fontSize: 11,
             lineHeight: 1.9,
             letterSpacing: ".14em",
             color: "var(--dateline)",

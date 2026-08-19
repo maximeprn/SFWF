@@ -46,7 +46,7 @@ export function BackToTop() {
         clipPath: soft(4),
         background: "var(--orange)",
         color: "var(--button-ink)",
-        font: "700 13px/1 var(--font-body)",
+        font: "700 14.3px/1 var(--font-body)",
         cursor: "pointer",
         transition: "background var(--hover)",
       }}

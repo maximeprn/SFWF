@@ -32,7 +32,7 @@ export function AccessMark({
         )}
         <span
           className="mono"
-          style={{ fontSize: 10, letterSpacing: ".12em", color: "var(--ink-body)" }}
+          style={{ fontSize: 11, letterSpacing: ".12em", color: "var(--ink-body)" }}
         >
           {word}
         </span>
@@ -40,7 +40,7 @@ export function AccessMark({
       {/* The chevron flips with no transition — it is a state, not a movement. */}
       <span
         aria-hidden="true"
-        style={{ flex: "none", font: "700 11px/1 var(--font-body)", color: "var(--chevron)" }}
+        style={{ flex: "none", font: "700 12.1px/1 var(--font-body)", color: "var(--chevron)" }}
       >
         {chevron}
       </span>

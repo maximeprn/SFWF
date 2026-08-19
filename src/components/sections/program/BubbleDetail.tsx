@@ -6,7 +6,7 @@ import { soft } from "@/lib/design/shapes";
 
 const ITALIC_NOTE = {
   margin: "11px 0 0",
-  font: "italic 400 clamp(12px,0.11vw + 11.6px,13px)/1.5 var(--font-body)",
+  font: "italic 400 clamp(13.2px,0.121vw + 12.76px,14.3px)/1.5 var(--font-body)",
   color: "var(--ink-body)",
 } as const;
 
@@ -33,7 +33,7 @@ export function BubbleDetail({
       <p
         style={{
           margin: "6px 0 0",
-          font: "700 clamp(10.5px, 0.11vw + 10.07px, 11.5px)/1.5 var(--font-body)",
+          font: "700 clamp(11.55px, 0.121vw + 11.077px, 12.65px)/1.5 var(--font-body)",
           letterSpacing: ".03em",
           color: "var(--ink-body)",
           textTransform: "uppercase",
@@ -57,7 +57,7 @@ export function BubbleDetail({
                system scales, so a fixed one never grew on a 440px bubble and — worse — left
                the description smaller than the line-up crediting it. Prose now sits above
                its own credit list at every width, under the title, where it belongs. */
-            font: "400 clamp(12.5px, 0.14vw + 11.95px, 13.5px)/1.62 var(--font-body)",
+            font: "400 clamp(13.75px, 0.154vw + 13.145px, 14.85px)/1.62 var(--font-body)",
             color: "var(--ink-title)",
             textWrap: "pretty",
           }}
@@ -65,7 +65,7 @@ export function BubbleDetail({
           {event.desc}
         </p>
       ) : (
-        <p style={{ ...ITALIC_NOTE, fontSize: "clamp(12.8px,0.19vw + 12.1px,14.5px)", lineHeight: 1.62 }}>
+        <p style={{ ...ITALIC_NOTE, fontSize: "clamp(14.08px,0.209vw + 13.31px,15.95px)", lineHeight: 1.62 }}>
           Program details to be announced.
         </p>
       )}
@@ -85,7 +85,7 @@ export function BubbleDetail({
             style={{
               margin: 0,
               maxWidth: "52ch",
-              font: "400 clamp(12px,0.11vw + 11.6px,13px)/1.5 var(--font-body)",
+              font: "400 clamp(13.2px,0.121vw + 12.76px,14.3px)/1.5 var(--font-body)",
               color: "var(--ink-body)",
             }}
           >
@@ -113,7 +113,7 @@ export function BubbleDetail({
               /* Above the description, below the title. At the handoff's flat 12px the one
                  thing in the bubble you are meant to press was set smaller than the prose
                  you had just finished reading. */
-              font: "700 clamp(13.5px, 0.17vw + 12.84px, 15px)/1.2 var(--font-body)",
+              font: "700 clamp(14.85px, 0.187vw + 14.124px, 16.5px)/1.2 var(--font-body)",
               cursor: "pointer",
               transition: "background var(--hover)",
             }}

@@ -21,7 +21,7 @@ export function SponsorRow() {
              more air under it than a paragraph would to read as a label rather than as the
              first thing in the row. */
           margin: "0 0 clamp(26px,3.2vw,36px)",
-          fontSize: 10.5,
+          fontSize: 11.55,
           letterSpacing: ".2em",
           color: "var(--beige)",
         }}
