@@ -6,7 +6,6 @@ import type { FestivalEvent } from "@/content/types";
 import { soft } from "@/lib/design/shapes";
 import type { Phase } from "@/lib/program/useBubbleReveal";
 import { AccessMark } from "./AccessMark";
-import { Chevron } from "./Chevron";
 import { BubbleDetail } from "./BubbleDetail";
 
 /**
@@ -58,16 +57,10 @@ export function EventBubble({
       }}
     >
       {open ? (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            gap: 18,
-            paddingRight: 6,
-          }}
-        >
-          {/* The title grows rather than being replaced — 15.5–17 up to 18–21. */}
+        <div>
+          {/* The title grows rather than being replaced — 15.5–17 up to 18–21. It has the
+              header to itself: nothing marks the open state in this corner, because the
+              bubble being open is the thing you can already see. */}
           <p
             style={{
               margin: 0,
@@ -79,7 +72,6 @@ export function EventBubble({
           >
             {event.title}
           </p>
-          <Chevron open />
         </div>
       ) : (
         <div
@@ -124,10 +116,7 @@ export function EventBubble({
               {event.title}
             </p>
           </div>
-          <div style={{ flex: "none", display: "flex", alignItems: "center", gap: 13 }}>
-            <AccessMark event={event} />
-            <Chevron />
-          </div>
+          <AccessMark event={event} />
         </div>
       )}
 
