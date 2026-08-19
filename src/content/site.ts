@@ -65,12 +65,20 @@ export const SPONSORS = [
   { name: "Modulus", src: "/sponsors/modulus.png", intrinsic: [640, 188] },
   { name: "Destileria Limtuaco", src: "/sponsors/destileria-limtuaco.svg", intrinsic: [2022, 416] },
   { name: "Galatea Tours Siargao", src: "/sponsors/galatea.svg", intrinsic: [2311, 955] },
+  { name: "Coconut Cruisers", src: "/sponsors/coconut-cruisers.svg", intrinsic: [388, 391] },
+  { name: "Greenhouse", src: "/sponsors/greenhouse.svg", intrinsic: [734, 271] },
+  { name: "Masterplan Global", src: "/sponsors/masterplan-global.svg", intrinsic: [837, 713] },
+  { name: "Ripple", src: "/sponsors/ripple.svg", intrinsic: [852, 243] },
+  { name: "The Henry", src: "/sponsors/the-henry.svg", intrinsic: [383, 371] },
+  { name: "Tropika", src: "/sponsors/tropika.svg", intrinsic: [395, 395] },
 ] as const;
 
 /**
  * The host marks. Widths are hand-tuned per logo for optical weight, not derived from the
  * artwork — a uniform height leaves the wide wordmarks shouting and the round marks lost.
- * Hiyas Farm and Tropical Academy have no mark and are set in type instead.
+ *
+ * Marks only. The prototype set two further hosts in type because they have no artwork;
+ * that pair is out, so the row is a wall of logos with nothing lettered among them.
  */
 export const HOST_LOGOS = [
   { name: "Wild Siargao", src: "/venues/beige/wild.png", width: 30, intrinsic: [114, 174] },
@@ -89,5 +97,3 @@ export const HOST_LOGOS = [
   { name: "Lunares Café", src: "/venues/beige/lunares.png", width: 48, intrinsic: [420, 420] },
   { name: "Siargao Corner Café", src: "/venues/beige/siargao-corner-cafe.png", width: 48, intrinsic: [1120, 1121] },
 ] as const;
-
-export const HOST_NAMES = ["Hiyas Farm", "Tropical Academy"] as const;

@@ -71,8 +71,8 @@ describe("site", () => {
     expect(FESTIVAL_DATES.display).toContain("2026");
   });
 
-  it("carries the four sponsor marks and the fifteen host marks, all beige", () => {
-    expect(SPONSORS).toHaveLength(4);
+  it("carries the ten sponsor marks and the fifteen host marks, all beige", () => {
+    expect(SPONSORS).toHaveLength(10);
     expect(HOST_LOGOS).toHaveLength(15);
     for (const mark of [...SPONSORS, ...HOST_LOGOS]) {
       const [w, h] = mark.intrinsic;

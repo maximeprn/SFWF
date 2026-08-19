@@ -1,13 +1,13 @@
 import { Mark } from "@/components/ui/Mark";
 import { WobbleFlourish } from "@/components/ui/Wobble";
-import { HOST_LOGOS, HOST_NAMES } from "@/content/site";
+import { HOST_LOGOS } from "@/content/site";
 
 /**
  * Everyone hosting a gathering. The prototype wrapped this row in a link to a Venues page
  * that was explored and cut — it is a credit, not a control, and does not link anywhere.
  *
  * Widths are per-logo and hand-tuned: a common height leaves the wide wordmarks shouting
- * and the round marks lost. Two hosts have no mark and are set in the display face instead.
+ * and the round marks lost.
  */
 export function HostRow() {
   return (
@@ -46,11 +46,6 @@ export function HostRow() {
             intrinsic={host.intrinsic}
             style={{ width: host.width, height: "auto" }}
           />
-        ))}
-        {HOST_NAMES.map((name) => (
-          <span key={name} style={{ font: "400 20px/1 var(--font-display)", color: "var(--beige)" }}>
-            {name}
-          </span>
         ))}
       </div>
     </section>
