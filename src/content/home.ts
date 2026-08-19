@@ -75,5 +75,5 @@ export const PURPOSE = {
   ],
   payoff: "And it takes root — local farmers know what to grow.",
   closing: "The week is what gets everyone in the room. Join us and be part of the solution.",
-  cta: "See the Program",
+  cta: "Learn more",
 } as const;
