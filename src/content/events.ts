@@ -62,7 +62,7 @@ export const DAYS: readonly FestivalDay[] = [
       {
         id: "gl-market-roots",
         venue: "GL PUBLIC MARKET",
-        time: "TIME TBD",
+        time: "4PM – 6PM",
         title: "Wet market experience by Roots",
         price: "À LA CARTE",
         who: "Roots",
@@ -168,7 +168,7 @@ export const DAYS: readonly FestivalDay[] = [
       {
         id: "kermit-pizza-contest",
         venue: "KERMIT",
-        time: "TIME TBD",
+        time: "4PM",
         title: "Kermit pizza eating contest!",
         price: "TBD",
         who: null,
@@ -214,15 +214,15 @@ export const DAYS: readonly FestivalDay[] = [
       {
         id: "mam-on-chefs-table",
         venue: "MAM-ON ISLAND",
-        time: "MORNING",
+        time: "9AM – 5PM",
         title: "Island style chef’s table",
         price: "₱6,000 / HEAD",
-        who: "Chef David · Hapag Manila · Ayà Manila",
+        who: "Chef David · Hapag Manila · Ayà Manila · Last Chance",
         desc:
           "Cev brings the chefs of Hapag Manila (1 Michelin Star) and Ayà Manila (Michelin " +
           "Selected) over to curate an island feast on beautiful Mam-on Island — a " +
           "one-of-a-kind boodle fight inspired heavily by kinilaw (raw) and sugba (grilled) " +
-          "cooking techniques.",
+          "cooking techniques. Cocktails by Last Chance.",
       },
       {
         id: "bravo-mercado",
@@ -235,7 +235,9 @@ export const DAYS: readonly FestivalDay[] = [
           "Bravo hosts a vibrant gathering celebrating the flavours and creativity of " +
           "Siargao. Karinderyas, local eateries and some of Siargao’s favourite restaurants " +
           "come together right by the beach, with live performances, workshops and cultural " +
-          "programming, plus a special introduction of Siargao Slow Food to the community.",
+          "programming, plus the community introduction of Slow Food Siargao — a local " +
+          "chapter of the international Slow Food movement, formed by island chefs, giving " +
+          "talks on the gaps in Siargao’s local food supply chain.",
       },
       {
         id: "sagana-salo-salo",

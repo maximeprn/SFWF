@@ -53,5 +53,8 @@ These are §13 items that touch what shipped. None were invented around.
    source. Shipped as given.
 3. **Seven events have no confirmed price** and one (Paraluman) has neither line-up nor description.
    The UI states the absence rather than guessing — that copy is the design.
+   Times are now all confirmed: Roots' wet market, the Kermit contest and the Mam-on chef's table
+   came in on 19 Aug, so nothing on the page says "time to be confirmed" any more. The `TIME TBD`
+   branch in `softTime` stays, with its test — the next schedule change may need it again.
 4. `info@siargaofoodfest.com` is the only address on the page. The Press page's
    `hello@siargaofoodandwinefestival.com` is a phase 2 question.
