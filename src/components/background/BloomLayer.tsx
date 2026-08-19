@@ -2,89 +2,64 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
-import { DYE_TEXTURE } from "@/content/photos";
 import { createDyeFlow, type DyeFlow } from "./dyeFlow";
-import { LOADER_STRENGTH, PAGE_STRENGTH } from "./shader";
+import { buildDyeGround, paintStill } from "./dyeGround";
 
 /**
- * The live dye. Sits fixed behind every page — one per document, on the primary surface,
- * and the only ambient motion in the system.
+ * The dye. One fixed, viewport-sized canvas behind the page — the only ambient motion in
+ * the system, and the only background in the product.
  *
  * A swipe stirs it like a hand through liquid: the whole path of the stroke stays stirred,
  * and when the finger lifts the motion keeps developing for a couple of seconds rather than
- * stopping dead. Scrolling stirs it too, on a phone and with a wheel.
+ * stopping dead. Scrolling stirs it too. There is deliberately no `pointerup` handler —
+ * lifting off is not an event the field cares about; it simply stops being fed and coasts.
  *
- * Falls back to the static texture when WebGL is unavailable or the visitor has asked for
- * reduced motion — visually identical at rest.
- *
- * It stirs harder while the loading seal is up, where the dye is the whole screen, and eases
- * off once there is copy to read over it.
+ * The ground itself is the two-colour remap in `dyeGround`, handed over as a texture, so
+ * nothing here knows anything about colour. Under `prefers-reduced-motion`, without WebGL,
+ * or after the GPU takes the context back, `paintStill` draws the identical ground flat.
  */
-export function BloomLayer({ loading = false }: { readonly loading?: boolean }) {
+export function BloomLayer() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reduced = usePrefersReducedMotion();
-  const [failed, setFailed] = useState(false);
-  const live = !reduced && !failed;
+  /* Whether this device can run the shader is only knowable after hydration, so this is a
+     genuine external-capability report rather than derived state. */
+  const [lost, setLost] = useState(false);
+  const still = reduced || lost;
 
-  /* Retuning is a live setter, never a remount — rebuilding the flow would drop the field
-     and with it every eddy currently unwinding. The ref seeds the first mount, since the
-     retune effect below has not run yet at that point. */
-  const flowRef = useRef<DyeFlow | null>(null);
-  const strength = loading ? LOADER_STRENGTH : PAGE_STRENGTH;
-  const strengthRef = useRef(strength);
-
-  /* Whether this device can run the shader is only knowable after hydration, so setFailed
-     is a genuine external-capability report, not derived state. It fires at most once, and
-     only on hardware that can't run the effect at all. */
   useEffect(() => {
-    if (reduced || failed) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const flow = createDyeFlow(canvas, {
-      image: DYE_TEXTURE,
-      strength: strengthRef.current,
-      onImageError: () => setFailed(true),
-      onContextLost: () => setFailed(true),
-    });
-    if (!flow) {
-      setFailed(true);
-      return;
-    }
-    flowRef.current = flow;
-    return () => {
-      flowRef.current = null;
-      flow.destroy();
-    };
-  }, [reduced, failed]);
+    let flow: DyeFlow | null = null;
+    let dead = false;
 
-  useEffect(() => {
-    strengthRef.current = strength;
-    flowRef.current?.set({ strength });
-  }, [strength]);
+    void buildDyeGround()
+      .then((ground) => {
+        if (dead) return;
+        if (still) return paintStill(canvas, ground);
+        /* No `onImageError`: the texture is a canvas just built here, so there is no fetch
+           left to fail. Losing the context is the only way this stops painting. */
+        flow = createDyeFlow(canvas, { image: ground, onContextLost: () => setLost(true) });
+        if (!flow) paintStill(canvas, ground);
+      })
+      .catch((error: unknown) => {
+        console.error("BloomLayer: dye ground failed —", error);
+      });
+
+    return () => {
+      dead = true;
+      flow?.destroy();
+    };
+  }, [still]);
 
   return (
     <div aria-hidden="true" className="dye-layer">
+      {/* A canvas holds one context type for life, so the still path needs an element that
+          has never been handed to WebGL. Keying on the mode gives it one. */}
       <canvas
+        key={still ? "still" : "flow"}
         ref={canvasRef}
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          display: live ? "block" : "none",
-        }}
+        style={{ width: "100%", height: "100%", display: "block" }}
       />
-      {!live && (
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: `url(${DYE_TEXTURE}) center/cover`,
-          }}
-        />
-      )}
-      {/* The veil is what lets white type hold over the dye. It stays on both paths. */}
-      <div style={{ position: "absolute", inset: 0, background: "var(--veil)" }} />
     </div>
   );
 }

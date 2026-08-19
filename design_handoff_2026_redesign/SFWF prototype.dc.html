@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics=""><meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Beth+Ellen&amp;family=Baloo+2:wght@400;700&amp;family=Arimo:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<script src="image-slot.js"></script>
+<style>
+body{margin:0;background:#4F3F79;font-family:"Arimo",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#E9E7C2;text-decoration:none}a:hover{color:#E9622D}
+.mono{font-family:ui-monospace,Menlo,monospace}
+html{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0}
+.rail{overflow-x:auto;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+@keyframes menuIn{from{opacity:0}to{opacity:1}}
+@keyframes pageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style></helmet>
+
+<svg aria-hidden="true" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden"><defs>
+<clipPath id="pb0" clipPathUnits="objectBoundingBox"><path d="M 0.098 0.988 C 0.324 1.002 0.556 0.974 0.774 0.990 C 0.892 0.998 0.974 0.956 0.984 0.864 C 0.994 0.778 0.982 0.622 0.988 0.478 C 0.994 0.332 1.000 0.152 0.962 0.082 C 0.930 0.022 0.796 0.022 0.586 0.010 C 0.376 -0.002 0.148 0.008 0.054 0.038 C 0.008 0.052 0.002 0.204 0.008 0.400 C 0.014 0.596 0.000 0.818 0.028 0.906 C 0.046 0.972 0.066 0.980 0.098 0.988 Z"></path></clipPath>
+<clipPath id="pb1" clipPathUnits="objectBoundingBox"><path d="M 0.895 0.986 C 0.680 1.000 0.440 0.976 0.240 0.992 C 0.120 1.002 0.032 0.954 0.018 0.870 C 0.004 0.788 0.016 0.620 0.010 0.480 C 0.004 0.336 -0.004 0.158 0.034 0.084 C 0.066 0.020 0.210 0.024 0.420 0.012 C 0.628 0.000 0.850 0.006 0.948 0.040 C 0.994 0.056 0.996 0.210 0.990 0.404 C 0.984 0.596 1.004 0.810 0.974 0.902 C 0.952 0.970 0.938 0.976 0.895 0.986 Z"></path></clipPath>
+<clipPath id="pb2" clipPathUnits="objectBoundingBox"><path d="M 0.922 0.980 C 0.700 0.994 0.420 0.980 0.188 0.994 C 0.074 1.002 0.024 0.938 0.014 0.848 C 0.004 0.760 0.018 0.608 0.012 0.472 C 0.006 0.332 0.006 0.174 0.048 0.094 C 0.082 0.028 0.230 0.034 0.434 0.020 C 0.640 0.006 0.860 0.014 0.954 0.054 C 0.996 0.072 0.992 0.218 0.986 0.412 C 0.980 0.606 1.000 0.836 0.966 0.916 C 0.944 0.968 0.952 0.970 0.922 0.980 Z"></path></clipPath>
+<clipPath id="pb3" clipPathUnits="objectBoundingBox"><path d="M 0.888 0.992 C 0.664 1.004 0.452 0.970 0.214 0.986 C 0.098 0.994 0.020 0.962 0.012 0.874 C 0.004 0.792 0.020 0.628 0.014 0.484 C 0.008 0.328 -0.006 0.144 0.040 0.078 C 0.074 0.028 0.196 0.018 0.406 0.008 C 0.616 -0.002 0.844 0.010 0.942 0.034 C 0.990 0.046 0.998 0.196 0.992 0.394 C 0.986 0.592 0.998 0.824 0.970 0.910 C 0.956 0.974 0.930 0.982 0.888 0.992 Z"></path></clipPath>
+<clipPath id="pb4" clipPathUnits="objectBoundingBox"><path d="M 0.914 0.984 C 0.690 0.998 0.430 0.972 0.200 0.990 C 0.082 1.000 0.028 0.946 0.016 0.858 C 0.004 0.772 0.014 0.614 0.010 0.476 C 0.006 0.334 0.002 0.166 0.042 0.090 C 0.074 0.024 0.220 0.030 0.428 0.016 C 0.634 0.002 0.854 0.010 0.950 0.046 C 0.994 0.062 0.994 0.214 0.988 0.408 C 0.982 0.602 1.002 0.828 0.970 0.910 C 0.948 0.970 0.944 0.974 0.914 0.984 Z"></path></clipPath>
+<clipPath id="pb5" clipPathUnits="objectBoundingBox"><path d="M 0.902 0.988 C 0.676 1.002 0.444 0.974 0.226 0.990 C 0.108 0.998 0.026 0.956 0.016 0.864 C 0.006 0.778 0.018 0.622 0.012 0.478 C 0.006 0.332 0.000 0.152 0.038 0.082 C 0.070 0.022 0.204 0.022 0.414 0.010 C 0.624 -0.002 0.852 0.008 0.946 0.038 C 0.992 0.052 0.998 0.204 0.992 0.400 C 0.986 0.596 1.000 0.818 0.972 0.906 C 0.954 0.972 0.934 0.980 0.902 0.988 Z"></path></clipPath>
+</defs></svg>
+
+{{ dyeLayer }}
+
+<div style="position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column">
+
+  <header style="position:sticky;top:0;z-index:60;pointer-events:none">
+    <div style="max-width:calc(var(--sw,1040px) + 60px);margin:0 auto;padding:15px clamp(18px,5vw,52px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:22px">
+      <a href="#/home" style="justify-self:start;display:block;pointer-events:auto"><img src="assets/logos/sfwf-beige.png" alt="Siargao Food &amp; Wine Festival" style="display:block;height:23px"></a>
+      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+        <nav style="justify-self:center;display:flex;align-items:center;gap:clamp(16px,2.2vw,28px);pointer-events:auto">
+          <span style="position:relative;display:block;padding-bottom:6px">
+            <a href="#/home" style-hover="color:#E9622D" style="font:400 14px/1 'Beth Ellen',cursive;color:#E9E7C2;transition:color .15s ease">Home</a>
+            <sc-if value="{{ onHome }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 100 6" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;left:-2px;right:-2px;bottom:0;width:calc(100% + 4px);height:5px;overflow:visible"><path d="M1 4 C 18 1 34 5.4 50 3 C 66 0.8 82 5.2 99 2.2" fill="none" stroke="#E9E7C2" stroke-width="1.6" stroke-linecap="round"></path></svg></sc-if>
+          </span>
+          <span style="position:relative;display:block;padding-bottom:6px">
+            <a href="#/program" style-hover="color:#E9622D" style="font:400 14px/1 'Beth Ellen',cursive;color:#E9E7C2;transition:color .15s ease">Program</a>
+            <sc-if value="{{ onProgram }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 100 6" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;left:-2px;right:-2px;bottom:0;width:calc(100% + 4px);height:5px;overflow:visible"><path d="M1 4 C 18 1 34 5.4 50 3 C 66 0.8 82 5.2 99 2.2" fill="none" stroke="#E9E7C2" stroke-width="1.6" stroke-linecap="round"></path></svg></sc-if>
+          </span>
+          <sc-if value="{{ navVenues }}" hint-placeholder-val="{{ true }}">
+          <span style="position:relative;display:block;padding-bottom:6px">
+            <a href="#/venues" style-hover="color:#E9622D" style="font:400 14px/1 'Beth Ellen',cursive;color:#E9E7C2;transition:color .15s ease">Venues</a>
+            <sc-if value="{{ onVenues }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 100 6" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;left:-2px;right:-2px;bottom:0;width:calc(100% + 4px);height:5px;overflow:visible"><path d="M1 4 C 18 1 34 5.4 50 3 C 66 0.8 82 5.2 99 2.2" fill="none" stroke="#E9E7C2" stroke-width="1.6" stroke-linecap="round"></path></svg></sc-if>
+          </span>
+          </sc-if>
+          <span style="position:relative;display:block;padding-bottom:6px">
+            <a href="#/press" style-hover="color:#E9622D" style="font:400 14px/1 'Beth Ellen',cursive;color:#E9E7C2;transition:color .15s ease">Press</a>
+            <sc-if value="{{ onPress }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 100 6" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;left:-2px;right:-2px;bottom:0;width:calc(100% + 4px);height:5px;overflow:visible"><path d="M1 4 C 18 1 34 5.4 50 3 C 66 0.8 82 5.2 99 2.2" fill="none" stroke="#E9E7C2" stroke-width="1.6" stroke-linecap="round"></path></svg></sc-if>
+          </span>
+        </nav>
+        <a href="#/program" style-hover="background:#f27a49" style="justify-self:end;pointer-events:auto;padding:10px 19px 12px;clip-path:url(#pb2);background:#E9622D;color:#191218;font:700 12.5px/1 'Baloo 2',system-ui,sans-serif;letter-spacing:.02em;transition:background .15s ease">View Program</a>
+      </sc-if>
+      <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{ toggleMenu }}" aria-label="Menu" aria-expanded="{{ menuOpen }}" style="grid-column:3;justify-self:end;pointer-events:auto;width:42px;height:42px;display:grid;place-items:center;background:rgba(233,231,194,.16);border:1px solid rgba(233,231,194,.34);backdrop-filter:blur(6px);border-radius:52% 48% 56% 44% / 60% 42% 58% 40%;color:#E9E7C2;cursor:pointer;padding:0;font:400 15px/1 'Arimo',Helvetica,sans-serif">{{ menuGlyph }}</button>
+      </sc-if>
+    </div>
+  </header>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeMenu }}" style="position:fixed;inset:0;z-index:55;display:grid;place-items:center;padding:56px 16px 40px;animation:menuIn .34s ease both">
+      <div style="position:relative;width:min(84vw,322px);aspect-ratio:322/326;display:grid;place-items:center">
+        <svg viewBox="0 0 300 320" aria-hidden="true" style="position:absolute;left:-11%;top:-5%;width:121%;height:118%;overflow:visible"><path d="M152 9 C188 5 212 21 226 45 C240 69 233 91 246 111 C259 131 264 156 253 178 C242 200 247 223 232 245 C217 267 191 281 165 289 C139 297 110 293 88 281 C66 269 50 249 42 227 C34 205 39 182 31 160 C23 138 29 113 43 93 C57 73 55 51 73 33 C91 15 119 13 152 9 Z" fill="none" stroke="#E9E7C2" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"></path></svg>
+        <nav style="position:relative;display:flex;flex-direction:column;align-items:center;gap:24px">
+          <a href="#/home" style="font:400 23px/1 'Beth Ellen',cursive;color:#E9E7C2">Home</a>
+          <a href="#/program" style="font:400 23px/1 'Beth Ellen',cursive;color:#E9E7C2">Program</a>
+          <sc-if value="{{ navVenues }}" hint-placeholder-val="{{ true }}">
+          <a href="#/venues" style="font:400 23px/1 'Beth Ellen',cursive;color:#E9E7C2">Venues</a>
+          </sc-if>
+          <a href="#/press" style="font:400 23px/1 'Beth Ellen',cursive;color:#E9E7C2">Press</a>
+        </nav>
+      </div>
+    </div>
+  </sc-if>
+
+  <main ref="{{ mainRef }}" style="flex:1;transition:opacity .3s ease;opacity:{{ contentOpacity }};pointer-events:{{ contentPointer }}">
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <div data-screen-label="Home" style="animation:pageIn .3s ease both">
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:calc(clamp(34px,5vw,58px) * var(--hs,1) * var(--hs,1)) clamp(18px,5vw,52px) 0;text-align:center">
+      <div style="position:relative;display:inline-block;max-width:100%;padding-top:calc(22px * var(--hs,1))">
+        <img src="assets/logos/sfwf-beige.png" alt="Siargao Food &amp; Wine Festival" style="width:calc(min(46vw,300px) * var(--hs,1));display:block">
+        <p style="position:absolute;bottom:calc(100% + 2px);right:0;margin:0;font:400 calc(clamp(15px,2vw,20px) * var(--hs,1))/1 'Beth Ellen',cursive;color:#E9E7C2;white-space:nowrap;transform:rotate(-4deg);transform-origin:right bottom">2nd edition</p>
+      </div>
+      <h1 style="margin:calc(14px * var(--hs,1)) auto calc(clamp(26px,4vw,40px) * var(--hs,1));max-width:14em;font:400 calc(clamp(32px,5.4vw,56px) * var(--hs,1))/1.1 'Beth Ellen',cursive;color:#E9622D;text-wrap:pretty">ani sang Siargao</h1>
+      <div style="margin:0 auto;display:flex;align-items:center;justify-content:center;gap:clamp(10px,2vw,18px)">
+        <svg width="120" height="12" viewBox="0 0 130 14" fill="none" aria-hidden="true" style="display:block;flex:none;width:calc(clamp(54px,10vw,110px) * var(--hs,1))"><path d="M2 8 C 14 2 26 12 40 7 C 52 3 64 11 78 7 C 90 3 102 11 116 6 C 122 4 126 7 128 5" stroke="#E9E7C2" stroke-opacity=".72" stroke-width="1.5" stroke-linecap="round"></path></svg>
+        <p class="mono" style="margin:0;font-size:calc(clamp(10px,1.4vw,11.5px) * var(--hs,1));letter-spacing:.22em;color:#E9E7C2;white-space:nowrap">26 – 31 AUGUST 2026</p>
+        <svg width="120" height="12" viewBox="0 0 130 14" fill="none" aria-hidden="true" style="display:block;flex:none;width:calc(clamp(54px,10vw,110px) * var(--hs,1));transform:scaleX(-1)"><path d="M2 8 C 14 2 26 12 40 7 C 52 3 64 11 78 7 C 90 3 102 11 116 6 C 122 4 126 7 128 5" stroke="#E9E7C2" stroke-opacity=".72" stroke-width="1.5" stroke-linecap="round"></path></svg>
+      </div>
+      <a href="#/program" style-hover="background:#f27a49" style="display: inline-block; margin-top: 20px; padding: 13px 26px 15px; clip-path: url(#pb1); color: #191218; font: 700 13.5px/1 'Baloo 2',system-ui,sans-serif; letter-spacing: .02em; transition: background .15s ease; background-color: #E9E7C2">View the Program</a>
+    </section>
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(28px,4vw,44px) clamp(18px,5vw,52px) 0;display:flex;justify-content:center">
+      <div style="position:relative;width:min(72vw,268px);aspect-ratio:9/16;box-shadow:0 18px 46px rgba(20,14,40,.32)">
+        <image-slot id="proto-hero-film" shape="rounded" radius="6" fit="cover" placeholder="Festival film — poster frame, 9:16" style="border-radius:16px;overflow:hidden"></image-slot>
+        <div style="position:absolute;left:0;right:0;bottom:0;padding:12px 14px;pointer-events:none;background:linear-gradient(transparent,rgba(20,14,40,.66))">
+          <p class="mono" style="margin:0;font-size:9.5px;letter-spacing:.18em;color:#E9E7C2">THE FILM · 2026</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(30px,4vw,48px) clamp(18px,5vw,52px) 0;display:flex;justify-content:center">
+      <div style="max-width:var(--tm,58ch);text-align:center">
+        <p style="margin: 0; font: 400 15px/1.7 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: clamp(13px,0.22vw + 12.17px,15px)">Siargao is nine municipalities of farmland, mangrove and open water, and for six days in August the whole island becomes the venue. Ani sang Siargao is not held in one place. It happens in kitchens, on a farm, in a wet market among the fishers, on a beach at sunset, in the cafés that were here long before anyone was watching.</p>
+        <p style="margin: 16px 0 0; font: 400 15px/1.7 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: clamp(13px,0.22vw + 12.17px,15px)">There is no way to understand it from the outside. You have to come and eat with us.</p>
+        <p style="margin:20px 0 0;font:400 clamp(21px,2.8vw,28px)/1.24 'Beth Ellen',cursive;color:#E9622D">See you on Siargao this August</p>
+      </div>
+    </section>
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(34px,4.6vw,54px) clamp(18px,5vw,52px) 0">
+      <svg width="216" height="24" viewBox="0 0 216 24" fill="none" aria-hidden="true" style="display:block;margin:0 auto clamp(28px,4vw,44px);width:clamp(120px,22vw,200px);transform:rotate(0.9deg)"><path d="M2 14 C 18 4 34 20 50 9 C 64 1 78 18 96 12 C 112 7 122 20 140 10 C 154 3 168 17 184 11 C 196 8 204 14 214 9" stroke="#E9E7C2" stroke-opacity=".7" stroke-width="1.8" stroke-linecap="round"></path></svg>
+      <div style="max-width:calc(var(--tm,58ch) + 2ch);margin:0 auto;text-align:center">
+        <p class="mono" style="margin:0 0 11px;font-size:10.5px;letter-spacing:.2em;color:#E9E7C2">WHAT IT IS</p>
+        <p style="margin: 0; font: 400 15px/1.7 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: clamp(13px,0.22vw + 12.17px,15px)">The Siargao Food &amp; Wine Festival is the Philippines' first community-led, island-wide culinary festival. Six days, nine municipalities, and more than thirty chefs, farmers, fishers, producers and venues, run by the people who actually live and cook here. Now in its second year.</p>
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(16px,4vw,40px);margin:clamp(20px,3vw,28px) 0 0">
+          <div><p style="margin:0;font:400 clamp(24px,3.4vw,32px)/1 'Beth Ellen',cursive;color:#E9622D">6</p><p class="mono" style="margin:5px 0 0;font-size:10px;letter-spacing:.16em;color:#E9E7C2">DAYS</p></div>
+          <div><p style="margin:0;font:400 clamp(24px,3.4vw,32px)/1 'Beth Ellen',cursive;color:#E9622D">9</p><p class="mono" style="margin:5px 0 0;font-size:10px;letter-spacing:.16em;color:#E9E7C2">MUNICIPALITIES</p></div>
+          <div><p style="margin:0;font:400 clamp(24px,3.4vw,32px)/1 'Beth Ellen',cursive;color:#E9622D">30+</p><p class="mono" style="margin:5px 0 0;font-size:10px;letter-spacing:.16em;color:#E9E7C2">MAKERS</p></div>
+          <div><p style="margin:0;font:400 clamp(24px,3.4vw,32px)/1 'Beth Ellen',cursive;color:#E9622D">18<br></p><p class="mono" style="margin:5px 0 0;font-size:10px;letter-spacing:.16em;color:#E9E7C2">GATHERINGS</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(34px,4.6vw,54px) clamp(18px,5vw,52px) 0">
+      <svg width="216" height="24" viewBox="0 0 216 24" fill="none" aria-hidden="true" style="display:block;margin:0 auto clamp(28px,4vw,44px);width:clamp(120px,22vw,200px);transform:rotate(-0.7deg)"><path d="M3 9 C 14 19 28 3 42 13 C 58 22 70 5 88 15 C 104 23 118 6 136 14 C 150 20 162 4 178 12 C 192 18 202 8 214 13" stroke="#E9E7C2" stroke-opacity=".74" stroke-width="1.9" stroke-linecap="round"></path></svg>
+      <div style="max-width:calc(var(--tm,58ch) + 2ch);margin:0 auto;text-align:center">
+        <p class="mono" style="margin:0 0 12px;font-size:10.5px;letter-spacing:.2em;color:#E9E7C2">ACKNOWLEDGEMENT</p>
+        <p style="margin:0;font:700 clamp(13.5px,0.22vw + 12.67px,15.5px)/1.55 'Arimo',Helvetica,sans-serif;color:#E9E7C2;letter-spacing:.01em;text-wrap:pretty">THE SIARGAO FOOD &amp; WINE FESTIVAL IS HELD ON THE LAND AND WATERS OF THE PEOPLE OF SIARGAO.</p>
+        <p style="margin: 16px 0 0; font: 400 15px/1.7 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: clamp(13px,0.22vw + 12.17px,15px)">We cook with what their farmers grow and their fishers bring in, and we gather in the kitchens, markets and community spaces they built and still keep. This festival celebrates those who stayed. The families who kept feeding this island through the storms, through the pandemic, through every season the visitors did not see, and who are still here doing it now.</p>
+        <p style="margin: 16px 0 0; font: 400 15px/1.7 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: clamp(13px,0.22vw + 12.17px,15px)">We ask our guests to arrive with that in mind, and to leave having supported it.</p>
+      </div>
+    </section>
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(34px,4.6vw,54px) clamp(18px,5vw,52px) 0;text-align:center">
+      <svg width="216" height="24" viewBox="0 0 216 24" fill="none" aria-hidden="true" style="display:block;margin:0 auto clamp(28px,4vw,44px);width:clamp(120px,22vw,200px);transform:rotate(1.4deg)"><path d="M2 12 C 12 2 24 21 38 8 C 52 -2 66 19 82 10 C 98 3 110 20 128 11 C 144 4 156 18 172 9 C 186 3 198 16 212 10" stroke="#E9E7C2" stroke-opacity=".7" stroke-width="1.7" stroke-linecap="round"></path></svg>
+      <p class="mono" style="margin:0 0 16px;font-size:10.5px;letter-spacing:.2em;color:#E9E7C2">OFFICIAL PARTNERS AND SPONSORS</p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:clamp(22px,3.6vw,38px);margin:clamp(4px,1vw,10px) 0 0">
+        <img src="assets/venues/beige/happy-living.png" alt="Happy Living Philippines" loading="lazy" style="height:clamp(24px,2.8vw,32px);width:auto;max-width:min(40vw,150px);display:block">
+        <img src="assets/venues/beige/modulus.png" alt="Modulus" loading="lazy" style="height:clamp(24px,2.8vw,32px);width:auto;max-width:min(40vw,150px);display:block">
+        <img src="assets/venues/beige/destileria-limtuaco.svg" alt="Destileria Limtuaco" loading="lazy" style="height:clamp(24px,2.8vw,32px);width:auto;max-width:min(40vw,150px);display:block">
+        <img src="assets/venues/beige/galatea.svg" alt="Galatea Tours Siargao" loading="lazy" style="height:clamp(24px,2.8vw,32px);width:auto;max-width:min(40vw,150px);display:block">
+      </div>
+    </section>
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(34px,4.6vw,54px) clamp(18px,5vw,52px) 0">
+      <svg width="216" height="24" viewBox="0 0 216 24" fill="none" aria-hidden="true" style="display:block;margin:0 auto clamp(28px,4vw,44px);width:clamp(120px,22vw,200px);transform:rotate(1.1deg)"><path d="M2 11 C 14 21 28 2 44 13 C 58 22 72 3 88 13 C 104 22 118 4 136 13 C 152 21 166 3 182 12 C 196 19 206 9 214 12" stroke="#E9E7C2" stroke-opacity=".72" stroke-width="1.8" stroke-linecap="round"></path></svg>
+      <div style="max-width:calc(var(--tm,58ch) + 4ch);margin:0 auto">
+        <p class="mono" style="margin:0;font-size:10.5px;letter-spacing:.2em;color:#E9E7C2">WHY WE DO THIS</p>
+        <h2 style="margin: 12px 0 0; font: 400 clamp(24px,3.2vw,34px)/1.16 'Beth Ellen',cursive; color: #E9E7C2; text-wrap: pretty">Siargao grows less of its own food every year.</h2>
+        <div style="margin-top:clamp(26px,3.4vw,36px)">
+          <div style="display:flex;align-items:center;gap:11px">
+            <span style="font:400 clamp(20px,2.6vw,25px)/1 'Beth Ellen',cursive;color:#E9E7C2">01</span>
+            <span class="mono" style="font-size:10.5px;letter-spacing:.2em;color:#E9E7C2;white-space:nowrap">THE GAP</span>
+            <svg viewBox="0 0 200 6" preserveAspectRatio="none" aria-hidden="true" style="flex:1;height:5px;overflow:visible"><path d="M1 3.6 C 34 1.2 68 5 100 2.8 C 134 0.7 168 4.8 199 2.2" fill="none" stroke="rgba(233,231,194,.5)" stroke-width="1.4" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg>
+          </div>
+          <h3 style="margin: 13px 0 0; font: 700 clamp(15px,0.5vw + 13.1px,17.5px)/1.34 'Arimo',Helvetica,sans-serif; color: #E9622D; letter-spacing: .005em; text-wrap: pretty; text-transform: uppercase; font-size: 15.5px">Tourism grows. But not everyone grows with it.</h3>
+          <p style="margin: 10px 0 0; font: 400 15px/1.7 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: clamp(13px,0.22vw + 12.17px,15px)">As Siargao develops, rising costs, unequal access to resources and pressure on local food systems can leave communities behind. The challenge is ensuring tourism creates value <strong style="font-weight:700">with the island — not at its expense.</strong></p>
+        </div>
+        <div style="margin-top:clamp(26px,3.4vw,36px)">
+          <div style="display:flex;align-items:center;gap:11px">
+            <span style="font:400 clamp(20px,2.6vw,25px)/1 'Beth Ellen',cursive;color:#E9E7C2">02</span>
+            <span class="mono" style="font-size:10.5px;letter-spacing:.2em;color:#E9E7C2;white-space:nowrap">THE SOLUTION</span>
+            <svg viewBox="0 0 200 6" preserveAspectRatio="none" aria-hidden="true" style="flex:1;height:5px;overflow:visible"><path d="M1 3.6 C 34 1.2 68 5 100 2.8 C 134 0.7 168 4.8 199 2.2" fill="none" stroke="rgba(233,231,194,.5)" stroke-width="1.4" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg>
+          </div>
+          <h3 style="margin: 13px 0 0; font: 700 clamp(15px,0.5vw + 13.1px,17.5px)/1.34 'Arimo',Helvetica,sans-serif; color: #E9622D; letter-spacing: .005em; text-wrap: pretty; text-transform: uppercase; font-size: 15.5px">Turn tourism into a force for local resilience.</h3>
+          <p style="margin: 10px 0 0; font: 400 15px/1.7 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: clamp(13px,0.22vw + 12.17px,15px)">Through collaboration between hospitality, producers, chefs and communities, we create more circular food systems, supporting local sourcing, reducing waste and directing resources back into the communities that sustain Siargao.</p>
+        </div>
+        <div style="margin:clamp(28px,3.6vw,38px) 0 0">
+          <svg viewBox="0 0 600 6" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:5px;overflow:visible"><path d="M2 3.8 C 108 1.1 216 5.2 300 2.9 C 392 0.6 500 4.9 598 2.4" fill="none" stroke="rgba(233,231,194,.5)" stroke-width="1.4" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg>
+          <p class="mono" style="margin:clamp(18px,2.4vw,24px) 0 10px;font-size:10.5px;letter-spacing:.2em;color:#E9E7C2">AND IT TAKES ROOT</p>
+          <p style="margin:0;max-width:30em;font:700 clamp(15.5px,0.6vw + 13.2px,18.5px)/1.42 'Arimo',Helvetica,sans-serif;color:#E9E7C2;text-wrap:pretty">Local farmers know what to grow.</p>
+        </div>
+        <p style="margin: 14px 0 0; font: 400 15px/1.7 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: clamp(13px,0.22vw + 12.17px,15px)">The week is what gets everyone in the room. Join us and be part of the solution.</p>
+        <a href="#/program" style-hover="background:#f27a49" style="display:inline-block;margin-top:18px;padding:12px 24px 14px;clip-path:url(#pb1);background:#E9622D;color:#191218;font:700 13px/1 'Baloo 2',system-ui,sans-serif;letter-spacing:.02em;transition:background .15s ease">See the Program</a>
+      </div>
+    </section>
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(34px,4.6vw,54px) clamp(18px,5vw,52px) 0;text-align:center">
+      <svg width="216" height="24" viewBox="0 0 216 24" fill="none" aria-hidden="true" style="display:block;margin:0 auto clamp(28px,4vw,44px);width:clamp(120px,22vw,200px);transform:rotate(-1.2deg)"><path d="M4 10 C 16 22 30 1 46 14 C 60 24 74 4 90 16 C 106 24 120 3 138 15 C 154 23 168 5 184 14 C 198 21 206 8 216 12" stroke="#E9E7C2" stroke-opacity=".72" stroke-width="1.9" stroke-linecap="round"></path></svg>
+      <p class="mono" style="margin:0 0 18px;font-size:10.5px;letter-spacing:.2em;color:#E9E7C2">HOSTED ACROSS THE ISLAND BY</p>
+      <a href="#/venues" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(16px,2.6vw,30px);max-width:880px;margin:0 auto">
+        <img src="assets/venues/beige/wild.png" alt="Wild Siargao" loading="lazy" style="width:30px;display:block">
+        <img src="assets/venues/beige/alma.png" alt="Alma" loading="lazy" style="width:84px;display:block">
+        <img src="assets/venues/beige/lokal-lab.png" alt="Lokal Lab" loading="lazy" style="width:66px;display:block">
+        <img src="assets/venues/beige/lyma.png" alt="Lyma" loading="lazy" style="width:64px;display:block">
+        <img src="assets/venues/beige/kermit.png" alt="Kermit Siargao" loading="lazy" style="width:60px;display:block">
+        <img src="assets/venues/beige/bravo.png" alt="Bravo Beach Resort" loading="lazy" style="width:42px;display:block">
+        <img src="assets/venues/beige/roots.png" alt="Roots Siargao" loading="lazy" style="width:98px;display:block">
+        <img src="assets/venues/beige/lamari.png" alt="Lamari" loading="lazy" style="width:92px;display:block">
+        <img src="assets/venues/beige/hue.png" alt="Hue Hotels &amp; Resorts Siargao" loading="lazy" style="width:62px;display:block">
+        <img src="assets/venues/beige/sagana.png" alt="Sagana Siargao" loading="lazy" style="width:58px;display:block">
+        <img src="assets/venues/beige/paraluman.png" alt="Paraluman Siargao" loading="lazy" style="width:78px;display:block">
+        <img src="assets/venues/beige/isla-panciteria.png" alt="Isla Panciteria" loading="lazy" style="width:74px;display:block">
+        <img src="assets/venues/beige/cev.png" alt="Cev Siargao" loading="lazy" style="width:72px;display:block">
+        <img src="assets/venues/beige/lunares.png" alt="Lunares Café" loading="lazy" style="width:48px;display:block">
+        <img src="assets/venues/beige/siargao-corner-cafe.png" alt="Siargao Corner Café" loading="lazy" style="width:48px;display:block">
+        <span style="font:400 20px/1 'Beth Ellen',cursive;color:#E9E7C2">Hiyas Farm</span>
+        <span style="font:400 20px/1 'Beth Ellen',cursive;color:#E9E7C2">Tropical Academy</span>
+      </a>
+    </section>
+
+    <section style="padding:clamp(84px,10.5vw,140px) 0 0">
+      <div style="max-width:var(--sw,1040px);margin:0 auto;padding:0 clamp(18px,5vw,52px) clamp(26px,3.4vw,42px);display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <h2 class="mono" style="margin:0;font-size:10.5px;font-weight:400;letter-spacing:.2em;color:#E9E7C2">RELIVE LAST YEAR'S BEST MOMENTS</h2>
+        <sc-if value="{{ railSwipe }}" hint-placeholder-val="{{ false }}">
+          <span class="mono" style="display:inline-flex;align-items:center;gap:7px;font-size:9.5px;letter-spacing:.2em;color:#E9E7C2;opacity:.78">SWIPE<svg viewBox="0 0 34 8" aria-hidden="true" style="width:26px;height:8px;overflow:visible"><path d="M1 4.4 C 9 2.6 17 5.6 27 3.6" fill="none" stroke="#E9E7C2" stroke-width="1.3" stroke-linecap="round"></path><path d="M23.2 1.1 L27.6 3.6 L23.6 6.6" fill="none" stroke="#E9E7C2" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+        </sc-if>
+      </div>
+      <div class="rail" style="display:flex;gap:36px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:{{ railPad }};justify-content:{{ railJustify }}">
+        <div style="position:relative;flex:none;width:min(58vw,208px);aspect-ratio:9/16;scroll-snap-align:center;box-shadow:0 14px 34px rgba(20,14,40,.3)">
+          <image-slot id="proto-last-1" shape="rounded" radius="6" fit="cover" placeholder="2025 clip 1 — 9:16"></image-slot>
+          <p class="mono" style="position:absolute;left:12px;bottom:10px;margin:0;pointer-events:none;font-size:9.5px;letter-spacing:.16em;color:#E9E7C2;text-shadow:0 1px 8px rgba(20,14,40,.9)">THE MERCADO</p>
+        </div>
+        <div style="position:relative;flex:none;width:min(58vw,208px);aspect-ratio:9/16;scroll-snap-align:center;box-shadow:0 14px 34px rgba(20,14,40,.3)">
+          <image-slot id="proto-last-2" shape="rounded" radius="6" fit="cover" placeholder="2025 clip 2 — 9:16"></image-slot>
+          <p class="mono" style="position:absolute;left:12px;bottom:10px;margin:0;pointer-events:none;font-size:9.5px;letter-spacing:.16em;color:#E9E7C2;text-shadow:0 1px 8px rgba(20,14,40,.9)">THE WET MARKET</p>
+        </div>
+        <div style="position:relative;flex:none;width:min(58vw,208px);aspect-ratio:9/16;scroll-snap-align:center;box-shadow:0 14px 34px rgba(20,14,40,.3)">
+          <image-slot id="proto-last-3" shape="rounded" radius="6" fit="cover" placeholder="2025 clip 3 — 9:16"></image-slot>
+          <p class="mono" style="position:absolute;left:12px;bottom:10px;margin:0;pointer-events:none;font-size:9.5px;letter-spacing:.16em;color:#E9E7C2;text-shadow:0 1px 8px rgba(20,14,40,.9)">THE LONG TABLE</p>
+        </div>
+        
+      </div>
+    </section>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isProgram }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Program" style="animation:pageIn .3s ease both">
+
+    <section style="max-width:calc(var(--sw,1040px) - 60px);margin:0 auto;padding:clamp(28px,4vw,46px) clamp(24px,7vw,76px) 0;text-align:center">
+      
+      <h1 style="margin:0 auto;max-width:16em;font:400 clamp(27px,3.8vw,40px)/1.12 'Beth Ellen',cursive;color:#E9622D;text-wrap:pretty">the six-day journey</h1>
+      <p style="margin:11px auto 0;max-width:calc(var(--tm,58ch) - 8ch);font:400 clamp(12.8px,0.19vw + 12.1px,14.5px)/1.66 'Arimo',Helvetica,sans-serif;color:#E9E7C2;text-wrap:pretty">Tap any gathering to see who is cooking and how to get in. Every reservation is made with the venue itself.</p>
+    </section>
+
+    <section style="max-width:calc(var(--sw,1040px) - 60px);margin:0 auto;padding:clamp(22px,3.2vw,34px) clamp(24px,7vw,76px) 0">
+      <sc-if value="{{ doodles }}" hint-placeholder-val="{{ true }}">
+        
+      </sc-if>
+      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+        <img src="assets/doodles/orange/farmer.png" alt="" style="display: block; width: min(56%,300px); margin: 0 auto clamp(10px,1.6vw,18px); margin-top: 25px"><div class="rail" style="margin:0 -6px">
+          <div style="display: flex; flex-wrap: nowrap; align-items: flex-end; gap: 4px; padding: 0 6px 4px; justify-content: space-between; padding-bottom: 44px; padding-top: 44px">
+            <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="7">
+              <button type="button" onClick="{{ tab.onPick }}" style="flex:none;padding:0;background:transparent;border:0;cursor:pointer;text-align:center">
+                <sc-if value="{{ tab.on }}" hint-placeholder-val="{{ true }}">
+                  <span style="display:block;background:#E9E7C2;clip-path:{{ tab.blob }};padding:7px 13px 9px">
+                    <span class="mono" style="display:block;font-size:8.5px;letter-spacing:.14em;color:#8F3A12">{{ tab.date }}</span>
+                    <span style="display: block; margin-top: 1px; font: 400 13px/1.1 'Beth Ellen',cursive; color: #3E3064; white-space: nowrap; font-size: 16px">{{ tab.name }}</span>
+                  </span>
+                </sc-if>
+                <sc-if value="{{ tab.off }}" hint-placeholder-val="{{ false }}">
+                  <span style-hover="opacity:1" style="display:block;padding:7px 9px 9px;opacity:.7;transition:opacity .15s ease">
+                    <span class="mono" style="display:block;font-size:8.5px;letter-spacing:.14em;color:#E9E7C2">{{ tab.date }}</span>
+                    <span style="display:block;margin-top:1px;font:400 clamp(12px,0.5vw + 8.4px,14.5px)/1.1 'Beth Ellen',cursive;color:#E9E7C2;white-space:nowrap">{{ tab.name }}</span>
+                  </span>
+                </sc-if>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="7">
+            <button type="button" onClick="{{ tab.onPick }}" style="flex:none;padding:0;background:transparent;border:0;cursor:pointer">
+              <sc-if value="{{ tab.on }}" hint-placeholder-val="{{ true }}">
+                <span class="mono" style="display:block;padding:8px 13px 9px;clip-path:{{ tab.blob }};background:#E9622D;font-size:11px;letter-spacing:.1em;color:#E9E7C2">{{ tab.short }}</span>
+              </sc-if>
+              <sc-if value="{{ tab.off }}" hint-placeholder-val="{{ false }}">
+                <span class="mono" style-hover="opacity:1" style="display:block;margin:1px 0;padding:6px 11px 7px;clip-path:{{ tab.blob }};background:rgba(233,231,194,.1);font-size:10px;letter-spacing:.1em;color:#E9E7C2;opacity:.72;transition:opacity .15s ease">{{ tab.short }}</span>
+              </sc-if>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <p class="mono" style="margin:clamp(26px,3.4vw,38px) 0 0;font-size:10px;letter-spacing:.2em;color:#E9E7C2">{{ gridCount }}</p>
+    </section>
+
+    <section style="max-width:calc(var(--sw,1040px) - 60px);margin:0 auto;padding:clamp(14px,2vw,20px) clamp(24px,7vw,76px) 0">
+      <sc-for list="{{ days }}" as="day" hint-placeholder-count="3">
+        <div style="padding:clamp(22px,3vw,32px) 0 clamp(14px,2vw,20px)"><svg viewBox="0 0 600 6" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:5px;overflow:visible;margin:0 0 clamp(22px,3vw,32px)"><path d="M2 4.6 C 46 1.4 88 5.8 132 3.2 C 176 0.6 210 6.2 256 4.4 C 300 2.6 332 0.4 378 2.8 C 420 5 452 6.4 496 3.4 C 534 0.8 562 5.4 598 2.2" fill="none" stroke="rgba(233,231,194,.4)" stroke-width="1.4" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg>
+          <div style="display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin:0 0 clamp(16px,2.2vw,22px)">
+            <p class="mono" style="margin:0;font-size:10px;letter-spacing:.2em;color:#E9E7C2">{{ day.date }}</p>
+            <div style="display:flex;align-items:center;gap:12px">
+              <h3 style="margin:0;font:400 clamp(18px,2.2vw,22px)/1.16 'Beth Ellen',cursive;color:#E9E7C2">{{ day.name }}</h3>
+              <sc-if value="{{ day.showIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ day.iconSrc }}" alt="" style="width:{{ day.iconW }};display:block;flex:none"></sc-if>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px;align-items:start;max-width:calc(var(--sw,1040px) - 148px)">
+            <sc-for list="{{ day.events }}" as="ev" hint-placeholder-count="2">
+              <div role="button" tabIndex="0" onClick="{{ ev.onToggle }}" onKeyDown="{{ ev.onKey }}" style-hover="background:#F2F0D4" style="max-width:440px;background:#E9E7C2;clip-path:{{ ev.blob }};padding:{{ ev.pad }};cursor:pointer;transition:padding .34s cubic-bezier(.22,.75,.2,1),background .15s ease;overflow-wrap:break-word">
+                <sc-if value="{{ ev.closed }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:14px">
+                    <div style="min-width:0">
+                      <p class="mono" style="margin:0 0 7px;font-size:10px;line-height:1.5;letter-spacing:.14em;color:#4F3F79"><span style="font-weight:700;color:#F9621B">{{ ev.venue }}</span> ·<span style="white-space:nowrap"> {{ ev.time }}</span></p>
+                      <p style="margin:0;font:700 clamp(13.2px,0.14vw + 12.7px,14.5px)/1.35 'Arimo',Helvetica,sans-serif;color:#3E3064;text-wrap:pretty">{{ ev.title }}</p>
+                    </div>
+                    <div style="flex:none;display:flex;align-items:center;gap:10px">
+                      <div style="flex:none;display:flex;align-items:center;gap:6px">
+                        <sc-if value="{{ ev.bookable }}" hint-placeholder-val="{{ true }}"><span style="width:8px;height:8px;border-radius:50%;background:#E9622D"></span></sc-if>
+                        <span class="mono" style="font-size:10px;letter-spacing:.12em;color:#4F3F79">{{ ev.access }}</span>
+                      </div>
+                      <span style="flex:none;font:700 11px/1 'Arimo',Helvetica,sans-serif;color:rgba(79,63,121,.92)">▾</span>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ ev.open }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding-right:6px">
+                    <p style="margin:0;max-width:22em;font:700 clamp(15px,0.2vw + 14.25px,16.5px)/1.3 'Arimo',Helvetica,sans-serif;color:#3E3064;text-wrap:pretty">{{ ev.title }}</p>
+                    <div style="flex:none;display:flex;align-items:center;gap:10px;margin-top:3px">
+                      <div style="flex:none;display:flex;align-items:center;gap:6px">
+                        <sc-if value="{{ ev.bookable }}" hint-placeholder-val="{{ true }}"><span style="width:8px;height:8px;border-radius:50%;background:#E9622D"></span></sc-if>
+                        <span class="mono" style="font-size:10px;letter-spacing:.12em;color:#4F3F79">{{ ev.access }}</span>
+                      </div>
+                      <span style="flex:none;font:700 11px/1 'Arimo',Helvetica,sans-serif;color:rgba(79,63,121,.92)">▴</span>
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-rows:{{ ev.rows }};opacity:{{ ev.detailOpacity }};overflow:hidden;transition:grid-template-rows .34s cubic-bezier(.22,.75,.2,1),opacity .34s cubic-bezier(.22,.75,.2,1)">
+                    <div style="min-height:0;min-width:0">
+                  <p style="margin: 6px 0 0; font: 400 12.5px/1.5 'Arimo',Helvetica,sans-serif; color: #4F3F79; text-transform: uppercase; font-size: 8.5px; font-weight: 900"><span style="color:#E9622D">{{ ev.place }}</span> · {{ ev.hintRest }}</p>
+                  <sc-if value="{{ ev.hasDesc }}" hint-placeholder-val="{{ true }}">
+                    <p style="margin: 11px 0 0; max-width: 78ch; font: 400 clamp(12.8px,0.19vw + 12.1px,14.5px)/1.62 'Arimo',Helvetica,sans-serif; color: #3E3064; text-wrap: pretty; font-size: 11.5px; font-weight: 400">{{ ev.desc }}</p>
+                  </sc-if>
+                  <sc-if value="{{ ev.noDesc }}" hint-placeholder-val="{{ false }}">
+                    <p style="margin:11px 0 0;font:italic 400 clamp(12.8px,0.19vw + 12.1px,14.5px)/1.62 'Arimo',Helvetica,sans-serif;color:#4F3F79">Program details to be announced.</p>
+                  </sc-if>
+                  <div style="display:flex;flex-direction:column;align-items:flex-start;gap:13px;margin-top:14px"><svg viewBox="0 0 400 6" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:5px;overflow:visible"><path d="M2 3.8 C 52 1.2 104 5.6 160 3.4 C 214 1.4 262 5.8 316 3.6 C 352 2.2 378 4.6 398 3" fill="none" stroke="rgba(79,63,121,.3)" stroke-width="1.3" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg>
+                    <sc-if value="{{ ev.hasWho }}" hint-placeholder-val="{{ true }}">
+                      <p style="margin:0;max-width:52ch;font:400 clamp(12px,0.11vw + 11.6px,13px)/1.5 'Arimo',Helvetica,sans-serif;color:#4F3F79">{{ ev.who }}</p>
+                    </sc-if>
+                    <sc-if value="{{ ev.noWho }}" hint-placeholder-val="{{ false }}">
+                      <p style="margin:0;font:italic 400 clamp(12px,0.11vw + 11.6px,13px)/1.5 'Arimo',Helvetica,sans-serif;color:#4F3F79">Line-up to be announced</p>
+                    </sc-if>
+                    <sc-if value="{{ ev.bookable }}" hint-placeholder-val="{{ true }}">
+                      <a href="{{ ev.igUrl }}" target="_blank" rel="noopener" onClick="{{ ev.stopProp }}" style-hover="background:#d4551f" style="align-self:flex-start;clip-path:{{ ev.btnBlob }};padding:10px 18px 11px;background:#E9622D;color:#E9E7C2;font:700 12px/1.2 'Arimo',Helvetica,sans-serif;cursor:pointer;transition:background .15s ease">{{ ev.book }}</a>
+                    </sc-if>
+                  </div>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section style="max-width:calc(var(--sw,1040px) - 60px);margin:0 auto;padding:clamp(30px,4vw,46px) clamp(24px,7vw,76px) 0;text-align:center">
+      <p style="margin:0 auto;max-width:24em;font:400 clamp(19px,2.4vw,25px)/1.28 'Beth Ellen',cursive;color:#E9E7C2;text-wrap:pretty">The festival sells nothing. Every table is booked with the people cooking at it.</p>
+    </section>
+
+  </div>
+  </sc-if>
+
+
+  <sc-if value="{{ isVenues }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Venues" style="animation:pageIn .3s ease both">
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(30px,4.4vw,50px) clamp(18px,5vw,52px) 0;text-align:center">
+      <p class="mono" style="margin:0 0 11px;font-size:10.5px;letter-spacing:.2em;color:#E9E7C2">NINE MUNICIPALITIES</p>
+      <h1 style="margin:0 auto;max-width:16em;font:400 clamp(30px,4.6vw,48px)/1.12 'Beth Ellen',cursive;color:#E9622D;text-wrap:pretty">the whole island is the venue</h1>
+      <p style="margin:14px auto 0;max-width:calc(var(--tm,58ch) - 2ch);font:400 clamp(13px,0.22vw + 12.17px,15px)/1.68 'Arimo',Helvetica,sans-serif;color:#E9E7C2;text-wrap:pretty">Every gathering is hosted by a kitchen, farm, market or bar that was already here. The festival brings the week; they bring the room, the fire and the food.</p>
+    </section>
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(32px,4.4vw,52px) clamp(18px,5vw,52px) 0">
+      <p class="mono" style="margin:0 0 16px;font-size:10.5px;letter-spacing:.2em;color:#E9E7C2;text-align:center">RESERVE WITH THE HOST</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:10px;max-width:960px;margin:0 auto">
+        <sc-for list="{{ hosts }}" as="host" hint-placeholder-count="8">
+          <a href="{{ host.url }}" target="_blank" rel="noopener" style-hover="background:#F2F0D4" style="background:#E9E7C2;clip-path:{{ host.blob }};padding:15px 20px 18px;display:block;transition:background .15s ease">
+            <p class="mono" style="margin:0 0 5px;font-size:10px;letter-spacing:.14em;color:#4F3F79">{{ host.date }}</p>
+            <p style="margin:0;font:700 clamp(13.2px,0.14vw + 12.7px,14.5px)/1.3 'Arimo',Helvetica,sans-serif;color:#3E3064">{{ host.name }}</p>
+            <p style="margin:5px 0 0;font:400 clamp(12px,0.11vw + 11.6px,13px)/1.5 'Arimo',Helvetica,sans-serif;color:#4F3F79">{{ host.handle }}</p>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(32px,4.4vw,52px) clamp(18px,5vw,52px) 0;text-align:center">
+      <p class="mono" style="margin:0 0 16px;font-size:10.5px;letter-spacing:.2em;color:#E9E7C2">OFFICIAL PARTNERS AND SPONSORS</p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:clamp(22px,3.6vw,38px);margin:clamp(4px,1vw,10px) 0 0">
+        <img src="assets/venues/beige/happy-living.png" alt="Happy Living Philippines" loading="lazy" style="height:clamp(24px,2.8vw,32px);width:auto;max-width:min(40vw,150px);display:block">
+        <img src="assets/venues/beige/modulus.png" alt="Modulus" loading="lazy" style="height:clamp(24px,2.8vw,32px);width:auto;max-width:min(40vw,150px);display:block">
+        <img src="assets/venues/beige/destileria-limtuaco.svg" alt="Destileria Limtuaco" loading="lazy" style="height:clamp(24px,2.8vw,32px);width:auto;max-width:min(40vw,150px);display:block">
+        <img src="assets/venues/beige/galatea.svg" alt="Galatea Tours Siargao" loading="lazy" style="height:clamp(24px,2.8vw,32px);width:auto;max-width:min(40vw,150px);display:block">
+      </div>
+    </section>
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(32px,4.4vw,52px) clamp(18px,5vw,52px) 0;text-align:center">
+      <p style="margin:0 auto;max-width:22em;font:400 clamp(20px,2.6vw,27px)/1.26 'Beth Ellen',cursive;color:#E9E7C2;text-wrap:pretty">Want to host something in 2027?</p>
+      <a href="mailto:info@siargaofoodfest.com" style-hover="background:#f27a49" style="display:inline-block;margin-top:16px;padding:12px 24px 14px;clip-path:url(#pb1);background:#E9622D;color:#191218;font:700 13px/1 'Baloo 2',system-ui,sans-serif;letter-spacing:.02em;transition:background .15s ease">Write to us</a>
+    </section>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isPress }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Press" style="animation:pageIn .3s ease both">
+
+    
+
+    
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(34px,4.6vw,54px) clamp(18px,5vw,52px) 0">
+      <h2 style="margin:0;font:400 clamp(20px,2.4vw,26px)/1.2 'Beth Ellen',cursive;color:#E9E7C2">Festival media kit</h2>
+      <p style="margin:10px 0 0;max-width:calc(var(--tm,58ch) + 4ch);font:400 clamp(12.8px,0.19vw + 12.1px,14.5px)/1.68 'Arimo',Helvetica,sans-serif;color:#E9E7C2;text-wrap:pretty">In our Media Folder, you will find a curated selection of high-resolution photos available for download. Please credit ‘Siargao Food and Wine Festival’ when using photos for your coverage.</p>
+      <a href="#" target="_blank" rel="noopener" style-hover="background:#d4551f" style="display:inline-block;margin-top:16px;clip-path:url(#pb2);padding:12px 22px 14px;background:#E9622D;color:#E9E7C2;font:700 13px/1.2 'Arimo',Helvetica,sans-serif;transition:background .15s ease">Download the media kit (PDF)</a>
+      <p class="mono" style="margin:9px 0 0;font-size:9.5px;letter-spacing:.14em;color:#E9E7C2">PDF LINK TO BE ADDED</p>
+      <div style="margin:clamp(24px,3.4vw,38px) 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:clamp(14px,2.2vw,24px)">
+        <img src="assets/photography/string-lights-palms.png" alt="String lights strung between the palms" loading="lazy" style="display:block;width:100%;aspect-ratio:2/1;object-fit:cover;clip-path:url(#pb0)">
+        <img src="assets/photography/communal-table-dusk.png" alt="The long communal table at dusk" loading="lazy" style="display:block;width:100%;aspect-ratio:2/1;object-fit:cover;clip-path:url(#pb1)">
+      </div>
+    </section>
+
+    <section style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(34px,4.6vw,54px) clamp(18px,5vw,52px) 0">
+      <h2 style="margin:0;font:400 clamp(21px,2.6vw,28px)/1.2 'Beth Ellen',cursive;color:#E9E7C2">Covering the Festival?</h2>
+      <p style="margin:10px 0 0;max-width:calc(var(--tm,58ch) - 6ch);font:400 clamp(13px,0.22vw + 12.17px,15px)/1.7 'Arimo',Helvetica,sans-serif;color:#E9E7C2;text-wrap:pretty">Tell us what you're working on and we'll put you with the right people on the island.</p>
+      <p style="margin:14px 0 0"><a href="mailto:info@siargaofoodfest.com" style-hover="color:#E9622D" style="font:400 16px/1 'Beth Ellen',cursive;color:#E9E7C2;transition:color .15s ease">info@siargaofoodfest.com</a></p>
+    </section>
+
+  </div>
+  </sc-if>
+
+  </main>
+
+  <footer style="margin-top:clamp(44px,5vw,68px)">
+    <div style="max-width:calc(var(--sw,1040px) + 60px);margin:0 auto;padding:0 clamp(18px,5vw,52px)">
+      <svg viewBox="0 0 600 6" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:5px;overflow:visible"><path d="M2 4.6 C 46 1.4 88 5.8 132 3.2 C 176 0.6 210 6.2 256 4.4 C 300 2.6 332 0.4 378 2.8 C 420 5 452 6.4 496 3.4 C 534 0.8 562 5.4 598 2.2" fill="none" stroke="rgba(233,231,194,.5)" stroke-width="1.4" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg>
+    </div>
+    <div style="max-width:var(--sw,1040px);margin:0 auto;padding:clamp(24px,3vw,34px) clamp(18px,5vw,52px) clamp(28px,3.4vw,40px);display:flex;flex-direction:column;align-items:center;gap:clamp(16px,2vw,22px);text-align:center">
+      <a href="#/home" style="display:block"></a>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+        <div style="display:flex;gap:4px">
+          <a href="https://www.instagram.com/siargaofoodandwinefestival/" target="_blank" rel="noopener" aria-label="Instagram" style-hover="color:#E9622D;transform:rotate(0deg) scale(1.14)" style="width:40px;height:40px;display:grid;place-items:center;transform:rotate(-5deg);color:#E9E7C2;transition:transform .22s cubic-bezier(.34,1.56,.64,1),color .2s ease"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><rect x="3.4" y="3.4" width="17.2" height="17.2" rx="5.2"></rect><circle cx="12" cy="12" r="4.2"></circle><path d="M17.1 7h.01" stroke-width="2.6"></path></svg></a>
+          <a href="https://www.facebook.com/siargaofoodfest" target="_blank" rel="noopener" aria-label="Facebook" style-hover="color:#E9622D;transform:rotate(0deg) scale(1.14)" style="width:40px;height:40px;display:grid;place-items:center;transform:rotate(4deg);color:#E9E7C2;transition:transform .22s cubic-bezier(.34,1.56,.64,1),color .2s ease"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><circle cx="12" cy="12" r="8.7"></circle><path d="M14.5 7.9h-1.3c-1.1 0-1.9.8-1.9 1.9v6.9M9.7 12.2h4.4"></path></svg></a>
+          <a href="https://www.tiktok.com/@siargaofoodfest" target="_blank" rel="noopener" aria-label="TikTok" style-hover="color:#E9622D;transform:rotate(0deg) scale(1.14)" style="width:40px;height:40px;display:grid;place-items:center;transform:rotate(-3deg);color:#E9E7C2;transition:transform .22s cubic-bezier(.34,1.56,.64,1),color .2s ease"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M14.3 4.1v9.9a3.7 3.7 0 1 1-3.3-3.7"></path><path d="M14.3 4.1c.4 2.3 2 3.7 4.2 3.9"></path></svg></a>
+        </div>
+        <a href="mailto:info@siargaofoodfest.com" style-hover="color:#E9622D" style="font:400 16px/1 'Beth Ellen',cursive;color:#E9E7C2;transition:color .15s ease">info@siargaofoodfest.com</a>
+      </div>
+      <p class="mono" style="margin:0;font-size:10px;line-height:1.9;letter-spacing:.14em;color:rgba(233,231,194,.86)">26 – 31 AUGUST 2026 · SIARGAO ISLAND, PHILIPPINES</p>
+    </div>
+  </footer>
+
+  <sc-if value="{{ showTop }}" hint-placeholder-val="{{ false }}">
+    <button type="button" onClick="{{ toTop }}" aria-label="Back to top" style-hover="background:#f27a49" style="position:fixed;right:clamp(14px,3vw,26px);bottom:clamp(14px,3vw,26px);z-index:50;width:44px;height:44px;border:0;clip-path:url(#pb4);background:#E9622D;color:#191218;font:700 13px/1 'Arimo',Helvetica,sans-serif;cursor:pointer;transition:background .15s ease">↑</button>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;heroScale&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1.4,&quot;min&quot;:1,&quot;max&quot;:1.7,&quot;step&quot;:0.05,&quot;unit&quot;:&quot;×&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;readingWidth&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:80,&quot;min&quot;:42,&quot;max&quot;:80,&quot;step&quot;:2,&quot;unit&quot;:&quot;ch&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;contentWidth&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1040,&quot;min&quot;:840,&quot;max&quot;:1320,&quot;step&quot;:20,&quot;unit&quot;:&quot;px&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;showVenues&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Navigation&quot;},&quot;multiOpen&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Programme behaviour&quot;},&quot;showDoodles&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Art direction&quot;},&quot;dyeCoverage&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:40,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Dye ground&quot;},&quot;dyeIntensity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:50,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:5,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Dye ground&quot;}}">
+/* One prototype, five routes. The hash is the router: nav links are plain anchors
+ * (#/program), so browser back and forward work with no interception. */
+/* Venues was explored and cut — the route stays out of the build. */
+const ROUTES = ['home', 'program', 'press'];
+
+const DAYS = [
+  { date:'AUG 26', wd:'WED 26', name:'gala opening', icon:'wine', w:34,
+    events:[
+      {venue:'WILD', time:'6PM – 10PM', title:'Ani sang Siargao opening celebration', price:'TBD',
+       who:'Chef Morris · Chef Jarrod · Chef Hannah · Chef Dre · the WILD team · Manu',
+       desc:'Ani sang Siargao opens with a high-energy celebration at WILD Siargao, bringing together chefs, farmers, media, creatives, partners and guests from across the island and beyond. The evening features cultural performances by Espoir, specialty cocktails by Manu, and a collaborative chef-led dining experience.'} ] },
+  { date:'AUG 27', wd:'THU 27', name:'ocean day', icon:'fish', w:40,
+    events:[
+      {venue:'SIARGAO CORNER CAFÉ', time:'8AM – 11AM', title:'Brewed by the Pioneers', price:'FREE',
+       who:'Guests from Don Narciso Café, Claveria (Misamis Oriental)',
+       desc:'Waffle, Coffee and Roasting 101. Participants taste two coffees without knowing what they are, then guests from Don Narciso Café educate them on the basics of coffee roasting and lead a Coffee Appreciation on the Siargao Robusta.'},
+      {venue:'GL PUBLIC MARKET', time:'TIME TBD', title:'Wet market experience by Roots', price:'À LA CARTE',
+       who:'Roots',
+       desc:'Set in the heart of the General Luna Wet Market, among fishermen and local vendors, this casual standing pop-up celebrates Siargao’s everyday coastal food culture through fresh seafood, island drinks and an open, community-driven atmosphere.'},
+      {venue:'ALMA', time:'1ST SEATING 5PM · 2ND 8PM', title:'Alma × CMD Supper Club tasting menu', price:'TBD',
+       who:'Chef Luis · Chef Morris',
+       desc:'Chef Luis Martinez and Chef Morris Danzen prepare a beautiful dinner focused on the bounty of Siargao’s prime and native seafood.'} ] },
+  { date:'AUG 28', wd:'FRI 28', name:'coconut day', icon:'coconut', w:32,
+    events:[
+      {venue:'LUNARES CAFÉ', time:'8AM – 11AM', title:'Brewed by the Pioneers', price:'TBD',
+       who:null,
+       desc:'Coffee, pastry, and island café Italian culture. Relaxed, welcoming and focused on the relationship between coffee, breakfast and café culture that brings the Italian flavours.'},
+      {venue:'ISLA PANCITERIA', time:'ALL DAY', title:'Miki Fiesta!', price:'À LA CARTE',
+       who:'Isla Panciteria',
+       desc:'Isla Panciteria presents Miki Fiesta, a celebration of Filipino miki featuring three new signature miki dishes inspired by the flavours of Siargao and the sea. It opens with a free miki-making workshop, followed by an afternoon of street food, music and cocktails, with a one-day-only à la carte festival menu and exclusive merchandise.'},
+      {venue:'LOKAL HUB', time:'5PM – 7PM', title:'Meet the Changemakers: Coconut Lab, from tree to table', price:'FREE',
+       who:'c/o Lokal',
+       desc:'Lokal Hub hosts a very special Meet the Changemakers featuring workshops and talks on processing, fermentation, and zero-waste coconut utilization.'},
+      {venue:'LYMA', time:'DINNER', title:'Chef Jarrod Moore × Lyma collaboration dinner', price:'₱2,400 / HEAD',
+       who:'Chef Jarrod · Chef Marc · Chef Jose (Lyma)',
+       desc:'Chef Jarrod, Chef Marc and Chef Jose collaborate on a coconut-themed, zero-waste five-course dinner at Lyma.'} ] },
+  { date:'AUG 29', wd:'SAT 29', name:'producer day', icon:'dish', w:34,
+    events:[
+      {venue:'TROPICAL ACADEMY SAN ISIDRO', time:'DAYTIME', title:'Island meets the Outback', price:'TBD',
+       who:'Chef Jarrod · Chef Morris · Lokal',
+       desc:'Spend a day immersed in the rhythms of island agriculture. Guests are invited to learn alongside farmers and chefs through farming, workshops and conversations centred on Siargao’s land and food culture.'},
+      {venue:'KERMIT', time:'TIME TBD', title:'Kermit pizza eating contest!', price:'TBD',
+       who:null,
+       desc:'Pizza making workshops showcasing native ingredients, and the ever-popular Pizza Eating Contest back for its second year.'},
+      {venue:'LAMARI', time:'6:30PM', title:'Lamari presents “The Bounty of Siargao”', price:'₱1,500',
+       who:'Chef Ericka · Sinta · FullMoon · Lokal Lab',
+       desc:'A story of abundance told through a convergence of chefs who revere and celebrate the incredible native produce Siargao has to offer. LAMARI, Sinta, FullMoon Siargao and Lokal Lab come together for a collaborative feast prepared entirely from 100% local produce.'},
+      {venue:'PARALUMAN', time:'9PM – 1AM', title:'After dinner bar feature', price:'TBD',
+       who:null,
+       desc:null} ] },
+  { date:'AUG 30', wd:'SUN 30', name:'community day', icon:'ukulele', w:22,
+    events:[
+      {venue:'MAM-ON ISLAND', time:'MORNING', title:'Island style chef’s table', price:'₱6,000 / HEAD',
+       who:'Chef David · Hapag Manila · Ayà Manila',
+       desc:'Cev brings the chefs of Hapag Manila (1 Michelin Star) and Ayà Manila (Michelin Selected) over to curate an island feast on beautiful Mam-on Island — a one-of-a-kind boodle fight inspired heavily by kinilaw (raw) and sugba (grilled) cooking techniques.'},
+      {venue:'BRAVO', time:'4PM – 9PM', title:'Siargao Mercado', price:'OPEN FOR ALL',
+       who:'Assorted restaurants and eateries of Siargao',
+       desc:'Bravo hosts a vibrant gathering celebrating the flavours and creativity of Siargao. Karinderyas, local eateries and some of Siargao’s favourite restaurants come together right by the beach, with live performances, workshops and cultural programming, plus a special introduction of Siargao Slow Food to the community.'},
+      {venue:'SAGANA', time:'4PM – 11PM', title:'Salo salo sa Sagana', price:'₱2,000',
+       who:'Chef EJ · Chef Gino · Castaway Cocktails',
+       desc:'An afternoon-to-evening celebration of regional Filipino cuisine featuring Sagana’s winning signature Sunday Roast with Chef Gino of Haole (2024 Siargao Lechon Festival Champion), followed by a collaborative Luzon–Visayas–Mindanao salo-salo by Chef EJ and Chef Gino, paired with a cocktail collaboration and a rotating lineup of guest DJs.'} ] },
+  { date:'AUG 31', wd:'MON 31', name:'closing celebration', icon:'flower', w:20,
+    events:[
+      {venue:'HUE HOTEL', time:'4PM', title:'Closing celebration & recognition', price:'TBD',
+       who:'Dayana Resto · Castaway Cocktails',
+       desc:'Overlooking the world-class Cloud 9 surf break, Ani sang Siargao concludes with an afternoon of recognition, celebration, community and cocktails by the wild boys of Castaway Cocktails at the newly opened HUE Hotel.'} ] },
+];
+
+/* Reservations happen per venue by Instagram DM — the festival sells nothing itself. */
+const FALLBACK = 'siargaofoodandwinefestival';
+const VENUES = {
+  'WILD': ['Wild', 'wild.siargao'],
+  'SIARGAO CORNER CAFÉ': ['Siargao Corner Café', FALLBACK],
+  'GL PUBLIC MARKET': ['General Luna public market', 'roots.siargao', 'Roots'],
+  'ALMA': ['Alma', 'almasiargao'],
+  'LUNARES CAFÉ': ['Lunares Café', FALLBACK],
+  'ISLA PANCITERIA': ['Isla Panciteria', 'islapanciteria.siargao'],
+  'LOKAL HUB': ['Lokal Hub', 'lokallab'],
+  'LYMA': ['Lyma', 'lymasiargao'],
+  'TROPICAL ACADEMY SAN ISIDRO': ['Tropical Academy, San Isidro', 'tropicalacademyiao', 'Tropical Academy'],
+  'KERMIT': ['Kermit', 'kermitsiargao'],
+  'LAMARI': ['Lamari', 'lamarisiargao'],
+  'PARALUMAN': ['Paraluman', 'paraluman.ph'],
+  'MAM-ON ISLAND': ['Mam-on Island', 'cevsiargao', 'Cev'],
+  'BRAVO': ['Bravo', 'bravosiargao'],
+  'SAGANA': ['Sagana', FALLBACK],
+  'HUE HOTEL': ['Hue Hotel', 'huesiargao'],
+};
+const place = v => (VENUES[v] || [v])[0];
+const bookName = v => (VENUES[v] || [v])[2] || place(v);
+const handleOf = v => (VENUES[v] || [v, FALLBACK])[1];
+const softTime = t => t === 'TIME TBD' ? 'time to be confirmed' : t.toLowerCase().replace('1st seating', 'first seating').replace('2nd', 'second');
+const WEEKDAY = { 'AUG 26':'Wednesday 26 August', 'AUG 27':'Thursday 27 August', 'AUG 28':'Friday 28 August', 'AUG 29':'Saturday 29 August', 'AUG 30':'Sunday 30 August', 'AUG 31':'Monday 31 August' };
+
+const HOSTS = [
+  ['AUG 26 & 30', 'Wild Siargao', 'wild.siargao'],
+  ['AUG 27', 'Alma', 'almasiargao'],
+  ['AUG 27', 'Roots Siargao', 'roots.siargao'],
+  ['AUG 28', 'Lokal Hub', 'lokallab'],
+  ['AUG 28', 'Lyma Siargao', 'lymasiargao'],
+  ['AUG 28 & 30', 'Cev', 'cevsiargao'],
+  ['AUG 28', 'Isla Panciteria', 'islapanciteria.siargao'],
+  ['AUG 29', 'Tropical Academy · Ihayas Farm', 'tropicalacademyiao'],
+  ['AUG 29', 'Kermit Siargao', 'kermitsiargao'],
+  ['AUG 29', 'Lamari Siargao', 'lamarisiargao'],
+  ['AUG 29', 'Paraluman', 'paraluman.ph'],
+  ['AUG 30', 'Bravo Beach Resort', 'bravosiargao'],
+  ['AUG 30', 'Bar Principal', 'barprincipal.ph'],
+  ['AUG 30', 'Sagana Siargao', FALLBACK],
+  ['AUG 31', 'Hue Hotel', 'huesiargao'],
+];
+
+const CAFES = ['LOKA', 'Coffee Stroll', 'Pawikan', 'Marmalade', 'St. Thomas', 'Amon', 'Good Times Coffee', 'Sunset Coffee Roasters', 'Mondayyys', 'Happy Islanders Club'];
+
+/* The mark is the booking, not a price tag: walk-in events say so, everything reservable
+ * carries the ask and an orange dot. */
+function access(e) {
+  const p = (e.price || '').toUpperCase();
+  const walk = p === 'FREE' || p === 'OPEN FOR ALL' || p === 'À LA CARTE';
+  return walk ? { go: false, word: 'WALK IN' } : { go: true, word: 'RESERVE' };
+}
+
+/* Price is only spoken once the bubble is open, in the hint line. */
+function priceNote(e) {
+  const p = (e.price || '').toUpperCase();
+  if (p === 'FREE' || p === 'OPEN FOR ALL') return 'free';
+  if (p === 'À LA CARTE') return 'pay per dish';
+  if (p === 'TBD') return ''; /* unconfirmed prices are not spoken */
+  return e.price.replace(' / HEAD', ' per head');
+}
+
+const BLOBS = ['url(#pb0)', 'url(#pb1)', 'url(#pb2)', 'url(#pb3)', 'url(#pb4)', 'url(#pb5)'];
+
+/* 26th, 27th … 31st — the suffix is what makes a bare numeral read as a date. */
+function ordinal(n) {
+  const d = parseInt(n, 10);
+  const s = d % 10 === 1 && d !== 11 ? 'st' : d % 10 === 2 && d !== 12 ? 'nd' : d % 10 === 3 && d !== 13 ? 'rd' : 'th';
+  return d + s;
+}
+
+function routeFromHash() {
+  const h = (typeof location !== 'undefined' ? location.hash : '').replace(/^#\/?/, '');
+  return ROUTES.indexOf(h) >= 0 ? h : 'home';
+}
+
+class Component extends DCLogic {
+  state = {
+    w: typeof window !== 'undefined' ? window.innerWidth : 1200,
+    page: routeFromHash(),
+    grown: {},
+    menu: false,
+    open: {},
+    day: 'all',
+    showTop: false,
+  };
+
+  componentDidMount() {
+    this.applyWidth();
+    this.onResize = () => {
+      if (window.innerWidth === this.state.w) return;
+      this.setState({ w: window.innerWidth, menu: window.innerWidth >= 860 ? false : this.state.menu });
+    };
+    window.addEventListener('resize', this.onResize);
+
+    this.onHash = () => {
+      const page = routeFromHash();
+      if (page === this.state.page) { this.setState({ menu: false }); return; }
+      this.setState({ page, menu: false, day: 'all' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    window.addEventListener('hashchange', this.onHash);
+
+    this.onKey = e => { if (e.key === 'Escape' && this.state.menu) this.setState({ menu: false }); };
+    window.addEventListener('keydown', this.onKey);
+
+    /* Two things per scroll: the back-to-top flag (state, only when it flips) and the fade
+     * under the nav band, written straight to the node — far too often for state. */
+    this.onScroll = () => {
+      const past = window.scrollY > 640;
+      if (past !== this.state.showTop) this.setState({ showTop: past });
+      if (this.fadeQueued) return;
+      this.fadeQueued = true;
+      requestAnimationFrame(() => { this.fadeQueued = false; this.applyFade(); });
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    this.applyFade();
+
+    this.startDye();
+  }
+
+  /* One tweak drives every section's max-width. It rides on a CSS variable set here
+   * rather than a template hole, so the sections keep painting from static literals. */
+  applyWidth() {
+    const w = Number(this.props.contentWidth) || 1040;
+    const m = Number(this.props.readingWidth) || 58;
+    document.documentElement.style.setProperty('--sw', w + 'px');
+    document.documentElement.style.setProperty('--tm', m + 'ch');
+    /* The hero grows only where there is room for it; the CTA is left out on purpose. */
+    const hs = this.state.w >= 1100 ? (Number(this.props.heroScale) || 1) : 1;
+    document.documentElement.style.setProperty('--hs', String(hs));
+  }
+
+  componentDidUpdate() {
+    this.applyWidth();
+    document.body.style.overflow = this.state.menu && this.state.w < 860 ? 'hidden' : '';
+    this.startDye();
+    this.applyFade();
+  }
+
+  /* No plate behind the nav: the page dissolves as it reaches the top of the viewport, so
+   * the links sit straight on the dye — the live site's behaviour. */
+  applyFade() {
+    const el = this.mainEl;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top;
+    /* Nothing shows behind the nav band, then a short ramp — 26px, not a long dissolve — so
+     * the links stay clean and the copy is at full strength as soon as it clears them. */
+    const g = 'linear-gradient(to bottom, rgba(0,0,0,0) ' + (-top) + 'px, rgba(0,0,0,0) ' + (-top + 56) + 'px, #000 ' + (-top + 82) + 'px)';
+    el.style.maskImage = g;
+    el.style.webkitMaskImage = g;
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('hashchange', this.onHash);
+    window.removeEventListener('keydown', this.onKey);
+    window.removeEventListener('scroll', this.onScroll);
+    document.body.style.overflow = '';
+    if (this.flow && this.flow.destroy) this.flow.destroy();
+  }
+
+  /* The shared dye ground: the palette-remapped shibori, fixed behind the page so a long
+   * scroll never rescales it. Rebuilt only when a coverage/wash tweak changes. */
+  startDye() {
+    if (!this.dyeEl) return;
+    const coverage = this.props.dyeCoverage ?? 40;
+    const wash = this.props.dyeIntensity ?? 50;
+    const key = coverage + ':' + wash;
+    if (this.dyeKey === key) return;
+    this.dyeKey = key;
+    if (this.flow && this.flow.destroy) { this.flow.destroy(); this.flow = null; }
+    import('./components/backgrounds/dye-ground.js')
+      .then(m => m.mountDyeGround(this.dyeEl, { coverage, wash }))
+      .then(flow => { this.flow = flow; })
+      .catch(e => console.warn(e));
+  }
+
+  /* Every bubble opens on its own; with multiOpen off the grid behaves as an accordion.
+   * Two-step like the live site: the detail block mounts at 0fr, then grows to 1fr on the
+   * next frame (.34s, cubic-bezier(.22,.75,.2,1)); closing runs it back down before unmount. */
+  toggle(key) {
+    const many = this.props.multiOpen ?? true;
+    const wasOpen = !!this.state.open[key];
+    this.shut = this.shut || {};
+    clearTimeout(this.shut[key]);
+    if (wasOpen) {
+      this.setState(s => { const g = Object.assign({}, s.grown); delete g[key]; return { grown: g }; });
+      this.shut[key] = setTimeout(() => this.setState(s => {
+        const o = Object.assign({}, s.open); delete o[key]; return { open: o };
+      }), 360);
+      return;
+    }
+    this.setState(s => (many
+      ? { open: Object.assign({}, s.open, { [key]: true }) }
+      : { open: { [key]: true }, grown: {} }));
+    requestAnimationFrame(() => requestAnimationFrame(() => this.setState(s => (many
+      ? { grown: Object.assign({}, s.grown, { [key]: true }) }
+      : { grown: { [key]: true } }))));
+  }
+
+  buildDays() {
+    const showIcon = this.props.showDoodles ?? true;
+    let n = 0;
+    return DAYS.map((d, di) => ({
+      date: d.date,
+      name: d.name,
+      showIcon,
+      iconSrc: 'assets/doodles/beige/' + d.icon + '.png',
+      iconW: d.w + 'px',
+      events: d.events.map((e, ei) => {
+        const key = di + ':' + ei;
+        const open = !!this.state.open[key];
+        const grown = !!this.state.grown[key];
+        const acc = access(e);
+        const toggle = () => this.toggle(key);
+        return Object.assign({}, e, {
+          open, closed: !open,
+          rows: grown ? '1fr' : '0fr',
+          detailOpacity: grown ? '1' : '0',
+          pad: open ? '24px clamp(26px,3vw,38px) 28px' : '22px clamp(26px,3vw,38px) 26px',
+          /* Every bubble keeps its column and its cap, open or closed — opening adds height,
+           * never width, so a day of one reads the same as a day of four. */
+          onToggle: toggle,
+          onKey: evt => {
+            if (evt.key === 'Enter' || evt.key === ' ') { evt.preventDefault(); toggle(); }
+          },
+          stopProp: evt => evt.stopPropagation(),
+          hasWho: !!e.who, noWho: !e.who,
+          hasDesc: !!e.desc, noDesc: !e.desc,
+          place: place(e.venue),
+          hintRest: [softTime(e.time), priceNote(e)].filter(Boolean).join(' · '),
+          igUrl: 'https://www.instagram.com/' + handleOf(e.venue) + '/',
+          access: acc.word,
+          bookable: acc.go,
+          book: 'Message ' + bookName(e.venue) + ' to reserve',
+          blob: BLOBS[(n * 5 + di) % 6],
+          btnBlob: BLOBS[(di * 5 + ei + 2) % 6],
+        });
+      }),
+    }));
+  }
+
+  clipRail() {
+    const w = this.state.w || 1200;
+    const gutter = Math.max(18, Math.min(w * 0.05, 52));
+    const item = Math.min(w * 0.58, 208);
+    const group = item * 3 + 72;
+    const frame = Math.min(w, Number(this.props.contentWidth) || 1040);
+    if (group + gutter * 2 <= frame) return { pad: '4px ' + Math.round((w - frame) / 2 + gutter) + 'px 14px', justify: 'center' };
+    return { pad: '4px ' + Math.round(Math.max(gutter, (w - item) / 2)) + 'px 14px', justify: 'flex-start' };
+  }
+
+  renderVals() {
+    const mobile = this.state.w < 860;
+    const rail = this.clipRail();
+    const menuOpen = mobile && this.state.menu;
+    const page = this.state.page;
+    const all = this.buildDays();
+    const pick = this.state.day;
+    const shown = pick === 'all' ? all : [all[pick]];
+    const count = shown.reduce((t, d) => t + d.events.length, 0);
+
+    return {
+      mobile,
+      desktop: !mobile,
+      /* Three 9:16 clips. When they fit, the row is centred and there is nothing to scroll;
+       * when they don't, the side padding centres the FIRST clip at scroll 0 and the rest
+       * are reachable to the right (a centred flex row would strand them off-screen left). */
+      railPad: rail.pad,
+      railJustify: rail.justify,
+      railSwipe: rail.justify === 'flex-start',
+      navVenues: false,
+      menuOpen,
+      menuGlyph: menuOpen ? '✕' : '☰',
+      /* The menu carries no plate: the page's copy fades out and the dye stays as it is,
+       * with the hand-drawn circle holding the links. */
+      contentOpacity: menuOpen ? '0' : '1',
+      contentPointer: menuOpen ? 'none' : 'auto',
+      toggleMenu: () => this.setState(s => ({ menu: !s.menu })),
+      closeMenu: () => this.setState({ menu: false }),
+
+      onHome: page === 'home',
+      onProgram: page === 'program',
+      onVenues: false,
+      onPress: page === 'press',
+      isHome: page === 'home',
+      isProgram: page === 'program',
+      isVenues: false,
+      isPress: page === 'press',
+
+      doodles: this.props.showDoodles ?? true,
+      showTop: this.state.showTop,
+      toTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+
+      days: shown,
+      /* The count is a summary of the whole week; on a single day the date says enough. */
+      gridCount: pick === 'all'
+        ? count + ' GATHERINGS · SIX DAYS'
+        : WEEKDAY[all[pick].date].toUpperCase(),
+      /* Mobile shows dates only — one line, no script, so it reads as a control rather than
+       * a second block of headline. */
+      tabs: [{ date: 'ALL SIX DAYS', short: 'ALL', name: 'the whole week', key: 'all' }]
+        .concat(DAYS.map((d, i) => ({ date: d.wd, short: d.wd.replace('THU ', 'THUR '), name: d.name, key: i })))
+        .map((t, i) => ({
+          date: t.date,
+          short: t.short,
+          name: t.name,
+          on: pick === t.key,
+          off: pick !== t.key,
+          blob: BLOBS[i % 6],
+          onPick: () => this.setState({ day: t.key }),
+        })),
+
+      mainRef: el => { if (el && el !== this.mainEl) { this.mainEl = el; this.applyFade(); } },
+
+      hosts: HOSTS.map((h, i) => ({
+        date: h[0], name: h[1],
+        handle: h[2] === FALLBACK ? 'Ask the festival' : '@' + h[2],
+        url: 'https://www.instagram.com/' + h[2] + '/',
+        blob: BLOBS[i % 6],
+      })),
+      cafes: CAFES.map((name, i) => ({ name, blob: BLOBS[(i * 5) % 6] })),
+
+      dyeLayer: React.createElement('canvas', {
+        ref: el => { if (el && el !== this.dyeEl) { this.dyeEl = el; this.startDye(); } },
+        style: { position: 'fixed', inset: 0, zIndex: 0, width: '100%', height: '100%', display: 'block', pointerEvents: 'none' },
+      }),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

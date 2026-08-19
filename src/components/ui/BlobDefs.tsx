@@ -1,18 +1,21 @@
 import { BLOB_PATHS } from "@/lib/design/shapes";
 
 /**
- * The hand-cut outlines, registered once per document as clipPaths. Everything that uses
- * `soft(i)` resolves against these, so this must be mounted in the root layout.
- *
- * clipPathUnits="objectBoundingBox" is what lets five fixed paths clip boxes of any size —
- * a bubble, a button and a photo frame all reuse the same silhouettes.
+ * The six hand-cut outlines, as clip-paths every surface and button refers to by id.
+ * Mounted once per document in the root layout — a clip-path referenced from a `<defs>`
+ * that isn't in the DOM silently clips the element to nothing.
  */
 export function BlobDefs() {
   return (
-    <svg width="0" height="0" aria-hidden="true" style={{ position: "absolute" }}>
+    <svg
+      aria-hidden="true"
+      width="0"
+      height="0"
+      style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}
+    >
       <defs>
         {BLOB_PATHS.map((d, i) => (
-          <clipPath key={i} id={`blob${i}`} clipPathUnits="objectBoundingBox">
+          <clipPath key={i} id={`pb${i}`} clipPathUnits="objectBoundingBox">
             <path d={d} />
           </clipPath>
         ))}

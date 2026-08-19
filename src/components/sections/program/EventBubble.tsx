@@ -1,128 +1,128 @@
 "use client";
 
-import { Bubble } from "@/components/ui/Bubble";
-import { Cta } from "@/components/ui/Cta";
-import { TIER_LABEL } from "@/content/events";
 import type { FestivalEvent } from "@/content/types";
-import { TapHint } from "./TapHint";
-
-const TIER_STYLE = {
-  free: { background: "var(--chip-free)", color: "var(--chip-free-ink)" },
-  paid: { background: "var(--chip-paid)", color: "var(--chip-paid-ink)" },
-  allWeek: { background: "var(--chip-paid)", color: "var(--chip-paid-ink)" },
-} as const;
+import { soft } from "@/lib/design/shapes";
+import type { Phase } from "@/lib/program/useBubbleReveal";
+import { AccessMark } from "./AccessMark";
+import { BubbleDetail } from "./BubbleDetail";
 
 /**
- * One event. Closed, it is a chip the width of its own title; open, it takes the full row
- * and grows its detail in. Bubbles open independently — tapping one never closes another,
- * because a visitor comparing two dinners should be able to hold both open.
+ * One gathering. Closed it is a scannable chip — venue, time, title, how you get in. Open
+ * it reflows rather than merely disclosing: the title grows into the space the kicker
+ * leaves, and the venue joins the time and price on a single hint line below.
+ *
+ * Opening adds height and never width. The bubble keeps its grid column and its 440px cap
+ * either way, so a day of one gathering reads the same as a day of four.
  */
 export function EventBubble({
   event,
-  shape,
-  isOpen,
+  phase,
+  shapeIndex,
+  buttonShapeIndex,
   onToggle,
-  showHint,
 }: {
   readonly event: FestivalEvent;
-  readonly shape: number;
-  readonly isOpen: boolean;
+  readonly phase: Phase | undefined;
+  readonly shapeIndex: number;
+  readonly buttonShapeIndex: number;
   readonly onToggle: () => void;
-  readonly showHint: boolean;
 }) {
-  const tier = TIER_STYLE[event.tier];
+  const open = phase !== undefined;
+  const grown = phase === "open";
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-expanded={open}
+      onClick={onToggle}
+      onKeyDown={(e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        /* Space would scroll the page and Enter would submit anything wrapping this. */
+        e.preventDefault();
+        onToggle();
+      }}
+      className="bubble on-beige"
       style={{
-        position: "relative",
-        display: "flex",
-        minWidth: 0,
-        flex: isOpen ? "1 1 100%" : "0 1 auto",
-        maxWidth: "100%",
+        maxWidth: 440,
+        background: "var(--beige)",
+        clipPath: soft(shapeIndex),
+        padding: open
+          ? "24px clamp(26px,3vw,38px) 28px"
+          : "22px clamp(26px,3vw,38px) 26px",
+        cursor: "pointer",
+        overflowWrap: "break-word",
       }}
     >
-      <Bubble
-        i={shape}
-        onClick={onToggle}
-        style={{
-          flex: "1 1 auto",
-          maxWidth: "100%",
-          minWidth: 0,
-          padding: isOpen ? "26px 30px" : "14px 24px",
-          transition: `padding var(--open) var(--ease)`,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "nowrap" }}>
-          <span
+      {open ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: 20,
+            paddingRight: 6,
+          }}
+        >
+          {/* The title grows rather than being replaced — 13.2–14.5 up to 15–16.5. */}
+          <p
             style={{
-              font: isOpen ? "var(--display-4)" : "var(--text-h3)",
-              fontWeight: isOpen ? 400 : undefined,
-              color: "var(--bubble-ink)",
-              flex: "1 1 auto",
-              minWidth: 0,
+              margin: 0,
+              maxWidth: "22em",
+              font: "700 clamp(15px,0.2vw + 14.25px,16.5px)/1.3 var(--font-body)",
+              color: "var(--ink-title)",
+              textWrap: "pretty",
             }}
           >
             {event.title}
-          </span>
-          <span
-            style={{
-              font: "var(--text-eyebrow)",
-              letterSpacing: "var(--tracking-eyebrow)",
-              textTransform: "uppercase",
-              padding: "4px 9px",
-              borderRadius: 999,
-              whiteSpace: "nowrap",
-              flexShrink: 0,
-              ...tier,
-            }}
-          >
-            {TIER_LABEL[event.tier]}
-          </span>
+          </p>
+          <AccessMark event={event} chevron="▴" />
         </div>
-
-        {isOpen && (
-          <div style={{ marginTop: 11, animation: `bodyIn .22s var(--ease) .03s both` }}>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 14,
+          }}
+        >
+          <div style={{ minWidth: 0 }}>
+            <p
+              className="mono"
+              style={{
+                margin: "0 0 7px",
+                fontSize: 10,
+                lineHeight: 1.5,
+                letterSpacing: ".14em",
+                color: "var(--ink-body)",
+              }}
+            >
+              <span style={{ fontWeight: 700, color: "var(--venue-orange)" }}>{event.venue}</span>{" "}
+              ·<span style={{ whiteSpace: "nowrap" }}> {event.time}</span>
+            </p>
             <p
               style={{
                 margin: 0,
-                font: "var(--text-caption)",
-                letterSpacing: "var(--tracking-label)",
-                textTransform: "uppercase",
-                color: "var(--bubble-soft)",
+                font: "700 clamp(13.2px,0.14vw + 12.7px,14.5px)/1.35 var(--font-body)",
+                color: "var(--ink-title)",
+                textWrap: "pretty",
               }}
             >
-              {event.venue}
+              {event.title}
             </p>
-            <p style={{ margin: "8px 0 0", font: "var(--text-body-sm)", color: "var(--bubble-soft)" }}>
-              {event.blurb}
-            </p>
-            {event.credit && (
-              <p
-                style={{
-                  margin: "8px 0 0",
-                  font: "var(--text-caption)",
-                  fontWeight: 700,
-                  fontSize: 10,
-                  color: "var(--bubble-soft)",
-                }}
-              >
-                {event.credit}
-              </p>
-            )}
-            {event.crawl && (
-              <Cta
-                i={shape}
-                variant="secondary"
-                style={{ marginTop: 16 }}
-                href={`/food-crawl/${event.crawl}`}
-                label={`See the ${event.crawl === "coffee" ? "Coffee Crawl" : "Karinderya Crawl"}`}
-              />
-            )}
           </div>
-        )}
-      </Bubble>
-      {showHint && <TapHint />}
+          <AccessMark event={event} chevron="▾" />
+        </div>
+      )}
+
+      {open && (
+        <div className="reveal" style={{ gridTemplateRows: grown ? "1fr" : "0fr", opacity: grown ? 1 : 0 }}>
+          <div>
+            <BubbleDetail event={event} buttonShapeIndex={buttonShapeIndex} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

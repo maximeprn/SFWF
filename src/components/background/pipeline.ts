@@ -1,20 +1,20 @@
 /**
  * GL objects that live for as long as the canvas does: the two programs, their uniform
- * locations, the fullscreen quad, and the three sampled textures.
+ * locations, the fullscreen quad, and the two sampled textures.
  *
- * Texture units are fixed — 0 the dye artwork, 1 the noise tile, 2 the velocity field —
- * because both programs read them and rebinding per frame would be pointless churn.
+ * Texture units are fixed — 0 the dye artwork, 2 the velocity field — because both programs
+ * read them and rebinding per frame would be pointless churn. Unit 1 held a noise tile until
+ * the grain overlay came out of the display pass; it is deliberately left empty rather than
+ * renumbered, so the two shaders keep saying what they have always said.
  */
 import {
   DISPLAY_FRAGMENT_SHADER,
-  GRAIN_TILE,
   SIM_FRAGMENT_SHADER,
   VERTEX_SHADER,
 } from "./shader";
 
 const DISPLAY_UNIFORMS = [
-  "ar", "amp", "imgAr", "gmx", "pt", "o1", "o2", "gd", "gs", "s1", "s2", "tt",
-  "dispK", "vsc", "grain",
+  "ar", "amp", "imgAr", "pt", "o1", "s1", "tt", "dispK", "vsc",
 ] as const;
 
 const SIM_UNIFORMS = [
@@ -32,7 +32,6 @@ export type Pipeline = {
   u: DisplayUniforms;
   s: SimUniforms;
   dye: WebGLTexture;
-  grain: WebGLTexture;
   /** Bound to unit 2 until the field exists, and whenever the device has no field at all. */
   rest: WebGLTexture;
   quad: WebGLBuffer;
@@ -95,57 +94,33 @@ export function makeTexture(
   return texture;
 }
 
-/** Monochrome noise, generated rather than shipped as an asset. */
-function grainCanvas(): HTMLCanvasElement {
-  const canvas = document.createElement("canvas");
-  canvas.width = canvas.height = GRAIN_TILE;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return canvas;
-  const img = ctx.createImageData(GRAIN_TILE, GRAIN_TILE);
-  for (let i = 0; i < img.data.length; i += 4) {
-    const n = 96 + Math.floor(Math.random() * 96);
-    img.data[i] = img.data[i + 1] = img.data[i + 2] = n;
-    img.data[i + 3] = 255;
-  }
-  ctx.putImageData(img, 0, 0);
-  return canvas;
-}
-
 export function createPipeline(gl: WebGLRenderingContext): Pipeline | null {
   const display = link(gl, DISPLAY_FRAGMENT_SHADER);
   const sim = link(gl, SIM_FRAGMENT_SHADER);
   const quad = gl.createBuffer();
   const dye = makeTexture(gl, 0, [158, 178, 199, 255], false);
-  const grain = makeTexture(gl, 1, [128, 128, 128, 255], true);
   /* Half in RG is zero velocity once unpacked, and zero in B is no agitation. */
   const rest = makeTexture(gl, 2, [128, 128, 0, 255], true);
-  if (!display || !sim || !quad || !dye || !grain || !rest) return null;
+  if (!display || !sim || !quad || !dye || !rest) return null;
 
   gl.bindBuffer(gl.ARRAY_BUFFER, quad);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
   gl.enableVertexAttribArray(0);
   gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
 
-  gl.activeTexture(gl.TEXTURE1);
-  gl.bindTexture(gl.TEXTURE_2D, grain);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, grainCanvas());
-
   gl.useProgram(sim);
   gl.uniform1i(gl.getUniformLocation(sim, "V"), 2);
   gl.useProgram(display);
   gl.uniform1i(gl.getUniformLocation(display, "T"), 0);
-  gl.uniform1i(gl.getUniformLocation(display, "G"), 1);
   gl.uniform1i(gl.getUniformLocation(display, "V"), 2);
 
   const u = locate(gl, display, DISPLAY_UNIFORMS);
   gl.uniform1f(u.imgAr, 2);
-  gl.uniform1f(u.gmx, 1);
-  return { display, sim, u, s: locate(gl, sim, SIM_UNIFORMS), dye, grain, rest, quad };
+  return { display, sim, u, s: locate(gl, sim, SIM_UNIFORMS), dye, rest, quad };
 }
 
 export function disposePipeline(gl: WebGLRenderingContext, p: Pipeline): void {
   gl.deleteTexture(p.dye);
-  gl.deleteTexture(p.grain);
   gl.deleteTexture(p.rest);
   gl.deleteBuffer(p.quad);
   gl.deleteProgram(p.display);

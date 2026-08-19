@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics=""><meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Beth+Ellen&amp;family=Baloo+2:wght@400;700;800&amp;family=Arimo:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#4F3F79;font-family:"Arimo",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#E9E7C2;text-decoration:none}a:hover{color:#E9622D}
+.mono{font-family:ui-monospace,Menlo,monospace}
+html{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0}
+@keyframes menuIn{from{opacity:0}to{opacity:1}}
+</style></helmet>
+
+<svg aria-hidden="true" width="0" height="0" data-shapes="hand-cut, mirrored" style="position:absolute;width:0;height:0;overflow:hidden"><defs>
+<clipPath id="blob0" clipPathUnits="objectBoundingBox"><path d="M 0.105 0.014 C 0.320 0.000 0.560 0.024 0.760 0.008 C 0.880 -0.002 0.968 0.046 0.982 0.130 C 0.996 0.212 0.984 0.380 0.990 0.520 C 0.996 0.664 1.004 0.842 0.966 0.916 C 0.934 0.980 0.790 0.976 0.580 0.988 C 0.372 1.000 0.150 0.994 0.052 0.960 C 0.006 0.944 0.004 0.790 0.010 0.596 C 0.016 0.404 -0.004 0.190 0.026 0.098 C 0.048 0.030 0.062 0.024 0.105 0.014 Z"></path></clipPath>
+<clipPath id="blob1" clipPathUnits="objectBoundingBox"><path d="M 0.078 0.020 C 0.300 0.006 0.580 0.020 0.812 0.006 C 0.926 -0.002 0.976 0.062 0.986 0.152 C 0.996 0.240 0.982 0.392 0.988 0.528 C 0.994 0.668 0.994 0.826 0.952 0.906 C 0.918 0.972 0.770 0.966 0.566 0.980 C 0.360 0.994 0.140 0.986 0.046 0.946 C 0.004 0.928 0.008 0.782 0.014 0.588 C 0.020 0.394 0.000 0.164 0.034 0.084 C 0.056 0.032 0.048 0.030 0.078 0.020 Z"></path></clipPath>
+<clipPath id="blob2" clipPathUnits="objectBoundingBox"><path d="M 0.112 0.008 C 0.336 -0.004 0.548 0.030 0.786 0.014 C 0.902 0.006 0.980 0.038 0.988 0.126 C 0.996 0.208 0.980 0.372 0.986 0.516 C 0.992 0.672 1.006 0.856 0.960 0.922 C 0.926 0.972 0.804 0.982 0.594 0.992 C 0.384 1.002 0.156 0.990 0.058 0.966 C 0.010 0.954 0.002 0.804 0.008 0.606 C 0.014 0.408 0.002 0.176 0.030 0.090 C 0.044 0.026 0.070 0.018 0.112 0.008 Z"></path></clipPath>
+<clipPath id="blob3" clipPathUnits="objectBoundingBox"><path d="M 0.086 0.016 C 0.310 0.002 0.570 0.028 0.800 0.010 C 0.918 0.000 0.972 0.054 0.984 0.142 C 0.996 0.228 0.986 0.386 0.990 0.524 C 0.994 0.666 0.998 0.834 0.958 0.910 C 0.926 0.976 0.780 0.970 0.572 0.984 C 0.366 0.998 0.146 0.990 0.050 0.954 C 0.006 0.938 0.006 0.786 0.012 0.592 C 0.018 0.398 -0.002 0.172 0.030 0.090 C 0.052 0.030 0.056 0.026 0.086 0.016 Z"></path></clipPath>
+<clipPath id="blob4" clipPathUnits="objectBoundingBox"><path d="M 0.098 0.012 C 0.324 -0.002 0.556 0.026 0.774 0.010 C 0.892 0.002 0.974 0.044 0.984 0.136 C 0.994 0.222 0.982 0.378 0.988 0.522 C 0.994 0.668 1.000 0.848 0.962 0.918 C 0.930 0.978 0.796 0.978 0.586 0.990 C 0.376 1.002 0.148 0.992 0.054 0.962 C 0.008 0.948 0.002 0.796 0.008 0.600 C 0.014 0.404 0.000 0.182 0.028 0.094 C 0.046 0.028 0.066 0.020 0.098 0.012 Z"></path></clipPath>
+<clipPath id="blob5" clipPathUnits="objectBoundingBox"><path d="M 0.895 0.014 C 0.680 0.000 0.440 0.024 0.240 0.008 C 0.120 -0.002 0.032 0.046 0.018 0.130 C 0.004 0.212 0.016 0.380 0.010 0.520 C 0.004 0.664 -0.004 0.842 0.034 0.916 C 0.066 0.980 0.210 0.976 0.420 0.988 C 0.628 1.000 0.850 0.994 0.948 0.960 C 0.994 0.944 0.996 0.790 0.990 0.596 C 0.984 0.404 1.004 0.190 0.974 0.098 C 0.952 0.030 0.938 0.024 0.895 0.014 Z"></path></clipPath>
+<clipPath id="blob6" clipPathUnits="objectBoundingBox"><path d="M 0.922 0.020 C 0.700 0.006 0.420 0.020 0.188 0.006 C 0.074 -0.002 0.024 0.062 0.014 0.152 C 0.004 0.240 0.018 0.392 0.012 0.528 C 0.006 0.668 0.006 0.826 0.048 0.906 C 0.082 0.972 0.230 0.966 0.434 0.980 C 0.640 0.994 0.860 0.986 0.954 0.946 C 0.996 0.928 0.992 0.782 0.986 0.588 C 0.980 0.394 1.000 0.164 0.966 0.084 C 0.944 0.032 0.952 0.030 0.922 0.020 Z"></path></clipPath>
+<clipPath id="blob7" clipPathUnits="objectBoundingBox"><path d="M 0.888 0.008 C 0.664 -0.004 0.452 0.030 0.214 0.014 C 0.098 0.006 0.020 0.038 0.012 0.126 C 0.004 0.208 0.020 0.372 0.014 0.516 C 0.008 0.672 -0.006 0.856 0.040 0.922 C 0.074 0.972 0.196 0.982 0.406 0.992 C 0.616 1.002 0.844 0.990 0.942 0.966 C 0.990 0.954 0.998 0.804 0.992 0.606 C 0.986 0.408 0.998 0.176 0.970 0.090 C 0.956 0.026 0.930 0.018 0.888 0.008 Z"></path></clipPath>
+<clipPath id="blob8" clipPathUnits="objectBoundingBox"><path d="M 0.914 0.016 C 0.690 0.002 0.430 0.028 0.200 0.010 C 0.082 0.000 0.028 0.054 0.016 0.142 C 0.004 0.228 0.014 0.386 0.010 0.524 C 0.006 0.666 0.002 0.834 0.042 0.910 C 0.074 0.976 0.220 0.970 0.428 0.984 C 0.634 0.998 0.854 0.990 0.950 0.954 C 0.994 0.938 0.994 0.786 0.988 0.592 C 0.982 0.398 1.002 0.172 0.970 0.090 C 0.948 0.030 0.944 0.026 0.914 0.016 Z"></path></clipPath>
+<clipPath id="blob9" clipPathUnits="objectBoundingBox"><path d="M 0.902 0.012 C 0.676 -0.002 0.444 0.026 0.226 0.010 C 0.108 0.002 0.026 0.044 0.016 0.136 C 0.006 0.222 0.018 0.378 0.012 0.522 C 0.006 0.668 0.000 0.848 0.038 0.918 C 0.070 0.978 0.204 0.978 0.414 0.990 C 0.624 1.002 0.852 0.992 0.946 0.962 C 0.992 0.948 0.998 0.796 0.992 0.600 C 0.986 0.404 1.000 0.182 0.972 0.094 C 0.954 0.028 0.934 0.020 0.902 0.012 Z"></path></clipPath>
+<clipPath id="blob10" clipPathUnits="objectBoundingBox"><path d="M 0.105 0.986 C 0.320 1.000 0.560 0.976 0.760 0.992 C 0.880 1.002 0.968 0.954 0.982 0.870 C 0.996 0.788 0.984 0.620 0.990 0.480 C 0.996 0.336 1.004 0.158 0.966 0.084 C 0.934 0.020 0.790 0.024 0.580 0.012 C 0.372 0.000 0.150 0.006 0.052 0.040 C 0.006 0.056 0.004 0.210 0.010 0.404 C 0.016 0.596 -0.004 0.810 0.026 0.902 C 0.048 0.970 0.062 0.976 0.105 0.986 Z"></path></clipPath>
+<clipPath id="blob11" clipPathUnits="objectBoundingBox"><path d="M 0.078 0.980 C 0.300 0.994 0.580 0.980 0.812 0.994 C 0.926 1.002 0.976 0.938 0.986 0.848 C 0.996 0.760 0.982 0.608 0.988 0.472 C 0.994 0.332 0.994 0.174 0.952 0.094 C 0.918 0.028 0.770 0.034 0.566 0.020 C 0.360 0.006 0.140 0.014 0.046 0.054 C 0.004 0.072 0.008 0.218 0.014 0.412 C 0.020 0.606 0.000 0.836 0.034 0.916 C 0.056 0.968 0.048 0.970 0.078 0.980 Z"></path></clipPath>
+<clipPath id="blob12" clipPathUnits="objectBoundingBox"><path d="M 0.112 0.992 C 0.336 1.004 0.548 0.970 0.786 0.986 C 0.902 0.994 0.980 0.962 0.988 0.874 C 0.996 0.792 0.980 0.628 0.986 0.484 C 0.992 0.328 1.006 0.144 0.960 0.078 C 0.926 0.028 0.804 0.018 0.594 0.008 C 0.384 -0.002 0.156 0.010 0.058 0.034 C 0.010 0.046 0.002 0.196 0.008 0.394 C 0.014 0.592 0.002 0.824 0.030 0.910 C 0.044 0.974 0.070 0.982 0.112 0.992 Z"></path></clipPath>
+<clipPath id="blob13" clipPathUnits="objectBoundingBox"><path d="M 0.086 0.984 C 0.310 0.998 0.570 0.972 0.800 0.990 C 0.918 1.000 0.972 0.946 0.984 0.858 C 0.996 0.772 0.986 0.614 0.990 0.476 C 0.994 0.334 0.998 0.166 0.958 0.090 C 0.926 0.024 0.780 0.030 0.572 0.016 C 0.366 0.002 0.146 0.010 0.050 0.046 C 0.006 0.062 0.006 0.214 0.012 0.408 C 0.018 0.602 -0.002 0.828 0.030 0.910 C 0.052 0.970 0.056 0.974 0.086 0.984 Z"></path></clipPath>
+<clipPath id="blob14" clipPathUnits="objectBoundingBox"><path d="M 0.098 0.988 C 0.324 1.002 0.556 0.974 0.774 0.990 C 0.892 0.998 0.974 0.956 0.984 0.864 C 0.994 0.778 0.982 0.622 0.988 0.478 C 0.994 0.332 1.000 0.152 0.962 0.082 C 0.930 0.022 0.796 0.022 0.586 0.010 C 0.376 -0.002 0.148 0.008 0.054 0.038 C 0.008 0.052 0.002 0.204 0.008 0.400 C 0.014 0.596 0.000 0.818 0.028 0.906 C 0.046 0.972 0.066 0.980 0.098 0.988 Z"></path></clipPath>
+<clipPath id="blob15" clipPathUnits="objectBoundingBox"><path d="M 0.895 0.986 C 0.680 1.000 0.440 0.976 0.240 0.992 C 0.120 1.002 0.032 0.954 0.018 0.870 C 0.004 0.788 0.016 0.620 0.010 0.480 C 0.004 0.336 -0.004 0.158 0.034 0.084 C 0.066 0.020 0.210 0.024 0.420 0.012 C 0.628 0.000 0.850 0.006 0.948 0.040 C 0.994 0.056 0.996 0.210 0.990 0.404 C 0.984 0.596 1.004 0.810 0.974 0.902 C 0.952 0.970 0.938 0.976 0.895 0.986 Z"></path></clipPath>
+<clipPath id="blob16" clipPathUnits="objectBoundingBox"><path d="M 0.922 0.980 C 0.700 0.994 0.420 0.980 0.188 0.994 C 0.074 1.002 0.024 0.938 0.014 0.848 C 0.004 0.760 0.018 0.608 0.012 0.472 C 0.006 0.332 0.006 0.174 0.048 0.094 C 0.082 0.028 0.230 0.034 0.434 0.020 C 0.640 0.006 0.860 0.014 0.954 0.054 C 0.996 0.072 0.992 0.218 0.986 0.412 C 0.980 0.606 1.000 0.836 0.966 0.916 C 0.944 0.968 0.952 0.970 0.922 0.980 Z"></path></clipPath>
+<clipPath id="blob17" clipPathUnits="objectBoundingBox"><path d="M 0.888 0.992 C 0.664 1.004 0.452 0.970 0.214 0.986 C 0.098 0.994 0.020 0.962 0.012 0.874 C 0.004 0.792 0.020 0.628 0.014 0.484 C 0.008 0.328 -0.006 0.144 0.040 0.078 C 0.074 0.028 0.196 0.018 0.406 0.008 C 0.616 -0.002 0.844 0.010 0.942 0.034 C 0.990 0.046 0.998 0.196 0.992 0.394 C 0.986 0.592 0.998 0.824 0.970 0.910 C 0.956 0.974 0.930 0.982 0.888 0.992 Z"></path></clipPath>
+<clipPath id="blob18" clipPathUnits="objectBoundingBox"><path d="M 0.914 0.984 C 0.690 0.998 0.430 0.972 0.200 0.990 C 0.082 1.000 0.028 0.946 0.016 0.858 C 0.004 0.772 0.014 0.614 0.010 0.476 C 0.006 0.334 0.002 0.166 0.042 0.090 C 0.074 0.024 0.220 0.030 0.428 0.016 C 0.634 0.002 0.854 0.010 0.950 0.046 C 0.994 0.062 0.994 0.214 0.988 0.408 C 0.982 0.602 1.002 0.828 0.970 0.910 C 0.948 0.970 0.944 0.974 0.914 0.984 Z"></path></clipPath>
+<clipPath id="blob19" clipPathUnits="objectBoundingBox"><path d="M 0.902 0.988 C 0.676 1.002 0.444 0.974 0.226 0.990 C 0.108 0.998 0.026 0.956 0.016 0.864 C 0.006 0.778 0.018 0.622 0.012 0.478 C 0.006 0.332 0.000 0.152 0.038 0.082 C 0.070 0.022 0.204 0.022 0.414 0.010 C 0.624 -0.002 0.852 0.008 0.946 0.038 C 0.992 0.052 0.998 0.204 0.992 0.400 C 0.986 0.596 1.000 0.818 0.972 0.906 C 0.954 0.972 0.934 0.980 0.902 0.988 Z"></path></clipPath>
+</defs></svg>
+
+{{ dyeLayer }}
+
+<div style="position:relative;min-height:100vh">
+  <header style="position:sticky;top:0;z-index:60;pointer-events:none">
+    <div style="max-width:1180px;margin:0 auto;padding:16px 24px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px">
+      <a href="SFWF Home.dc.html" style="flex:none;display:block;text-decoration:none;pointer-events:auto"><img src="assets/logos/sfwf-beige.png" alt="Siargao Food &amp; Wine Festival" style="display:block;height:26px"></a>
+      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+        <nav style="display:flex;align-items:center;justify-content:center;justify-self:center;gap:26px;pointer-events:auto">
+          <a href="SFWF Home.dc.html" style="font:400 13px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none">Home</a>
+          <a href="SFWF Programme.dc.html" style="font:400 13px/1 'Beth Ellen',cursive;color:#E9622D;text-decoration:none">Program</a>
+          <a href="SFWF Press.dc.html" style="font:400 13px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none">Press</a>
+        </nav>
+        <div style="display:flex;align-items:center;justify-self:end;gap:26px;pointer-events:auto">
+          <a href="SFWF Home.dc.html#purpose" style="padding:12px 24px 15px;clip-path:url(#blob3);background:#E9622D;color:#141210;font:700 14px/1 'Baloo 2',system-ui,sans-serif;letter-spacing:.02em;text-transform:capitalize;text-decoration:none">Why We Do This</a>
+        </div>
+      </sc-if>
+      <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{ toggleMenu }}" aria-label="Menu" aria-expanded="{{ menuOpen }}" aria-controls="sfwf-menu" style="grid-column:3;justify-self:end;pointer-events:auto;flex:none;width:40px;height:40px;display:grid;place-items:center;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.34);backdrop-filter:blur(6px);border-radius:52% 48% 56% 44% / 60% 42% 58% 40%;color:#E9E7C2;cursor:pointer;padding:0;line-height:0"><span style="display:block;font-family:'Wigglye',system-ui,sans-serif;font-weight:400;line-height:1;font-size:15px">{{ menuGlyph }}</span></button>
+      </sc-if>
+    </div>
+  </header>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div id="sfwf-menu" onClick="{{ closeMenu }}" style="position:fixed;inset:0;z-index:45;display:grid;place-items:center;padding:56px 16px 40px;animation:menuIn .34s ease both">
+      <div style="position:relative;width:min(84vw,322px);aspect-ratio:322/326;display:grid;place-items:center">
+        <svg viewBox="0 0 300 320" aria-hidden="true" style="position:absolute;left:-11%;top:-5%;width:121%;height:118%;overflow:visible"><path d="M152 9 C188 5 212 21 226 45 C240 69 233 91 246 111 C259 131 264 156 253 178 C242 200 247 223 232 245 C217 267 191 281 165 289 C139 297 110 293 88 281 C66 269 50 249 42 227 C34 205 39 182 31 160 C23 138 29 113 43 93 C57 73 55 51 73 33 C91 15 119 13 152 9 Z" fill="none" stroke="#E9E7C2" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"></path></svg>
+        <nav style="position:relative;display:flex;flex-direction:column;align-items:center;gap:26px">
+          <a href="SFWF Home.dc.html" style="font:400 22px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none">Home</a>
+          <a href="SFWF Programme.dc.html" style="font:400 21px/1 'Beth Ellen',cursive;color:#E9622D;text-decoration:none">Program</a>
+          <a href="SFWF Press.dc.html" style="font:400 21px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none">Press</a>
+        </nav>
+      </div>
+    </div>
+  </sc-if>
+
+  <main ref="{{ mainRef }}" style="transition:opacity .34s ease;opacity:{{ contentOpacity }};pointer-events:{{ contentPointer }}">
+
+  <section style="max-width:1180px;margin:0 auto;padding:clamp(30px,5vw,60px) 24px 0;text-align:center">
+    <p class="mono" style="margin:0 0 14px;font-size:11.5px;letter-spacing:.2em;color:#E9E7C2">THE PROGRAMME</p>
+    <h1 style="margin:0 auto;max-width:16em;font:400 clamp(38px,7vw,74px)/1.1 'Beth Ellen',cursive;color:#E9622D;text-wrap:pretty">the six-day journey</h1>
+    <p style="margin:16px auto 0;max-width:32em;font:400 clamp(14.5px,0.5vw + 13.1px,16px)/1.7 'Arimo',Helvetica,sans-serif;color:#E9E7C2;text-wrap:pretty">Tap any gathering to see who is cooking and how to get in. Every reservation is made with the venue itself.</p>
+
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:clamp(26px,3.6vw,38px) 0 0">
+      <sc-for list="{{ chips }}" as="chip" hint-placeholder-count="7">
+        <button type="button" onClick="{{ chip.onPick }}" style="padding:11px 18px 13px;border:1px solid rgba(233,231,194,.45);border-radius:{{ chip.nub }};cursor:pointer;white-space:nowrap;font:400 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;background:{{ chip.bg }};color:{{ chip.ink }}">{{ chip.label }}</button>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:clamp(30px,4vw,46px) 24px 0">
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px 24px;padding-bottom:8px">
+      <sc-if value="{{ oneDay }}" hint-placeholder-val="{{ false }}">
+        <h2 style="margin:0;font:400 clamp(28px,4vw,38px)/1.2 'Beth Ellen',cursive;color:#E9E7C2">{{ gridHeading }}</h2>
+      </sc-if>
+      <p class="mono" style="margin:0;font-size:11.5px;letter-spacing:.2em;color:#E9E7C2">{{ gridCount }}</p>
+    </div>
+
+    <sc-for list="{{ days }}" as="day" hint-placeholder-count="3">
+      <div style="padding:0 0 18px"><svg viewBox="0 0 600 6" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:5px;overflow:visible;margin:0 0 18px"><path d="M2 4.6 C 46 1.4 88 5.8 132 3.2 C 176 0.6 210 6.2 256 4.4 C 300 2.6 332 0.4 378 2.8 C 420 5 452 6.4 496 3.4 C 534 0.8 562 5.4 598 2.2" fill="none" stroke="rgba(233,231,194,.4)" stroke-width="1.4" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:0 0 20px">
+          <p class="mono" style="margin:0;font-size:12px;letter-spacing:.2em;color:#E9E7C2">{{ day.date }}</p>
+          <h3 style="margin:0;font:400 clamp(26px,3.4vw,30px)/1.15 'Beth Ellen',cursive;color:#E9E7C2">{{ day.name }}</h3>
+          <sc-if value="{{ day.showIcon }}" hint-placeholder-val="{{ false }}"><img src="{{ day.iconSrc }}" alt="" style="width:{{ day.iconW }};display:block;flex:none"></sc-if>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:12px;align-items:start">
+          <sc-for list="{{ day.events }}" as="ev" hint-placeholder-count="2">
+            <div onClick="{{ ev.onToggle }}" style="grid-column:{{ ev.span }};background:#E9E7C2;clip-path:{{ ev.blob }};padding:20px clamp(24px,2.6vw,34px) 24px;cursor:pointer">
+              <sc-if value="{{ ev.closed }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+                  <div>
+                    <p class="mono" style="margin:0 0 7px;font-size:11.5px;letter-spacing:.16em;color:#4F3F79"><span style="font-weight:700;color:#F9621B">{{ ev.venue }}</span> · {{ ev.time }}</p>
+                    <p style="margin:0;font:700 clamp(15.5px,0.7vw + 13.3px,17px)/1.35 'Arimo',Helvetica,sans-serif;color:#3E3064;text-wrap:pretty">{{ ev.title }}</p>
+                  </div>
+                  <div style="flex:none;display:flex;align-items:center;gap:13px">
+                    <div style="flex:none;display:flex;align-items:center;gap:7px">
+                      <sc-if value="{{ ev.bookable }}" hint-placeholder-val="{{ true }}"><span style="width:10px;height:10px;border-radius:50%;background:#E9622D"></span></sc-if>
+                      <span class="mono" style="font-size:11.5px;letter-spacing:.14em;color:#4F3F79">{{ ev.access }}</span>
+                    </div>
+                    <span style="flex:none;font:700 13px/1 'Arimo',Helvetica,sans-serif;color:rgba(79,63,121,.92)">▾</span>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ ev.open }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:18px">
+                  <p style="margin:0;max-width:26em;font:700 clamp(18px,1.05vw + 14.6px,21px)/1.22 'Arimo',Helvetica,sans-serif;color:#3E3064;text-wrap:pretty">{{ ev.title }}</p>
+                  <div style="flex:none;display:flex;align-items:center;gap:13px;margin-top:4px">
+                    <div style="flex:none;display:flex;align-items:center;gap:7px">
+                      <sc-if value="{{ ev.bookable }}" hint-placeholder-val="{{ true }}"><span style="width:10px;height:10px;border-radius:50%;background:#E9622D"></span></sc-if>
+                      <span class="mono" style="font-size:11.5px;letter-spacing:.14em;color:#4F3F79">{{ ev.access }}</span>
+                    </div>
+                    <span style="flex:none;font:700 13px/1 'Arimo',Helvetica,sans-serif;color:rgba(79,63,121,.92)">▴</span>
+                  </div>
+                </div>
+                <p style="margin:7px 0 0;font:400 clamp(13.5px,0.3vw + 12.8px,14.5px)/1.45 'Arimo',Helvetica,sans-serif;color:#4F3F79">{{ ev.hint }}</p>
+                <sc-if value="{{ ev.hasDesc }}" hint-placeholder-val="{{ true }}">
+                  <p style="margin:14px 0 0;max-width:900px;font:400 clamp(14.5px,0.5vw + 13.1px,16px)/1.6 'Arimo',Helvetica,sans-serif;color:#3E3064;text-wrap:pretty">{{ ev.desc }}</p>
+                </sc-if>
+                <sc-if value="{{ ev.noDesc }}" hint-placeholder-val="{{ false }}">
+                  <p style="margin:14px 0 0;font:italic 400 clamp(14.5px,0.5vw + 13.1px,16px)/1.6 'Arimo',Helvetica,sans-serif;color:#4F3F79">Programme details to be announced.</p>
+                </sc-if>
+                <svg viewBox="0 0 400 6" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:5px;overflow:visible"><path d="M2 3.8 C 52 1.2 104 5.6 160 3.4 C 214 1.4 262 5.8 316 3.6 C 352 2.2 378 4.6 398 3" fill="none" stroke="rgba(79,63,121,.3)" stroke-width="1.3" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg><div style="display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-top:14px">
+                  <sc-if value="{{ ev.hasWho }}" hint-placeholder-val="{{ true }}">
+                    <p style="margin:0;flex:1;min-width:150px;font:400 clamp(13.5px,0.3vw + 12.8px,14.5px)/1.45 'Arimo',Helvetica,sans-serif;color:#4F3F79">{{ ev.who }}</p>
+                  </sc-if>
+                  <sc-if value="{{ ev.noWho }}" hint-placeholder-val="{{ false }}">
+                    <p style="margin:0;flex:1;min-width:150px;font:italic 400 clamp(13.5px,0.3vw + 12.8px,14.5px)/1.45 'Arimo',Helvetica,sans-serif;color:#4F3F79">Line-up to be announced</p>
+                  </sc-if>
+                  <sc-if value="{{ ev.bookable }}" hint-placeholder-val="{{ true }}">
+                    <a href="{{ ev.igUrl }}" target="_blank" rel="noopener" onClick="{{ ev.stopProp }}" style="flex:none;clip-path:{{ ev.btnBlob }};padding:16px 28px;background:#4F3F79;color:#F7F3E4;font:700 14.5px/1.2 'Arimo',Helvetica,sans-serif;text-decoration:none;cursor:pointer">{{ ev.book }}</a>
+                  </sc-if>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:clamp(44px,6vw,72px) 24px 0;text-align:center">
+    <p style="margin:0 auto;max-width:24em;font:400 clamp(24px,3.4vw,32px)/1.24 'Beth Ellen',cursive;color:#E9E7C2;text-wrap:pretty">The festival sells nothing. Every table is booked with the people cooking at it.</p>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:clamp(40px,5.4vw,62px) 24px 0">
+    <p class="mono" style="margin:0 0 18px;font-size:11px;letter-spacing:.22em;color:#E9E7C2">HOSTED ACROSS THE ISLAND BY</p>
+    <a style="display:flex;flex-wrap:wrap;gap:22px 40px;align-items:center;text-decoration:none">
+      <img src="assets/venues/beige/wild.png" alt="Wild Siargao" style="width:38px;display:block">
+      <img src="assets/venues/beige/alma.png" alt="Alma" style="width:106px;display:block">
+      <img src="assets/venues/beige/lokal-lab.png" alt="Lokal Lab" style="width:83px;display:block">
+      <img src="assets/venues/beige/lyma.png" alt="Lyma" style="width:82px;display:block">
+      <img src="assets/venues/beige/kermit.png" alt="Kermit Siargao" style="width:76px;display:block">
+      <img src="assets/venues/beige/bravo.png" alt="Bravo Beach Resort" style="width:52px;display:block">
+      <img src="assets/venues/beige/roots.png" alt="Roots Siargao" style="width:124px;display:block">
+      <img src="assets/venues/beige/lamari.png" alt="Lamari" style="width:116px;display:block">
+      <img src="assets/venues/beige/hue.png" alt="Hue Hotels &amp; Resorts Siargao" style="width:79px;display:block">
+      <span style="font:400 25px/1 'Beth Ellen',cursive;color:#E9E7C2">Hiyas Farm</span>
+    </a>
+  </section>
+
+  <footer style="margin-top:clamp(50px,6.4vw,80px)"><svg viewBox="0 0 600 6" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:5px;overflow:visible;margin:0"><path d="M2 4.6 C 46 1.4 88 5.8 132 3.2 C 176 0.6 210 6.2 256 4.4 C 300 2.6 332 0.4 378 2.8 C 420 5 452 6.4 496 3.4 C 534 0.8 562 5.4 598 2.2" fill="none" stroke="rgba(233,231,194,.4)" stroke-width="1.4" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg>
+    <div style="max-width:1180px;margin:0 auto;padding:clamp(28px,4vw,40px) 24px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px">
+      <p class="mono" style="margin:0;font-size:11px;line-height:1.9;letter-spacing:.14em;color:#E9E7C2">26 – 31 AUGUST 2026<br>SIARGAO ISLAND, PHILIPPINES</p>
+      <a href="SFWF Home.dc.html" style="text-decoration:none"><img src="assets/logos/sfwf-beige.png" alt="Siargao Food &amp; Wine Festival" style="width:150px;display:block"></a>
+      <a href="mailto:info@siargaofoodfest.com" style="font:400 20px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none">info@siargaofoodfest.com</a>
+    </div>
+  </footer>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;multiOpen&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Programme behaviour&quot;},&quot;showDoodles&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Art direction&quot;}}">
+/* Confirmed festival programme, Aug 26–31 2026 — 16 gatherings over six days. Visitor-facing
+ * detail only: venue, time and price. Chefs and handles come from the press release. */
+const DAYS = [
+  { date:'AUG 26', name:'gala opening', icon:'wine', w:44,
+    events:[
+      {venue:'WILD', time:'6PM – 10PM', title:'Ani sang Siargao opening celebration', price:'TBD',
+       who:'Chef Morris · Chef Jarrod · Chef Hannah · Chef Dre · the WILD team · Manu',
+       desc:'Ani sang Siargao opens with a high-energy celebration at WILD Siargao, bringing together chefs, farmers, media, creatives, partners and guests from across the island and beyond. The evening features cultural performances by Espoir, specialty cocktails by Manu, and a collaborative chef-led dining experience.'} ] },
+  { date:'AUG 27', name:'ocean day', icon:'fish', w:52,
+    events:[
+      {venue:'SIARGAO CORNER CAFÉ', time:'8AM – 11AM', title:'Brewed by the Pioneers', price:'FREE',
+       who:'Guests from Don Narciso Café, Claveria (Misamis Oriental)',
+       desc:'Waffle, Coffee and Roasting 101. Participants taste two coffees without knowing what they are, then guests from Don Narciso Café educate them on the basics of coffee roasting and lead a Coffee Appreciation on the Siargao Robusta.'},
+      {venue:'GL PUBLIC MARKET', time:'TIME TBD', title:'Wet market experience by Roots', price:'À LA CARTE',
+       who:'Roots',
+       desc:'Set in the heart of the General Luna Wet Market, among fishermen and local vendors, this casual standing pop-up celebrates Siargao’s everyday coastal food culture through fresh seafood, island drinks and an open, community-driven atmosphere.'},
+      {venue:'ALMA', time:'1ST SEATING 5PM · 2ND 8PM', title:'Alma × CMD Supper Club tasting menu', price:'TBD',
+       who:'Chef Morris · Chef Luis',
+       desc:'Chef Morris Danzen and Chef Luis Martinez prepare a beautiful dinner focused on the bounty of Siargao’s prime and native seafood.'} ] },
+  { date:'AUG 28', name:'coconut day', icon:'coconut', w:40,
+    events:[
+      {venue:'LUNARES CAFÉ', time:'8AM – 11AM', title:'Brewed by the Pioneers', price:'TBD',
+       who:null,
+       desc:'Coffee, pastry, and island café Italian culture. Relaxed, welcoming and focused on the relationship between coffee, breakfast and café culture that brings the Italian flavours.'},
+      {venue:'ISLA PANCITERIA', time:'ALL DAY', title:'Miki Fiesta!', price:'À LA CARTE',
+       who:'Isla Panciteria',
+       desc:'Isla Panciteria presents Miki Fiesta, a celebration of Filipino miki featuring three new signature miki dishes inspired by the flavours of Siargao and the sea. It opens with a free miki-making workshop, followed by an afternoon of street food, music and cocktails, with a one-day-only à la carte festival menu and exclusive merchandise.'},
+      {venue:'LOKAL HUB', time:'5PM – 7PM', title:'Meet the Changemakers: Coconut Lab, from tree to table', price:'FREE',
+       who:'c/o Lokal',
+       desc:'Lokal Hub hosts a very special Meet the Changemakers featuring workshops and talks on processing, fermentation, and zero-waste coconut utilization.'},
+      {venue:'LYMA', time:'DINNER', title:'Chef Jarrod Moore × Lyma collaboration dinner', price:'₱2,400 / HEAD',
+       who:'Chef Jarrod · Chef Marc · Chef Jose (Lyma)',
+       desc:'Chef Jarrod, Chef Marc and Chef Jose collaborate on a coconut-themed, zero-waste five-course dinner at Lyma.'} ] },
+  { date:'AUG 29', name:'producer day', icon:'dish', w:44,
+    events:[
+      {venue:'TROPICAL ACADEMY SAN ISIDRO', time:'DAYTIME', title:'Island meets the Outback', price:'TBD',
+       who:'Chef Jarrod · Chef Morris · Lokal',
+       desc:'Spend a day immersed in the rhythms of island agriculture. Guests are invited to learn alongside farmers and chefs through farming, workshops and conversations centred on Siargao’s land and food culture.'},
+      {venue:'KERMIT', time:'TIME TBD', title:'Kermit pizza eating contest!', price:'TBD',
+       who:null,
+       desc:'Pizza making workshops showcasing native ingredients, and the ever-popular Pizza Eating Contest back for its second year.'},
+      {venue:'LAMARI', time:'6:30PM', title:'Lamari presents “The Bounty of Siargao”', price:'₱1,500',
+       who:'Chef Ericka · Sinta · FullMoon · Lokal Lab',
+       desc:'A story of abundance told through a convergence of chefs who revere and celebrate the incredible native produce Siargao has to offer. LAMARI, Sinta, FullMoon Siargao and Lokal Lab come together for a collaborative feast prepared entirely from 100% local produce.'},
+      {venue:'PARALUMAN', time:'9PM – 1AM', title:'After dinner bar feature', price:'TBD',
+       who:null,
+       desc:null} ] },
+  { date:'AUG 30', name:'community day', icon:'ukulele', w:28,
+    events:[
+      {venue:'MAM-ON ISLAND', time:'MORNING', title:'Island style chef’s table', price:'₱6,000 / HEAD',
+       who:'Chef David · Hapag Manila · Ayà Manila',
+       desc:'Cev brings the chefs of Hapag Manila (1 Michelin Star) and Ayà Manila (Michelin Selected) over to curate an island feast on beautiful Mam-on Island — a one-of-a-kind boodle fight inspired heavily by kinilaw (raw) and sugba (grilled) cooking techniques.'},
+      {venue:'BRAVO', time:'4PM – 9PM', title:'Siargao Mercado', price:'OPEN FOR ALL',
+       who:'Assorted restaurants and eateries of Siargao',
+       desc:'Bravo hosts a vibrant gathering celebrating the flavours and creativity of Siargao. Karinderyas, local eateries and some of Siargao’s favourite restaurants come together right by the beach, with live performances, workshops and cultural programming, plus a special introduction of Siargao Slow Food to the community.'},
+      {venue:'SAGANA', time:'4PM – 11PM', title:'Salo salo sa Sagana', price:'₱2,000',
+       who:'Chef EJ · Chef Gino · Castaway Cocktails',
+       desc:'An afternoon-to-evening celebration of regional Filipino cuisine featuring Sagana’s winning signature Sunday Roast with Chef Gino of Haole (2024 Siargao Lechon Festival Champion), followed by a collaborative Luzon–Visayas–Mindanao salo-salo by Chef EJ and Chef Gino, paired with a cocktail collaboration and a rotating lineup of guest DJs.'} ] },
+  { date:'AUG 31', name:'closing celebration', icon:'flower', w:26,
+    events:[
+      {venue:'HUE HOTEL', time:'4PM', title:'Closing celebration & recognition', price:'TBD',
+       who:'Dayana Resto · Castaway Cocktails',
+       desc:'Overlooking the world-class Cloud 9 surf break, Ani sang Siargao concludes with an afternoon of recognition, celebration, community and cocktails by the wild boys of Castaway Cocktails at the newly opened HUE Hotel.'} ] },
+];
+
+/* Reservations happen per venue by Instagram DM — the festival sells nothing itself. Three
+ * venues have no handle on record yet and fall back to the festival account. */
+const FALLBACK = 'siargaofoodandwinefestival';
+const VENUES = {
+  'WILD': ['Wild', 'wild.siargao'],
+  'SIARGAO CORNER CAFÉ': ['Siargao Corner Café', FALLBACK],
+  'GL PUBLIC MARKET': ['General Luna public market', 'roots.siargao', 'Roots'],
+  'ALMA': ['Alma', 'almasiargao'],
+  'LUNARES CAFÉ': ['Lunares Café', FALLBACK],
+  'ISLA PANCITERIA': ['Isla Panciteria', 'islapanciteria.siargao'],
+  'LOKAL HUB': ['Lokal Hub', 'lokallab'],
+  'LYMA': ['Lyma', 'lymasiargao'],
+  'TROPICAL ACADEMY SAN ISIDRO': ['Tropical Academy, San Isidro', 'tropicalacademyiao', 'Tropical Academy'],
+  'KERMIT': ['Kermit', 'kermitsiargao'],
+  'LAMARI': ['Lamari', 'lamarisiargao'],
+  'PARALUMAN': ['Paraluman', 'paraluman.ph'],
+  'MAM-ON ISLAND': ['Mam-on Island', 'cevsiargao', 'Cev'],
+  'BRAVO': ['Bravo', 'bravosiargao'],
+  'SAGANA': ['Sagana', FALLBACK],
+  'HUE HOTEL': ['Hue Hotel', 'huesiargao'],
+};
+const place = v => (VENUES[v] || [v])[0];
+const bookName = v => (VENUES[v] || [v])[2] || place(v);
+const handleOf = v => (VENUES[v] || [v, FALLBACK])[1];
+const softTime = t => t === 'TIME TBD' ? 'time to be confirmed' : t.toLowerCase().replace('1st seating', 'first seating').replace('2nd', 'second');
+const WEEKDAY = { 'AUG 26':'Wednesday 26 August', 'AUG 27':'Thursday 27 August', 'AUG 28':'Friday 28 August', 'AUG 29':'Saturday 29 August', 'AUG 30':'Sunday 30 August', 'AUG 31':'Monday 31 August' };
+
+/* The mark is the booking, not a price tag: walk-in events say so, everything reservable
+ * carries the ask and an orange dot. Price TBC still routes to the DM. */
+function access(e) {
+  const p = (e.price || '').toUpperCase();
+  const walk = p === 'FREE' || p === 'OPEN FOR ALL' || p === 'À LA CARTE';
+  return walk ? { go: false, word: 'WALK IN' } : { go: true, word: 'RESERVE' };
+}
+
+/* Price is only spoken once the bubble is open, in the hint line. */
+function priceNote(e) {
+  const p = (e.price || '').toUpperCase();
+  if (p === 'FREE' || p === 'OPEN FOR ALL') return 'free';
+  if (p === 'À LA CARTE') return 'pay per dish';
+  if (p === 'TBD') return ''; /* unconfirmed prices are not spoken */
+  return e.price.replace(' / HEAD', ' per head');
+}
+
+/* The five hand-cut outlines, each mirrored in x, y and both — 20 silhouettes from the same
+ * curves, so neighbouring bubbles never repeat. */
+const BLOB_REFS = Array.from({ length: 20 }, (_, i) => 'url(#blob' + i + ')');
+
+/* Chip radii: px per corner, horizontal never equal to vertical. */
+const CHIP_NUBS = [
+  [20, 15, 19, 14, 17, 20, 14, 19],
+  [15, 20, 14, 19, 20, 16, 19, 15],
+  [19, 14, 20, 16, 15, 19, 17, 20],
+];
+const px = set => {
+  const n = set.map(v => v + 'px');
+  return n.slice(0, 4).join(' ') + ' / ' + n.slice(4).join(' ');
+};
+
+class Component extends DCLogic {
+  state = { w: typeof window !== 'undefined' ? window.innerWidth : 1200, menu: false, open: {}, day: 'all' };
+
+  componentDidMount() {
+    this.onResize = () => {
+      if (window.innerWidth === this.state.w) return;
+      this.setState({ w: window.innerWidth, menu: window.innerWidth >= 860 ? false : this.state.menu });
+    };
+    window.addEventListener('resize', this.onResize);
+
+    this.onKey = e => { if (e.key === 'Escape' && this.state.menu) this.setState({ menu: false }); };
+    window.addEventListener('keydown', this.onKey);
+
+    this.onScroll = () => {
+      if (this.fadeQueued) return;
+      this.fadeQueued = true;
+      requestAnimationFrame(() => { this.fadeQueued = false; this.applyFade(); });
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    this.applyFade();
+    this.startDye();
+  }
+
+  /* The shared dye ground — the palette-remapped shibori — under the shipped flow engine. */
+  startDye() {
+    if (!this.dyeEl || this.flow) return;
+    this.flow = true;
+    import('./components/backgrounds/dye-ground.js')
+      .then(m => m.mountDyeGround(this.dyeEl))
+      .then(flow => { this.flow = flow; })
+      .catch(e => { this.flow = null; console.warn(e); });
+  }
+
+  /* No plate on the nav band: the copy dissolves as it reaches the top of the viewport. */
+  applyFade() {
+    const el = this.mainEl;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top;
+    const g = 'linear-gradient(to bottom, rgba(0,0,0,0) ' + (-top) + 'px, rgba(0,0,0,0) ' + (-top + 56) + 'px, #000 ' + (-top + 190) + 'px)';
+    el.style.maskImage = g;
+    el.style.webkitMaskImage = g;
+  }
+
+  componentDidUpdate() {
+    this.applyFade();
+    document.body.style.overflow = this.state.menu && this.state.w < 860 ? 'hidden' : '';
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.onKey);
+    window.removeEventListener('scroll', this.onScroll);
+    document.body.style.overflow = '';
+    if (this.flow && this.flow.destroy) this.flow.destroy();
+  }
+
+  /* Every bubble opens and closes on its own, as on the live site. With multiOpen off the
+   * page keeps accordion behaviour instead — opening one closes the last. */
+  toggle(key) {
+    const many = this.props.multiOpen ?? true;
+    this.setState(s => {
+      const wasOpen = !!s.open[key];
+      if (!many) return { open: wasOpen ? {} : { [key]: true } };
+      const next = Object.assign({}, s.open);
+      if (wasOpen) delete next[key]; else next[key] = true;
+      return { open: next };
+    });
+  }
+
+  days() {
+    const showIcon = this.props.showDoodles ?? true;
+    let n = 0;
+    return DAYS.map((d, di) => ({
+      date: d.date,
+      name: d.name,
+      showIcon,
+      iconSrc: 'assets/doodles/beige/' + d.icon + '.png',
+      iconW: d.w + 'px',
+      events: d.events.map((e, ei) => {
+        const key = di + ':' + ei;
+        const open = !!this.state.open[key];
+        const acc = access(e);
+        return Object.assign({}, e, {
+          open, closed: !open,
+          span: open ? '1 / -1' : 'auto',
+          onToggle: () => this.toggle(key),
+          stopProp: evt => evt.stopPropagation(),
+          hasWho: !!e.who, noWho: !e.who,
+          hasDesc: !!e.desc, noDesc: !e.desc,
+          hint: [place(e.venue), WEEKDAY[d.date], softTime(e.time), priceNote(e)].filter(Boolean).join(' · '),
+          igUrl: 'https://www.instagram.com/' + handleOf(e.venue) + '/',
+          access: acc.word,
+          bookable: acc.go,
+          book: 'Message ' + bookName(e.venue) + ' to reserve',
+          blob: BLOB_REFS[(n * 7 + di * 3) % 20],
+          btnBlob: BLOB_REFS[(di * 7 + ei * 3 + 5) % 20],
+          nub: px(CHIP_NUBS[n++ % 3]),
+        });
+      }),
+    }));
+  }
+
+  renderVals() {
+    const mobile = this.state.w < 860;
+    const open = mobile && this.state.menu;
+    const all = this.days();
+    const pick = this.state.day;
+    const shown = pick === 'all' ? all : [all[pick]];
+    const count = shown.reduce((t, d) => t + d.events.length, 0);
+    const one = shown.length === 1;
+
+    return {
+      mobile,
+      desktop: !mobile,
+      menuOpen: open,
+      menuGlyph: open ? '✕' : '≡',
+      contentOpacity: open ? '0' : '1',
+      contentPointer: open ? 'none' : 'auto',
+      toggleMenu: () => this.setState(s => ({ menu: !s.menu })),
+      closeMenu: () => this.setState({ menu: false }),
+      mainRef: el => { if (el && el !== this.mainEl) { this.mainEl = el; this.applyFade(); } },
+      dyeLayer: React.createElement('canvas', {
+        ref: el => { if (el && el !== this.dyeEl) { this.dyeEl = el; this.startDye(); } },
+        style: { position: 'fixed', inset: 0, zIndex: 0, width: '100%', height: '100%', display: 'block', pointerEvents: 'none' },
+      }),
+      days: shown,
+      oneDay: one,
+      gridHeading: one ? shown[0].name : '',
+      gridCount: count + (count === 1 ? ' GATHERING' : ' GATHERINGS') + (one ? '' : ' · SIX DAYS'),
+      chips: [{ label: 'ALL SIX DAYS', key: 'all' }].concat(all.map((d, i) => ({ label: d.date, key: i })))
+        .map((c, i) => ({
+          label: c.label,
+          nub: px(CHIP_NUBS[i % 3]),
+          bg: pick === c.key ? '#E9622D' : 'transparent',
+          ink: pick === c.key ? '#141210' : '#E9E7C2',
+          onPick: () => this.setState({ day: c.key }),
+        })),
+    };
+  }
+}
+</script>
+</body>
+</html>

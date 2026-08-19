@@ -1,89 +1,76 @@
-/* Siargao Food & Wine Festival — design tokens.
+/* Siargao Food & Wine Festival — 2026 design tokens ("ani sang Siargao", 2nd edition).
  *
- * Typography and tracking come verbatim from the design system's tokens/typography.css.
- * The colour set is palette "1a" (Dye & Gold) from ui_kits/mobile/prototype.html, which is
- * the locked one — indigo dye plus the yellow mark, bubbles in paper-white.
+ * Violet dye ground, orange script, beige hand-cut bubbles. This replaces the 2025
+ * indigo-and-gold system outright: not one value of the old gold set survives.
  *
- * Only #FFD010 (mark yellow) and #204020 (mark green) are measured from the festival's real
- * assets. The indigo tones are measured from the supplied dye texture. Everything else is a
- * considered proposal, not established brand — see project-docs/design-decisions.md.
+ * Contrast decisions, learned the hard way and not defects:
+ *   · #E9622D on the violet ground is 2.73:1. It is kept for the big script headline only,
+ *     where it is a picture rather than a label. Every eyebrow, date, meta line and body
+ *     paragraph on violet is beige (7.28:1).
+ *   · On beige bubbles any ink under ~.7 alpha falls below 4.5:1. Only --ink-title and
+ *     --ink-body clear it — never reach for a lighter tint to mean "secondary", use
+ *     italic, weight or size.
+ *   · #8F3A12 is the orange that passes on light grounds (5.99:1). #E9622D never goes there.
  */
 
 :root {
   /* ── type ──────────────────────────────────────────────────────────────
-     Wigglye is the festival's hand-drawn display face: headings, bubble labels,
-     numerals. Never body copy — the wiggle is illegible below ~18px and at length.
-     Satoshi carries everything else. Both are supplied by the festival.
-     The --font-*-src variables are injected by next/font/local in layout.tsx. */
-  --font-display: var(--font-wigglye-src), ui-rounded, system-ui, sans-serif;
-  --font-body: var(--font-satoshi-src), ui-sans-serif, system-ui, -apple-system, sans-serif;
+     Three Google faces, all free for commercial use. Beth Ellen is the display script:
+     headlines, day names, numerals, the email. Arimo carries prose and everything inside a
+     bubble. Baloo 2 is for primary buttons only. The --font-*-src variables are injected by
+     next/font/google in layout.tsx. Meta lines use the system mono stack directly. */
+  --font-display: var(--font-beth-ellen-src), cursive;
+  --font-body: var(--font-arimo-src), Helvetica, Arial, sans-serif;
+  --font-button: var(--font-baloo-src), system-ui, sans-serif;
+  --font-mono: ui-monospace, Menlo, monospace;
 
-  --display-1: 400 clamp(2.5rem, 2rem + 4vw, 4rem) / 0.98 var(--font-display);
-  --display-2: 400 clamp(1.75rem, 1.5rem + 2vw, 2.5rem) / 1.04 var(--font-display);
-  --display-3: 400 1.375rem/1.1 var(--font-display);
-  --display-4: 400 1.125rem/1.15 var(--font-display);
+  /* ── colour ───────────────────────────────────────────────────────────── */
+  --ground: #4f3f79; /* the dye's base. Never lighten or darken it */
+  --orange: #e9622d; /* script headlines, primary buttons, the access dot */
+  --beige: #e9e7c2; /* all copy on the ground; bubble fill; logo colourway */
+  --ink-title: #3e3064; /* titles on beige bubbles */
+  --ink-body: #4f3f79; /* body and meta on beige bubbles */
+  --venue-orange: #f9621b; /* the bold venue name in a collapsed kicker, only */
+  --orange-on-light: #8f3a12; /* orange text on beige/light grounds */
+  --button-ink: #191218; /* label on orange and beige buttons */
+  --bubble-hover: #f2f0d4;
+  --orange-hover: #f27a49; /* primary buttons */
+  --orange-hover-in-bubble: #d4551f;
+  --hairline-beige: rgba(233, 231, 194, 0.4); /* drawn rules on the ground */
+  --hairline-beige-strong: rgba(233, 231, 194, 0.5);
+  --hairline-violet: rgba(79, 63, 121, 0.3); /* the drawn rule inside an open bubble */
 
-  --text-h2: 700 1rem/1.3 var(--font-body);
-  --text-h3: 700 0.8125rem/1.4 var(--font-body);
-  --text-body-lg: 400 1.0625rem/1.6 var(--font-body);
-  --text-body: 400 0.9375rem/1.62 var(--font-body);
-  --text-body-sm: 400 0.8125rem/1.55 var(--font-body);
-  --text-caption: 500 0.6875rem/1.45 var(--font-body);
-  --text-label: 700 0.75rem/1 var(--font-body);
-  --text-eyebrow: 500 0.625rem/1 var(--font-body);
+  /* Three tints, each with exactly one job. They are alpha over the palette, never a
+     different hue: the chevron is the body ink held just off full, the dateline is the
+     one line quiet enough to sit under the address, and the chip well is the faintest
+     beige that still reads as a surface. */
+  --chevron: rgba(79, 63, 121, 0.92);
+  --dateline: rgba(233, 231, 194, 0.86);
+  --chip-well: rgba(233, 231, 194, 0.1);
 
-  --tracking-eyebrow: 0.18em;
-  --tracking-label: 0.09em;
+  /* The palette's cyan is in the brand and used nowhere on the site yet. It stays unused
+     rather than being found a job, so it is deliberately not a token here. */
 
-  /* ── palette 1a — "Dye & Gold" ─────────────────────────────────────────
-     The veil is what makes white type hold over the live dye. Mark yellow fails
-     contrast on paper and must sit on ink or dye; it is a mark colour, not a UI colour. */
-  --veil: rgba(18, 30, 46, 0.4);
-  --on-bg: #ffffff;
-  --on-bg-soft: rgba(255, 255, 255, 0.76);
-  --bubble: rgba(255, 255, 255, 0.9);
-  --bubble-ink: #101b27;
-  --bubble-soft: rgba(16, 27, 39, 0.62);
-  --mark: #ffd010;
-  --cta: #ffd010;
-  --cta-ink: #101b27;
-  --chip-free: rgba(16, 27, 39, 0.1);
-  --chip-free-ink: #101b27;
-  --chip-paid: #101b27;
-  --chip-paid-ink: #ffd010;
-  --ink-deep: #0b1420;
+  /* ── layout ───────────────────────────────────────────────────────────── */
+  --sw: 1040px; /* content column */
+  --tm: 80ch; /* reading measure; sections cap at --tm, or --tm ± 2–8ch */
+  --hs: 1; /* hero scale — the media query below raises it where there is room */
+  --gutter: clamp(18px, 5vw, 52px);
+  --gutter-program: clamp(24px, 7vw, 76px);
+  --sec: clamp(34px, 4.6vw, 54px);
 
-  /* Copy sitting straight on the dye needs this to stay legible; bubbles never use it.
-     This is a scrim, not an elevation system — the design has no shadows on surfaces. */
-  --text-shadow-on-dye: 0 1px 12px rgba(10, 18, 28, 0.45);
-  --text-shadow-on-dye-strong: 0 2px 14px rgba(8, 16, 26, 0.55);
-
-  /* ── layout rhythm ────────────────────────────────────────────────────
-     NAVH is reserved space, not a bar height: the nav rides in and out of it on scroll. */
-  --nav-h: 102px;
-  --gap: 36px;
-  --sec: 64px;
-  --sec-program: 52px;
-  --sec-media: 36px;
-  --gutter: clamp(20px, 4vw, 56px);
-  --column: 1180px;
-  --prose: 68ch;
-
-  /* ── motion ───────────────────────────────────────────────────────────
-     One easing curve across the whole product. The only ambient motion is the
-     bloom background; everything else is a direct response to a tap. */
+  /* ── motion ───────────────────────────────────────────────────────────── */
   --ease: cubic-bezier(0.22, 0.75, 0.2, 1);
   --open: 0.34s;
+  /* Every colour hover in the product, and the one overshoot: the footer marks standing up. */
+  --hover: 0.15s ease;
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Desktop raises the display caps — the mobile clamps top out too early on a wide column. */
+/* The hero grows only where there is room for it. One breakpoint at 860px carries the
+   whole layout; this second step is the hero alone. */
 @media (min-width: 1100px) {
   :root {
-    --display-1: 400 clamp(4rem, 2rem + 4vw, 5.25rem) / 0.98 var(--font-display);
-    --display-2: 400 clamp(2.5rem, 1.5rem + 2vw, 3.25rem) / 1.04 var(--font-display);
-    --display-3: 400 1.75rem/1.1 var(--font-display);
-    --display-4: 400 1.375rem/1.15 var(--font-display);
-    --text-body: 400 1rem/1.62 var(--font-body);
-    --text-body-sm: 400 0.875rem/1.55 var(--font-body);
+    --hs: 1.4;
   }
 }

@@ -1,22 +1,27 @@
 /**
- * The dye flow shader — a swipe stirs a liquid full of suspended glitter.
+ * The dye flow shader — a swipe stirs the cloth like a hand through liquid.
  *
  * Two passes per frame. The sim pass keeps a velocity field that self-advects, rolls shear
  * up into eddies and decays over a couple of seconds; the display pass samples the dye
  * artwork at an offset taken from that field. Momentum lives in the field rather than in an
  * input-bound envelope, which is why the motion keeps developing after a finger lifts.
  *
- * Every constant here is the shipped, user-approved value from the festival's own motion
- * prototype (`design_handoff_dye_flow_background`). They were tuned interactively against
- * the real artwork on a phone; moving `tau`, `visc` or `disp` by more than ~20% visibly
- * changes the character. Don't retune them.
+ * The motion constants are the shipped values from the festival's own prototype. They were
+ * tuned interactively against the real artwork on a phone; moving `tau`, `visc` or `disp`
+ * by more than ~20% visibly changes the character. Don't retune them.
+ *
+ * The COLOUR is a different matter, and the display pass below deliberately no longer has
+ * any. The prototype's version overlaid a 64px noise tile, soft-light blended two copies of
+ * the dye at different scales, and multiplied the result up to ~15% brighter — a film grain
+ * and a contrast push on top of the palette. All three are gone: the ground now renders as
+ * exactly the two hexes `dyeGround` mixes, moved around. The cloth is the only texture.
  */
 
-/** Feel presets. Turbulent is the shipped default. */
+/** Feel presets. Turbulent is the shipped default. All three are motion only. */
 export const FEELS = {
-  Calm: { push: 0.6, curl: 1.1, tau: 2.1, visc: 0.012, disp: 0.058, grain: 0.9 },
-  Flowing: { push: 1.0, curl: 2.2, tau: 1.7, visc: 0.016, disp: 0.086, grain: 1.3 },
-  Turbulent: { push: 1.55, curl: 3.7, tau: 1.4, visc: 0.02, disp: 0.12, grain: 1.9 },
+  Calm: { push: 0.6, curl: 1.1, tau: 2.1, visc: 0.012, disp: 0.058 },
+  Flowing: { push: 1.0, curl: 2.2, tau: 1.7, visc: 0.016, disp: 0.086 },
+  Turbulent: { push: 1.55, curl: 3.7, tau: 1.4, visc: 0.02, disp: 0.12 },
 } as const;
 
 export type FeelName = keyof typeof FEELS;
@@ -68,14 +73,14 @@ export const WHEEL_CLAMP = 1.6;
 export const DT_MIN = 1 / 240;
 export const DT_MAX = 1 / 24;
 export const DPR_CAP = 2;
-export const GRAIN_TILE = 64;
 
 export const VERTEX_SHADER =
   "attribute vec2 p;varying vec2 v;void main(){v=p*.5+.5;v.y=1.-v.y;gl_Position=vec4(p,0.,1.);}";
 
 /**
  * Pass 1 — the velocity field. RG is velocity, B is "agitation": a scalar that trails the
- * stroke and outlives it, driving the extra grain in a disturbed wake.
+ * stroke and outlives it. The display pass no longer reads it — it drove the grain — but the
+ * sim keeps it, because it is what makes a wake persist rather than snap back.
  *
  * Self-advection carries motion across the frame; curl amplification rotates velocity by
  * local spin so shear rolls up into eddies instead of dissipating; viscosity smooths.
@@ -110,21 +115,22 @@ void main(){
 }`;
 
 /**
- * Pass 2 — display. The field displacement and the resting pulse both feed `dp`, which
- * offsets three samples: two copies of the dye at slightly different scales, soft-light
- * blended, and a 64px noise tile overlaid harder where the dye is agitated. That last
- * term is what sells "suspended glitter" without drawing a single particle.
+ * Pass 2 — display. The field displacement and the resting pulse both feed `dp`, and `dp`
+ * offsets exactly one sample of the dye. Where the cloth is stirred, the cloth moves; the
+ * colour that comes back is the colour that went in.
+ *
+ * There is no second sample and no blend: the two-layer soft-light composite the prototype
+ * used raised contrast and saturation off the palette, and the noise-tile overlay put film
+ * grain over the whole page. Neither is a thing this design has. The final write is the
+ * sampled texel unmodified — no brightness lift, no agitation tint.
  */
 export const DISPLAY_FRAGMENT_SHADER = `
 precision mediump float;
-uniform sampler2D T,G,V; uniform float ar,amp,imgAr,gmx,dispK,vsc,grain;
-uniform vec2 pt,o1,o2,gd,gs; uniform float s1,s2,tt; varying vec2 v;
-float sl(float b,float s){ if(s<=0.5)return b-(1.0-2.0*s)*b*(1.0-b);
-  float d=(b<=0.25)?((16.0*b-12.0)*b+4.0)*b:sqrt(b); return b+(2.0*s-1.0)*(d-b); }
-float ov(float b,float s){return b<0.5?2.0*b*s:1.0-2.0*(1.0-b)*(1.0-s);}
+uniform sampler2D T,V; uniform float ar,amp,imgAr,dispK,vsc;
+uniform vec2 pt,o1; uniform float s1,tt; varying vec2 v;
 void main(){
   vec3 f=texture2D(V,v).rgb;
-  vec2 fv=(f.xy*2.0-1.0)*vsc; float ag=f.z;
+  vec2 fv=(f.xy*2.0-1.0)*vsc;
   vec2 dp=fv*dispK/vec2(ar,1.0);
   vec2 d=(v-pt)*vec2(ar,1.0); float r=length(d)+1e-4; vec2 dir=d/r;
   float ring=sin(r*${RING.toFixed(2)}-tt*${SPEED.toFixed(3)})*exp(-r*${DISP.toFixed(3)})*amp;
@@ -132,15 +138,10 @@ void main(){
   dp+=dir*(ring*${STR.toFixed(4)}+bl*${BLOOM.toFixed(4)});
   vec2 sc=imgAr>ar?vec2(ar/imgAr,1.0):vec2(1.0,imgAr/ar);
   vec2 cov=(v-0.5)*sc+0.5;
-  vec3 c1=texture2D(T,clamp((cov-0.5)/s1+0.5+o1+dp,0.002,0.998)).rgb;
-  vec3 c2=texture2D(T,clamp((cov-0.5)/s2+0.5+o2+dp*0.72,0.002,0.998)).rgb;
-  vec3 c=mix(c1,vec3(sl(c1.r,c2.r),sl(c1.g,c2.g),sl(c1.b,c2.b)),0.70);
-  vec3 g=texture2D(G,v*gs+gd+dp*0.45).rgb;
-  c=mix(c,vec3(ov(c.r,g.r),ov(c.g,g.g),ov(c.b,g.b)),0.42*gmx*(1.0+ag*grain));
-  gl_FragColor=vec4(c*(1.0+bl*0.10+ag*0.05),1.0);
+  gl_FragColor=vec4(texture2D(T,clamp((cov-0.5)/s1+0.5+o1+dp,0.002,0.998)).rgb,1.0);
 }`;
 
-/** The two ambient dye layers and the noise drift, all on slow cosine cycles. */
+/** The ambient dye drift, on a slow cosine cycle. */
 export function wave(period: number, t: number): number {
   return 0.5 - 0.5 * Math.cos(2 * Math.PI * ((t / period) % 1));
 }

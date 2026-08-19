@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics=""><meta name="design_doc_mode" content="page">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Beth+Ellen&amp;family=Baloo+2:wght@400;500;600;700;800&amp;family=Arimo:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+body{margin:0;background:#4F3F79;font-family:"Arimo",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#E9E7C2}a:hover{color:#E9622D}
+.mono{font-family:ui-monospace,Menlo,monospace}
+@font-face{font-family:"Satoshi";src:url("fonts/Satoshi-Medium.ttf") format("truetype");font-weight:500;font-style:normal;font-display:swap}
+@keyframes sfwfFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes menuIn{from{opacity:0}to{opacity:1}}
+.swipe-strip{scrollbar-width:none;-ms-overflow-style:none}
+.swipe-strip::-webkit-scrollbar{display:none}
+html{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0}
+</style></helmet>
+
+{{ dyeLayer }}
+
+<svg aria-hidden="true" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden"><defs>
+<clipPath id="sfwfBlob0" clipPathUnits="objectBoundingBox"><path d="M 0.105 0.014 C 0.320 0.000 0.560 0.024 0.760 0.008 C 0.880 -0.002 0.968 0.046 0.982 0.130 C 0.996 0.212 0.984 0.380 0.990 0.520 C 0.996 0.664 1.004 0.842 0.966 0.916 C 0.934 0.980 0.790 0.976 0.580 0.988 C 0.372 1.000 0.150 0.994 0.052 0.960 C 0.006 0.944 0.004 0.790 0.010 0.596 C 0.016 0.404 -0.004 0.190 0.026 0.098 C 0.048 0.030 0.062 0.024 0.105 0.014 Z"></path></clipPath>
+<clipPath id="sfwfBlob1" clipPathUnits="objectBoundingBox"><path d="M 0.086 0.016 C 0.310 0.002 0.570 0.028 0.800 0.010 C 0.918 0.000 0.972 0.054 0.984 0.142 C 0.996 0.228 0.986 0.386 0.990 0.524 C 0.994 0.666 0.998 0.834 0.958 0.910 C 0.926 0.976 0.780 0.970 0.572 0.984 C 0.366 0.998 0.146 0.990 0.050 0.954 C 0.006 0.938 0.006 0.786 0.012 0.592 C 0.018 0.398 -0.002 0.172 0.030 0.090 C 0.052 0.030 0.056 0.026 0.086 0.016 Z"></path></clipPath>
+</defs></svg>
+
+<div style="position:relative;min-height:100vh">
+
+  <header style="position:sticky;top:0;z-index:60;pointer-events:none">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 16px 24px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px">
+      <a href="#top" style="flex:none;display:block;text-decoration:none;pointer-events:auto"><img src="assets/logos/sfwf-beige.png" alt="Siargao Food &amp; Wine Festival" style="display: block; height: 26px; margin-left: 12px"></a>
+      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+        <nav style="display:flex;align-items:center;justify-content:center;justify-self:center;gap:26px;pointer-events:auto">
+          <a href="SFWF Home.dc.html" style="font:400 13px/1 'Beth Ellen',cursive;color:#E9622D;text-decoration:none">Home</a>
+          <a href="SFWF Programme.dc.html" style="font:400 13px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none">Program</a>
+          <a href="SFWF Press.dc.html" style="font:400 13px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none">Press</a>
+        </nav>
+        <div style="display:flex;align-items:center;justify-self:end;gap:26px;pointer-events:auto">
+          <a href="SFWF Programme.dc.html" style="padding: 12px 24px 15px; clip-path: url(#sfwfBlob0); background: #E9622D; color: #141210; font: 800 15px/1 'Baloo 2',system-ui,sans-serif; letter-spacing: .02em; text-transform: capitalize; text-decoration: none; font-size: 14px; font-weight: 700">View Program</a>
+        </div>
+      </sc-if>
+      <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{ toggleMenu }}" aria-label="Menu" aria-expanded="{{ menuOpen }}" aria-controls="sfwf-menu" style="grid-column:3;justify-self:end;pointer-events:auto;flex:none;width:40px;height:40px;display:grid;place-items:center;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.34);backdrop-filter:blur(6px);border-radius:52% 48% 56% 44% / 60% 42% 58% 40%;color:#E9E7C2;cursor:pointer;padding:0;line-height:0"><span style="display:block;font-family:'Wigglye',system-ui,sans-serif;font-weight:400;line-height:1;font-size:{{ menuGlyphSize }}">{{ menuGlyph }}</span></button>
+      </sc-if>
+    </div>
+    
+  </header>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div id="sfwf-menu" onClick="{{ closeMenu }}" style="position:fixed;inset:0;z-index:45;display:grid;place-items:center;padding:56px 16px 40px;animation:menuIn .34s ease both">
+      <div style="position:relative;width:min(84vw,322px);aspect-ratio:322/326;display:grid;place-items:center">
+        <svg viewBox="0 0 300 320" aria-hidden="true" style="position:absolute;left:-11%;top:-5%;width:121%;height:118%;overflow:visible"><path d="M152 9 C188 5 212 21 226 45 C240 69 233 91 246 111 C259 131 264 156 253 178 C242 200 247 223 232 245 C217 267 191 281 165 289 C139 297 110 293 88 281 C66 269 50 249 42 227 C34 205 39 182 31 160 C23 138 29 113 43 93 C57 73 55 51 73 33 C91 15 119 13 152 9 Z" fill="none" stroke="#E9E7C2" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"></path></svg>
+        <nav style="position:relative;display:flex;flex-direction:column;align-items:center;gap:26px">
+          <a href="SFWF Home.dc.html" onClick="{{ closeMenu }}" style-active="color:#E9622D" style="font:400 22px/1 'Beth Ellen',cursive;color:#E9622D;text-decoration:none;transition:color .14s ease">Home</a>
+          <a href="SFWF Programme.dc.html" onClick="{{ closeMenu }}" style-active="color:#E9622D" style="font:400 21px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none;transition:color .14s ease">Program</a>
+          <a href="SFWF Press.dc.html" onClick="{{ closeMenu }}" style-active="color:#E9622D" style="font:400 21px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none;transition:color .14s ease">Press</a>
+        </nav>
+      </div>
+    </div>
+  </sc-if>
+
+  <main ref="{{ mainRef }}" style="transition:opacity .34s ease;opacity:{{ contentOpacity }};pointer-events:{{ contentPointer }}">
+
+  <section id="top" style="max-width:1180px;margin:0 auto;padding:clamp(44px,7vw,86px) 24px clamp(30px,4vw,44px);text-align:center">
+    <div style="position:relative;display:inline-block;max-width:100%;padding-top:clamp(26px,3.6vw,40px)">
+      <img src="assets/logos/sfwf-beige.png" alt="Siargao Food &amp; Wine Festival" style="width: min(50vw,490px); display: block">
+      <p style="position:absolute;bottom:calc(100% + 3px);right:0;margin:0;font:400 clamp(19px,2.5vw,29px)/1 'Beth Ellen',cursive;color:#E9E7C2;white-space:nowrap;transform:rotate(-4deg);transform-origin:right bottom">2nd edition</p>
+    </div>
+    <h1 style="margin: clamp(14px,2.4vw,22px) auto clamp(52px,7.2vw,80px); max-width: 15em; font: 400 clamp(46px,8.4vw,88px)/1.06 'Beth Ellen',cursive; color: #E9622D; text-wrap: pretty; font-size: 54px">ani sang Siargao</h1>
+    <div style="margin:0 auto;width:fit-content;max-width:100%;display:flex;align-items:center;justify-content:center;gap:clamp(12px,2vw,20px)">
+      <svg width="130" height="14" viewBox="0 0 130 14" fill="none" aria-hidden="true" style="display:block;flex:none;width:clamp(72px,12vw,130px)"><path d="M2 8 C 14 2 26 12 40 7 C 52 3 64 11 78 7 C 90 3 102 11 116 6 C 122 4 126 7 128 5" stroke="#E9E7C2" stroke-opacity=".22" stroke-width="3.4" stroke-linecap="round" transform="translate(0.8,1)"></path><path d="M2 8 C 14 2 26 12 40 7 C 52 3 64 11 78 7 C 90 3 102 11 116 6 C 122 4 126 7 128 5" stroke="#E9E7C2" stroke-opacity=".75" stroke-width="1.5" stroke-linecap="round"></path></svg>
+      <p class="mono" style="margin:0;font-size:clamp(11.5px,1.6vw,13.5px);letter-spacing:.24em;color:#E9E7C2;white-space:nowrap">26 – 31 AUGUST 2026</p>
+      <svg width="130" height="14" viewBox="0 0 130 14" fill="none" aria-hidden="true" style="display:block;flex:none;width:clamp(72px,12vw,130px);transform:scaleX(-1)"><path d="M2 8 C 14 2 26 12 40 7 C 52 3 64 11 78 7 C 90 3 102 11 116 6 C 122 4 126 7 128 5" stroke="#E9E7C2" stroke-opacity=".22" stroke-width="3.4" stroke-linecap="round" transform="translate(0.8,1)"></path><path d="M2 8 C 14 2 26 12 40 7 C 52 3 64 11 78 7 C 90 3 102 11 116 6 C 122 4 126 7 128 5" stroke="#E9E7C2" stroke-opacity=".75" stroke-width="1.5" stroke-linecap="round"></path></svg>
+    </div>
+    <a href="SFWF Programme.dc.html" style-hover="background:#f27a49" style="display: inline-block; margin-top: clamp(22px,3.4vw,32px); padding: 17px 36px 20px; clip-path: url(#sfwfBlob1); background: #E9622D; color: #141210; font: 800 16px/1 'Baloo 2',system-ui,sans-serif; letter-spacing: .02em; text-transform: capitalize; text-decoration: none; transition: background .15s ease; font-weight: 700">View Program</a>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:0 24px clamp(34px,5vw,58px);display:flex;justify-content:center">
+    <div style="position:relative;width:min(100%,384px);aspect-ratio:9/16;box-shadow:0 24px 60px rgba(20,14,40,.34)">
+      <image-slot id="sfwf-hero-film" shape="rounded" radius="6" fit="cover" placeholder="Drop the festival film's poster frame — 9:16" style="border-radius: 20px; overflow: hidden"></image-slot>
+      <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 18px;pointer-events:none;background:linear-gradient(transparent,rgba(20,14,40,.66))">
+        <p class="mono" style="margin:0;font-size:10.5px;letter-spacing:.18em;color:#E9E7C2">THE FILM · 2026</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:0 24px;display:flex;justify-content:center">
+    <div style="max-width:620px;text-align:center">
+      <p style="margin: 0; font: 400 clamp(15px,0.6vw + 13.3px,16.5px)/1.72 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: 15.5px">Siargao is nine municipalities of farmland, mangrove and open water, and for six days in August the whole island becomes the venue. Ani Sang Siargao is not held in one place. It happens in kitchens, on a farm, in a wet market among the fishers, on a beach at sunset, in the cafés that were here long before anyone was watching.</p>
+      <p style="margin: 20px 0 0; font: 400 clamp(15px,0.6vw + 13.3px,16.5px)/1.72 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: 15.5px">There is no way to understand it from the outside. You have to come and eat with us.</p>
+      <p style="margin:24px 0 0;font:400 clamp(26px,4.4vw,38px)/1.2 'Beth Ellen',cursive;color:#E9622D">See you on Siargao this August</p>
+    </div>
+  </section>
+
+  <section id="programme" style="max-width:1180px;margin:0 auto;padding:0 24px;display:flex;justify-content:center">
+    <div style="max-width:660px;text-align:center;padding-top:clamp(56px,7.2vw,80px)">
+      <svg width="216" height="24" viewBox="0 0 216 24" fill="none" aria-hidden="true" style="display:block;margin:0 auto clamp(56px,7.2vw,80px);transform:rotate(0.9deg)"><path d="M2 14 C 18 4 34 20 50 9 C 64 1 78 18 96 12 C 112 7 122 20 140 10 C 154 3 168 17 184 11 C 196 8 204 14 214 9" stroke="#E9E7C2" stroke-opacity=".22" stroke-width="5" stroke-linecap="round" transform="translate(1,1.4)"></path><path d="M2 14 C 18 4 34 20 50 9 C 64 1 78 18 96 12 C 112 7 122 20 140 10 C 154 3 168 17 184 11 C 196 8 204 14 214 9" stroke="#E9E7C2" stroke-opacity=".75" stroke-width="1.8" stroke-linecap="round"></path></svg>
+      <p class="mono" style="margin:0 0 14px;font-size:11.5px;letter-spacing:.2em;color:#E9E7C2">WHAT IT IS</p>
+      <p style="margin: 0; font: 400 clamp(14.5px,0.5vw + 13.1px,16px)/1.7 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: 15.5px">The Siargao Food &amp; Wine Festival is the Philippines' first community-led, island-wide culinary festival. Six days, nine municipalities, and more than thirty chefs, farmers, fishers, producers and venues, run by the people who actually live and cook here. Now in its second year.</p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(18px,4vw,44px);margin:clamp(24px,3.4vw,34px) 0 0">
+        <div><p style="margin:0;font:400 clamp(30px,5vw,44px)/1 'Beth Ellen',cursive;color:#E9622D">6</p><p class="mono" style="margin:6px 0 0;font-size:11px;letter-spacing:.16em;color:#E9E7C2">DAYS</p></div>
+        <div><p style="margin:0;font:400 clamp(30px,5vw,44px)/1 'Beth Ellen',cursive;color:#E9622D">9</p><p class="mono" style="margin:6px 0 0;font-size:11px;letter-spacing:.16em;color:#E9E7C2">MUNICIPALITIES</p></div>
+        <div><p style="margin:0;font:400 clamp(30px,5vw,44px)/1 'Beth Ellen',cursive;color:#E9622D">30+</p><p class="mono" style="margin:6px 0 0;font-size:11px;letter-spacing:.16em;color:#E9E7C2">MAKERS</p></div>
+        <div><p style="margin:0;font:400 clamp(30px,5vw,44px)/1 'Beth Ellen',cursive;color:#E9622D">16</p><p class="mono" style="margin:6px 0 0;font-size:11px;letter-spacing:.16em;color:#E9E7C2">GATHERINGS</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="acknowledgement" style="max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: center">
+    <div style="max-width:660px;text-align:center;padding-top:clamp(56px,7.2vw,80px)">
+      <svg width="216" height="24" viewBox="0 0 216 24" fill="none" aria-hidden="true" style="display:block;margin:0 auto clamp(56px,7.2vw,80px);transform:rotate(-0.7deg)"><path d="M3 9 C 14 19 28 3 42 13 C 58 22 70 5 88 15 C 104 23 118 6 136 14 C 150 20 162 4 178 12 C 192 18 202 8 214 13" stroke="#E9E7C2" stroke-opacity=".22" stroke-width="5.4" stroke-linecap="round" transform="translate(-1,1.2)"></path><path d="M3 9 C 14 19 28 3 42 13 C 58 22 70 5 88 15 C 104 23 118 6 136 14 C 150 20 162 4 178 12 C 192 18 202 8 214 13" stroke="#E9E7C2" stroke-opacity=".78" stroke-width="2" stroke-linecap="round"></path></svg>
+      <p class="mono" style="margin:0 0 16px;font-size:11.5px;letter-spacing:.2em;color:#E9E7C2">ACKNOWLEDGEMENT</p>
+      <p style="margin:0;font:700 clamp(16px,0.75vw + 13.6px,17.5px)/1.5 'Arimo',Helvetica,sans-serif;color:#E9E7C2;letter-spacing:.01em;text-wrap:pretty">THE SIARGAO FOOD &amp; WINE FESTIVAL IS HELD ON THE LAND AND WATERS OF THE PEOPLE OF SIARGAO.</p>
+      <p style="margin: 20px 0 0; font: 400 clamp(14.5px,0.5vw + 13.1px,16px)/1.72 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: 15.5px">We cook with what their farmers grow and their fishers bring in, and we gather in the kitchens, markets and community spaces they built and still keep. This festival celebrates those who stayed. The families who kept feeding this island through the storms, through the pandemic, through every season the visitors did not see, and who are still here doing it now.</p>
+      <p style="margin: 20px 0 0; font: 400 clamp(14.5px,0.5vw + 13.1px,16px)/1.72 'Arimo',Helvetica,sans-serif; color: #E9E7C2; text-wrap: pretty; font-size: 15.5px">We ask our guests to arrive with that in mind, and to leave having supported it.</p>
+    </div>
+  </section>
+
+  <section id="supported" style="max-width:1180px;margin:0 auto;padding:0 24px">
+    <div style="padding-top:clamp(56px,7.2vw,80px);text-align:center">
+      <svg width="216" height="24" viewBox="0 0 216 24" fill="none" aria-hidden="true" style="display:block;margin:0 auto clamp(56px,7.2vw,80px);transform:rotate(1.4deg)"><path d="M2 12 C 12 2 24 21 38 8 C 52 -2 66 19 82 10 C 98 3 110 20 128 11 C 144 4 156 18 172 9 C 186 3 198 16 212 10" stroke="#E9E7C2" stroke-opacity=".22" stroke-width="4.8" stroke-linecap="round" transform="translate(1,-1)"></path><path d="M2 12 C 12 2 24 21 38 8 C 52 -2 66 19 82 10 C 98 3 110 20 128 11 C 144 4 156 18 172 9 C 186 3 198 16 212 10" stroke="#E9E7C2" stroke-opacity=".72" stroke-width="1.7" stroke-linecap="round"></path></svg>
+      <p class="mono" style="margin:0 0 20px;font-size:11.5px;letter-spacing:.2em;color:#E9E7C2">SUPPORTED BY</p>
+      <div style="display:inline-flex;flex-direction:column;align-items:center;gap:10px;padding:clamp(18px,2.6vw,26px) clamp(24px,4vw,44px);border:1px solid rgba(233,231,194,.4);border-radius:40px">
+        <p class="mono" style="margin:0;font-size:11px;letter-spacing:.18em;color:#E9E7C2">OFFICIAL WINE PARTNER</p>
+        <img src="assets/venues/beige/happy-living.png" alt="Happy Living Philippines" loading="lazy" decoding="async" style="width:min(74vw,208px);display:block">
+      </div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:40px;margin:clamp(24px,3.4vw,34px) 0 0">
+        <img src="assets/venues/beige/modulus.png" alt="Modulus" loading="lazy" decoding="async" style="width:152px;height:auto;display:block">
+        <img src="assets/venues/beige/destileria-limtuaco.svg" alt="Destileria Limtuaco" loading="lazy" decoding="async" style="width:168px;height:auto;display:block">
+        <img src="assets/venues/beige/galatea.svg" alt="Galatea Tours Siargao" loading="lazy" decoding="async" style="width:124px;height:auto;display:block">
+      </div>
+      
+    </div>
+
+    <div id="purpose" style="padding-top:clamp(56px,7.2vw,80px)">
+      <svg width="216" height="24" viewBox="0 0 216 24" fill="none" aria-hidden="true" style="display:block;margin:0 auto clamp(56px,7.2vw,80px);transform:rotate(1.1deg)"><path d="M2 11 C 14 21 28 2 44 13 C 58 22 72 3 88 13 C 104 22 118 4 136 13 C 152 21 166 3 182 12 C 196 19 206 9 214 12" stroke="#E9E7C2" stroke-opacity=".22" stroke-width="5" stroke-linecap="round" transform="translate(1,1.3)"></path><path d="M2 11 C 14 21 28 2 44 13 C 58 22 72 3 88 13 C 104 22 118 4 136 13 C 152 21 166 3 182 12 C 196 19 206 9 214 12" stroke="#E9E7C2" stroke-opacity=".75" stroke-width="1.8" stroke-linecap="round"></path></svg>
+      <div style="max-width:680px;margin:0 auto;text-align:left">
+        <p class="mono" style="margin:0;font-size:11.5px;letter-spacing:.2em;color:#E9E7C2">WHY WE DO THIS</p>
+        <h2 style="margin: 16px 0 0; font: 400 clamp(30px,5vw,46px)/1.14 'Beth Ellen',cursive; color: #E9622D; text-wrap: pretty; font-size: 20px">Siargao grows less of its own food every year.</h2>
+      <div style="margin-top:clamp(38px,5vw,52px)">
+        <div style="display:flex;align-items:center;gap:13px">
+          <span style="font:400 clamp(26px,3.4vw,32px)/1 'Beth Ellen',cursive;color:#E9E7C2">01</span>
+          <span class="mono" style="font-size:11.5px;letter-spacing:.2em;color:#E9E7C2;white-space:nowrap">THE GAP</span>
+          <span style="flex:1;height:1px;background:rgba(233,231,194,.34)"></span>
+        </div>
+        <h3 style="margin: 18px 0 0; font: 400 clamp(25px,3.6vw,34px)/1.2 'Beth Ellen',cursive; color: #E9622D; text-wrap: pretty; font-size: 20px">Tourism grows. But not everyone grows with it.</h3>
+        <p style="margin:14px 0 0;font:400 clamp(14.5px,0.5vw + 13.1px,16px)/1.7 'Arimo',Helvetica,sans-serif;color:#E9E7C2;text-wrap:pretty">As Siargao develops, rising costs, unequal access to resources and pressure on local food systems can leave communities behind. The challenge is ensuring tourism creates value <strong style="font-weight:700">with the island — not at its expense.</strong></p>
+      </div>
+      <div style="margin-top:clamp(38px,5vw,52px)">
+        <div style="display:flex;align-items:center;gap:13px">
+          <span style="font:400 clamp(26px,3.4vw,32px)/1 'Beth Ellen',cursive;color:#E9E7C2">02</span>
+          <span class="mono" style="font-size:11.5px;letter-spacing:.2em;color:#E9E7C2;white-space:nowrap">THE SOLUTION</span>
+          <span style="flex:1;height:1px;background:rgba(233,231,194,.34)"></span>
+        </div>
+        <h3 style="margin: 18px 0 0; font: 400 clamp(25px,3.6vw,34px)/1.2 'Beth Ellen',cursive; color: #E9622D; text-wrap: pretty; font-size: 20px">Turn tourism into a force for local resilience.</h3>
+        <p style="margin:14px 0 0;font:400 clamp(14.5px,0.5vw + 13.1px,16px)/1.7 'Arimo',Helvetica,sans-serif;color:#E9E7C2;text-wrap:pretty">Through collaboration between hospitality, producers, chefs and communities, we create more circular food systems — supporting local sourcing, reducing waste and directing resources back into the communities that sustain Siargao.</p>
+      </div>
+        <p style="margin: clamp(34px,4.6vw,48px) 0 0; max-width: 24em; font: 400 clamp(24px,3.4vw,32px)/1.24 'Beth Ellen',cursive; color: #E9E7C2; text-wrap: pretty; font-size: 24px">And it takes root — local farmers know what to grow.</p>
+        <p style="margin:24px 0 0;font:400 clamp(14.5px,0.5vw + 13.1px,16px)/1.7 'Arimo',Helvetica,sans-serif;color:#E9E7C2;text-wrap:pretty">The week is what gets everyone in the room. Join us and be part of the solution.</p>
+        <a href="SFWF Programme.dc.html" style-hover="background:#f27a49" style="display:inline-block;margin-top:22px;padding:16px 32px 19px;clip-path:url(#sfwfBlob1);background:#E9622D;color:#141210;font:700 15px/1 'Baloo 2',system-ui,sans-serif;letter-spacing:.02em;text-transform:capitalize;text-decoration:none;transition:background .15s ease">See The Program</a>
+      </div>
+    </div>
+
+    <div style="padding-top: clamp(56px,7.2vw,80px); text-align: center; margin-right: 40px; margin-left: 40px">
+      <svg width="216" height="24" viewBox="0 0 216 24" fill="none" aria-hidden="true" style="display:block;margin:0 auto clamp(56px,7.2vw,80px);transform:rotate(-1.2deg)"><path d="M4 10 C 16 22 30 1 46 14 C 60 24 74 4 90 16 C 106 24 120 3 138 15 C 154 23 168 5 184 14 C 198 21 206 8 216 12" stroke="#E9E7C2" stroke-opacity=".22" stroke-width="5.2" stroke-linecap="round" transform="translate(-1,1.5)"></path><path d="M4 10 C 16 22 30 1 46 14 C 60 24 74 4 90 16 C 106 24 120 3 138 15 C 154 23 168 5 184 14 C 198 21 206 8 216 12" stroke="#E9E7C2" stroke-opacity=".76" stroke-width="1.9" stroke-linecap="round"></path></svg>
+      <p class="mono" style="margin:0 0 20px;font-size:11.5px;letter-spacing:.2em;color:#E9E7C2">HOSTED ACROSS THE ISLAND BY</p>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: clamp(20px,3.4vw,42px); max-width: 980px; margin: 0 auto">
+        <span role="img" aria-label="Wild Siargao" style="flex:none;display:block;width:40px;height:61px;background:url('assets/venues/venue-sprite.png') 0 -10px/282px auto no-repeat"></span>
+        <span role="img" aria-label="Alma" style="flex:none;display:block;width:112px;height:50px;background:url('assets/venues/venue-sprite.png') 0 -74px/230px auto no-repeat"></span>
+        <span role="img" aria-label="Lokal Lab" style="flex:none;display:block;width:88px;height:52px;background:url('assets/venues/venue-sprite.png') 0 -147px/241px auto no-repeat"></span>
+        <span role="img" aria-label="Lyma" style="flex:none;display:block;width:86px;height:51px;background:url('assets/venues/venue-sprite.png') 0 -214px/238px auto no-repeat"></span>
+        <span role="img" aria-label="Kermit Siargao" style="flex:none;display:block;width:80px;height:52px;background:url('assets/venues/venue-sprite.png') 0 -284px/240px auto no-repeat"></span>
+        <span role="img" aria-label="Bravo Beach Resort" style="flex:none;display:block;width:55px;height:58px;background:url('assets/venues/venue-sprite.png') 0 -399px/271px auto no-repeat"></span>
+        <span role="img" aria-label="Roots Siargao" style="flex:none;display:block;width:130px;height:48px;background:url('assets/venues/venue-sprite.png') 0 -394px/224px auto no-repeat"></span>
+        <span role="img" aria-label="Lamari" style="flex:none;display:block;width:122px;height:26px;background:url('assets/venues/venue-sprite.png') 0 -250px/122px auto no-repeat"></span>
+        <span role="img" aria-label="Hue Hotels &amp; Resorts Siargao" style="flex:none;display:block;width:83px;height:48px;background:url('assets/venues/venue-sprite.png') 0 -524px/224px auto no-repeat"></span>
+        <span role="img" aria-label="Sagana Siargao" style="flex:none;display:block;width:78px;height:59px;background:url('assets/venues/venue-sprite.png') 0 -712px/272px auto no-repeat"></span>
+        <span role="img" aria-label="Paraluman Siargao" style="flex:none;display:block;width:104px;height:55px;background:url('assets/venues/venue-sprite.png') 0 -742px/255px auto no-repeat"></span>
+        <span role="img" aria-label="Isla Panciteria Siargao" style="flex:none;display:block;width:100px;height:55px;background:url('assets/venues/venue-sprite.png') 0 -820px/257px auto no-repeat"></span>
+        <span role="img" aria-label="Lunares Café Siargao" style="flex:none;display:block;width:64px;height:64px;background:url('assets/venues/venue-sprite.png') 0 -1035px/297px auto no-repeat"></span>
+        <span role="img" aria-label="Siargao Corner Café" style="flex:none;display:block;width:64px;height:64px;background:url('assets/venues/venue-sprite.png') 0 -1120px/297px auto no-repeat"></span>
+        <span role="img" aria-label="Cev Siargao" style="flex:none;display:block;width:96px;height:38px;background:url('assets/venues/venue-sprite.png') 0 -718px/177px auto no-repeat"></span>
+        <span style="font:400 26px/1 'Beth Ellen',cursive;color:#E9E7C2">Hiyas Farm</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="lastyear" style="padding: 0 0 clamp(44px,6vw,80px); padding-right: 40px; padding-left: 40px">
+    <div style="max-width:1180px;margin:0 auto;padding:clamp(56px,7.2vw,80px) 24px 0"><svg width="216" height="24" viewBox="0 0 216 24" fill="none" aria-hidden="true" style="display:block;margin:0 auto clamp(56px,7.2vw,80px);transform:rotate(-1.1deg)"><path d="M3 13 C 15 3 27 22 40 11 C 54 1 68 20 84 9 C 100 1 114 19 132 10 C 148 2 162 18 178 9 C 192 2 202 17 214 11" stroke="#E9E7C2" stroke-opacity=".22" stroke-width="5" stroke-linecap="round" transform="translate(1,-1.3)"></path><path d="M3 13 C 15 3 27 22 40 11 C 54 1 68 20 84 9 C 100 1 114 19 132 10 C 148 2 162 18 178 9 C 192 2 202 17 214 11" stroke="#E9E7C2" stroke-opacity=".77" stroke-width="1.8" stroke-linecap="round"></path></svg></div>
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px clamp(20px,3vw,28px);display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap">
+      <h2 style="margin: 0; font: 400 clamp(30px,5vw,44px)/1.14 'Beth Ellen',cursive; color: #E9E7C2; font-size: 34px">Relive last year's best moments</h2>
+      <p class="mono" style="margin:0;font-size:11px;letter-spacing:.18em;color:#E9E7C2">SWIPE →</p>
+    </div>
+    <div class="swipe-strip" style="display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px max(24px,calc((100vw - 1180px) / 2 + 24px)) 18px;-webkit-overflow-scrolling:touch">
+      <div style="position:relative;flex:none;width:min(74vw,300px);aspect-ratio:9/16;scroll-snap-align:start;box-shadow:0 18px 44px rgba(20,14,40,.3)">
+        <image-slot id="sfwf-last-1" shape="rounded" radius="6" fit="cover" placeholder="2025 clip 1 — 9:16"></image-slot>
+        <p class="mono" style="position:absolute;left:14px;bottom:12px;margin:0;pointer-events:none;font-size:10px;letter-spacing:.16em;color:#E9E7C2;text-shadow:0 1px 8px rgba(20,14,40,.9)">THE MERCADO</p>
+      </div>
+      <div style="position:relative;flex:none;width:min(74vw,300px);aspect-ratio:9/16;scroll-snap-align:start;box-shadow:0 18px 44px rgba(20,14,40,.3)">
+        <image-slot id="sfwf-last-2" shape="rounded" radius="6" fit="cover" placeholder="2025 clip 2 — 9:16"></image-slot>
+        <p class="mono" style="position:absolute;left:14px;bottom:12px;margin:0;pointer-events:none;font-size:10px;letter-spacing:.16em;color:#E9E7C2;text-shadow:0 1px 8px rgba(20,14,40,.9)">THE WET MARKET</p>
+      </div>
+      <div style="position:relative;flex:none;width:min(74vw,300px);aspect-ratio:9/16;scroll-snap-align:start;box-shadow:0 18px 44px rgba(20,14,40,.3)">
+        <image-slot id="sfwf-last-3" shape="rounded" radius="6" fit="cover" placeholder="2025 clip 3 — 9:16"></image-slot>
+        <p class="mono" style="position:absolute;left:14px;bottom:12px;margin:0;pointer-events:none;font-size:10px;letter-spacing:.16em;color:#E9E7C2;text-shadow:0 1px 8px rgba(20,14,40,.9)">THE LONG TABLE</p>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top:1px solid rgba(233,231,194,.28);background:rgba(20,14,40,.28)">
+    <div style="max-width:1180px;margin:0 auto;padding:clamp(28px,4vw,40px) 24px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px">
+      <div>
+        
+        <p class="mono" style="margin:14px 0 0;font-size:11px;line-height:1.9;letter-spacing:.14em;color:#E9E7C2">AUG 26 – 31, 2026<br>SIARGAO ISLAND, PHILIPPINES</p>
+      </div>
+      <img src="assets/logos/sfwf-beige.png" alt="Siargao Food &amp; Wine Festival" style="width:150px;display:block"><div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+        <p style="margin:0;font:400 20px/1 'Wigglye',system-ui,sans-serif;color:#E9E7C2">Follow us</p>
+        <div style="display:flex;gap:6px">
+          <a href="https://www.instagram.com/siargaofoodandwinefestival/" target="_blank" rel="noopener" aria-label="Instagram" style="width:44px;height:44px;display:grid;place-items:center;border-radius:999px;transform:rotate(-5deg);color:#E9E7C2;text-decoration:none"><svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><rect x="3.4" y="3.4" width="17.2" height="17.2" rx="5.2"></rect><circle cx="12" cy="12" r="4.2"></circle><path d="M17.1 7h.01" stroke-width="2.6"></path></svg></a>
+          <a href="https://www.facebook.com/siargaofoodfest" target="_blank" rel="noopener" aria-label="Facebook" style="width:44px;height:44px;display:grid;place-items:center;border-radius:999px;transform:rotate(4deg);color:#E9E7C2;text-decoration:none"><svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><circle cx="12" cy="12" r="8.7"></circle><path d="M14.5 7.9h-1.3c-1.1 0-1.9.8-1.9 1.9v6.9M9.7 12.2h4.4"></path></svg></a>
+          <a href="https://www.tiktok.com/@siargaofoodfest" target="_blank" rel="noopener" aria-label="TikTok" style="width:44px;height:44px;display:grid;place-items:center;border-radius:999px;transform:rotate(-3deg);color:#E9E7C2;text-decoration:none"><svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M14.3 4.1v9.9a3.7 3.7 0 1 1-3.3-3.7"></path><path d="M14.3 4.1c.4 2.3 2 3.7 4.2 3.9"></path></svg></a>
+        </div>
+        <a href="mailto:info@siargaofoodfest.com" style="margin-top:2px;font:500 13px/1 'Satoshi',system-ui,sans-serif;color:#E9E7C2;text-decoration:none">info@siargaofoodfest.com</a>
+      </div>
+    </div>
+  </footer>
+  </main>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;dyeCoverage&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:40,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Dye ground&quot;},&quot;dyeIntensity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:50,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:5,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Dye ground&quot;}}">
+/* The dye ground is painted from the same indigo shibori the live site samples, remapped
+ * to two palette colours: the ground keeps its exact hex and the orange rides the cloth's
+ * darkest stains. Fixed behind the page, so a long scroll never rescales or re-crops it. */
+class Component extends DCLogic {
+  state = { w: typeof window !== 'undefined' ? window.innerWidth : 1200, menu: false };
+
+  componentDidMount() {
+    this.onResize = () => {
+      if (window.innerWidth === this.state.w) return;
+      this.setState({ w: window.innerWidth, menu: window.innerWidth >= 860 ? false : this.state.menu });
+    };
+    window.addEventListener('resize', this.onResize);
+
+    this.onKey = e => { if (e.key === 'Escape' && this.state.menu) this.setState({ menu: false }); };
+    window.addEventListener('keydown', this.onKey);
+
+    /* The nav band carries no plate: the copy dissolves as it reaches the top of the
+     * viewport instead of sliding under an opaque bar. Written straight to the node on
+     * every scroll frame — too often for state. */
+    this.onScroll = () => {
+      if (this.fadeQueued) return;
+      this.fadeQueued = true;
+      requestAnimationFrame(() => { this.fadeQueued = false; this.applyFade(); });
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    this.applyFade();
+
+    this.startDye();
+  }
+
+  applyFade() {
+    const el = this.mainEl;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top;
+    const g = 'linear-gradient(to bottom, rgba(0,0,0,0) ' + (-top) + 'px, rgba(0,0,0,0) ' + (-top + 56) + 'px, #000 ' + (-top + 190) + 'px)';
+    el.style.maskImage = g;
+    el.style.webkitMaskImage = g;
+  }
+
+  componentWillUnmount() {
+    if (this.flow) { this.flow.destroy(); this.flow = null; }
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.onKey);
+    window.removeEventListener('scroll', this.onScroll);
+    document.body.style.overflow = '';
+  }
+
+  componentDidUpdate() {
+    this.startDye();
+    this.applyFade();
+    const lock = this.state.menu && this.state.w < 860;
+    document.body.style.overflow = lock ? 'hidden' : '';
+  }
+
+  /* The shared dye ground — the palette-remapped shibori — fed to the shipped flow engine, so
+   * a stroke anywhere on the page pushes the medium along its whole path and the eddies keep
+   * unwinding after the cursor stops. Every page in the prototype mounts the identical ground. */
+  startDye() {
+    if (!this.dyeEl) return;
+    const coverage = this.props.dyeCoverage ?? 40;
+    const wash = this.props.dyeIntensity ?? 62;
+    const key = coverage + ':' + wash;
+    if (this.dyeKey === key) return;
+    this.dyeKey = key;
+    if (this.flow) { this.flow.destroy(); this.flow = null; }
+    import('./components/backgrounds/dye-ground.js')
+      .then(m => m.mountDyeGround(this.dyeEl, { coverage, wash }))
+      .then(flow => { this.flow = flow; })
+      .catch(e => console.warn(e));
+  }
+
+  renderVals() {
+    const mobile = this.state.w < 860;
+    const open = mobile && this.state.menu;
+    return {
+      mobile,
+      desktop: !mobile,
+      menuOpen: open,
+      menuGlyph: open ? '✕' : '≡',
+      menuGlyphSize: '15px',
+      contentOpacity: open ? '0' : '1',
+      contentPointer: open ? 'none' : 'auto',
+      mainRef: el => { if (el && el !== this.mainEl) { this.mainEl = el; this.applyFade(); } },
+      toggleMenu: () => this.setState(s => ({ menu: !s.menu })),
+      closeMenu: () => this.setState({ menu: false }),
+      dyeLayer: React.createElement('canvas', {
+        ref: el => { if (el && el !== this.dyeEl) { this.dyeEl = el; this.startDye(); } },
+        style: { position: 'fixed', inset: 0, zIndex: 0, width: '100%', height: '100%', display: 'block', pointerEvents: 'none' },
+      }),
+    };
+  }
+}
+</script>
+</body>
+</html>

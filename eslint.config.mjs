@@ -15,6 +15,10 @@ const eslintConfig = defineConfig([
     // Agent worktrees: checkouts of this same repo, each with its own node_modules.
     // Linting them buries the project's own findings and is already git-excluded.
     ".claude/worktrees/**",
+    // The 2026 design handoff: HTML prototypes and the runtime that drives them. They are
+    // reference material to read values out of, explicitly not code to port, and they are
+    // written against a different React era — linting them says nothing about this app.
+    "design_handoff_2026_redesign/**",
   ]),
 ]);
 

@@ -1,25 +1,24 @@
-import type { Metadata } from "next";
-import { HomeHero } from "@/components/sections/home/HomeHero";
-import { HomeOutro } from "@/components/sections/home/HomeOutro";
-import { PhotoReel } from "@/components/sections/home/PhotoReel";
-import { PurposeSection } from "@/components/sections/purpose/PurposeSection";
+import { Hero } from "@/components/sections/home/Hero";
+import { ProgramSection } from "@/components/sections/program/ProgramSection";
+import { SponsorRow } from "@/components/sections/partners/SponsorRow";
+import { HostRow } from "@/components/sections/partners/HostRow";
 import { EventJsonLd } from "@/components/seo/EventJsonLd";
-import { FESTIVAL_DATES, SITE } from "@/content/site";
 
-export const metadata: Metadata = {
-  title: `${SITE.name} — ${FESTIVAL_DATES.label}`,
-  description: SITE.description,
-  alternates: { canonical: "/" },
-};
-
+/**
+ * The whole site, for now. The festival needed the programme published, so this release is
+ * one route: the hero, the six-day journey, who is paying for it and who is hosting it.
+ *
+ * Phase 2 splits this back into Home · Program · Press and adds the nav band, the menu and
+ * the fade mask. Everything below is built to carry over unchanged.
+ */
 export default function HomePage() {
   return (
     <>
       <EventJsonLd />
-      <HomeHero />
-      <PhotoReel />
-      <PurposeSection />
-      <HomeOutro />
+      <Hero />
+      <ProgramSection />
+      <SponsorRow />
+      <HostRow />
     </>
   );
 }

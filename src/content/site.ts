@@ -1,22 +1,20 @@
 /* Site-wide constants. Anything the festival might correct lives here and nowhere else. */
 
 /**
- * The 2026 dateline. Sources disagree: the live 2025 site is a partial find-replace and
- * contradicts itself across all seven pages, and an earlier hero prototype carried
- * 14–21 August. These are the dates the current mobile prototype states in its hero and
- * backs up with a full eight-block programme, so they are what the site uses.
- *
- * Still unconfirmed by the festival — change it here and it changes everywhere.
+ * The 2026 dateline, confirmed by the festival on 19 August 2026 alongside the press-release
+ * calendar. Change it here and it changes everywhere.
  */
 export const FESTIVAL_DATES = {
   label: "26–31 August 2026",
+  /** The hero and footer set it with spaces around the dash, as the design draws it. */
+  display: "26 – 31 AUGUST 2026",
   /** Machine-readable, for JSON-LD and <time>. */
   start: "2026-08-26",
   end: "2026-08-31",
   location: "Siargao Island, Philippines",
 } as const;
 
-export const DATELINE = `${FESTIVAL_DATES.label} · ${FESTIVAL_DATES.location}`;
+export const DATELINE = `${FESTIVAL_DATES.display} · SIARGAO ISLAND, PHILIPPINES`;
 
 /**
  * Where this site lives. Every canonical, sitemap entry, Open Graph URL and JSON-LD id is
@@ -28,35 +26,23 @@ export const SITE_URL = "https://siargaofoodfest.com";
 export const SITE = {
   name: "Siargao Food & Wine Festival",
   shortName: "SFWF",
-  tagline: "A weeklong celebration of food, culture, and community.",
+  /** The festival's own name for the 2026 edition. Lowercase display is deliberate. */
+  edition: "ani sang Siargao",
+  editionLabel: "2nd edition",
   description:
-    "A weeklong celebration of food, culture, and community on Siargao Island — " +
-    `${FESTIVAL_DATES.label}. Sixteen events, a self-guided coffee and karinderya crawl, ` +
-    "and thirty-plus collaborators across the island's nine municipalities.",
+    "Ani sang Siargao — the six-day journey, 26–31 August 2026. Sixteen gatherings across " +
+    "the island's nine municipalities, hosted by the people cooking at them.",
 } as const;
 
-/** The menu. "Tickets" is pinned separately in the nav band, so it is not a menu word. */
-export const NAV = [
-  { label: "Home", href: "/" },
-  { label: "Program", href: "/program" },
-  { label: "Food Crawl", href: "/food-crawl" },
-  { label: "Media Center", href: "/media-center" },
-  { label: "About", href: "/about" },
-] as const;
-
 /**
- * Two addresses appear in the source and both are kept: the festival's general address
- * and the one the Media Center gives for press. Not deduplicated on purpose.
+ * One address for the whole site. The Press page's `hello@siargaofoodandwinefestival.com`
+ * is a phase 2 question; nothing in the one-pager reaches for it.
  */
-export const CONTACT = {
-  general: "info@siargaofoodfest.com",
-  press: "hello@siargaofoodandwinefestival.com",
-} as const;
+export const CONTACT_EMAIL = "info@siargaofoodfest.com";
 
 /**
- * The festival ships no social icon assets, so these are drawn in the same yellow
- * line-weight as the food icons. Each sits at its own slight angle so the row reads
- * hand-placed rather than aligned.
+ * The three marks in the footer. Each rests at its own slight angle so the row reads
+ * hand-placed rather than aligned, and stands upright on hover.
  */
 export const SOCIALS = [
   {
@@ -68,9 +54,40 @@ export const SOCIALS = [
   { name: "TikTok", href: "https://www.tiktok.com/@siargaofoodfest", tilt: -3 },
 ] as const;
 
-/** Homepage stats. Two of the four carry no number and the design renders an em-dash
- *  rather than inventing one — the source is sparse and honest, and stays that way. */
-export const STATS = [
-  { value: "8+", label: "Events & pocket experiences" },
-  { value: "30+", label: "Culinary collaborators" },
+export type SocialName = (typeof SOCIALS)[number]["name"];
+
+/**
+ * The four sponsor marks, knocked out to beige. `intrinsic` is the artwork's own pixel
+ * size — next/image needs it to reserve the box; the rendered height is set in CSS.
+ */
+export const SPONSORS = [
+  { name: "Happy Living Philippines", src: "/sponsors/happy-living.png", intrinsic: [560, 338] },
+  { name: "Modulus", src: "/sponsors/modulus.png", intrinsic: [640, 188] },
+  { name: "Destileria Limtuaco", src: "/sponsors/destileria-limtuaco.svg", intrinsic: [2022, 416] },
+  { name: "Galatea Tours Siargao", src: "/sponsors/galatea.svg", intrinsic: [2311, 955] },
 ] as const;
+
+/**
+ * The host marks. Widths are hand-tuned per logo for optical weight, not derived from the
+ * artwork — a uniform height leaves the wide wordmarks shouting and the round marks lost.
+ * Hiyas Farm and Tropical Academy have no mark and are set in type instead.
+ */
+export const HOST_LOGOS = [
+  { name: "Wild Siargao", src: "/venues/beige/wild.png", width: 30, intrinsic: [114, 174] },
+  { name: "Alma", src: "/venues/beige/alma.png", width: 84, intrinsic: [318, 141] },
+  { name: "Lokal Lab", src: "/venues/beige/lokal-lab.png", width: 66, intrinsic: [249, 147] },
+  { name: "Lyma", src: "/venues/beige/lyma.png", width: 64, intrinsic: [246, 147] },
+  { name: "Kermit Siargao", src: "/venues/beige/kermit.png", width: 60, intrinsic: [228, 147] },
+  { name: "Bravo Beach Resort", src: "/venues/beige/bravo.png", width: 42, intrinsic: [156, 165] },
+  { name: "Roots Siargao", src: "/venues/beige/roots.png", width: 98, intrinsic: [372, 138] },
+  { name: "Lamari", src: "/venues/beige/lamari.png", width: 92, intrinsic: [348, 75] },
+  { name: "Hue Hotels & Resorts Siargao", src: "/venues/beige/hue.png", width: 62, intrinsic: [237, 138] },
+  { name: "Sagana Siargao", src: "/venues/beige/sagana.png", width: 58, intrinsic: [560, 421] },
+  { name: "Paraluman Siargao", src: "/venues/beige/paraluman.png", width: 78, intrinsic: [560, 296] },
+  { name: "Isla Panciteria", src: "/venues/beige/isla-panciteria.png", width: 74, intrinsic: [560, 309] },
+  { name: "Cev Siargao", src: "/venues/beige/cev.png", width: 72, intrinsic: [620, 246] },
+  { name: "Lunares Café", src: "/venues/beige/lunares.png", width: 48, intrinsic: [420, 420] },
+  { name: "Siargao Corner Café", src: "/venues/beige/siargao-corner-cafe.png", width: 48, intrinsic: [1120, 1121] },
+] as const;
+
+export const HOST_NAMES = ["Hiyas Farm", "Tropical Academy"] as const;

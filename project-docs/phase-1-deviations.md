@@ -1,0 +1,51 @@
+# Phase 1 — deviations from the 2026 handoff
+
+The one-pager is a faithful build of `design_handoff_2026_redesign/` (README + `PHASE-1-PROGRAM.md`,
+against `SFWF prototype.dc.html`). Everything below is a place where it deliberately differs, or
+where the handoff contradicts itself, so each one is a decision on the record rather than drift.
+
+Geometry was verified by measuring the running prototype and this build side by side at 390, 900
+and 1440. At 900 and 1440 every bubble, heading, chip and footer element lands on the same pixel.
+
+`project-docs/deviations-from-prototype.md` covers the 2025 site and is superseded wherever the two
+disagree; it is kept because the food-crawl and purpose decisions it records may come back.
+
+## Where the handoff contradicts itself
+
+| Handoff says | Built | Why |
+|---|---|---|
+| §2.4: "the live repo enforces [no clock times / no peso figures] with tests" | Nothing to relax | No such test exists. The 2025 repo enforced it *structurally* — `FestivalEvent` simply had no `time` or `price` field. Both are now on the type. The karinderya and no-emoji tests are unchanged and still pass against the new calendar. |
+| §13.6: "five events carry `TBD`" | Seven | §10, the confirmed calendar and the stated source of truth, lists seven. `tests/program.test.ts` pins the number so it moves only when the festival confirms a price. |
+| §2.3: "the dye no longer reacts to the pointer" | It does | §3 "Motion", which `PHASE-1-PROGRAM.md` names as authoritative, specifies the live flow engine — swipe stirs, motion develops for 2–3s after release. §2.3 is describing the *removal of the press-and-hold ripple*, which is separately listed as gone. |
+| §3 Shape: `bubble: BLOBS[(n * 5 + dayIndex) % 6]` | `n` is the event index | In the prototype `n` is declared and never incremented, so every bubble in a day shares one silhouette. The README states the intent one line earlier — "assigned round-robin so neighbouring bubbles never share a silhouette" — and that needs `n` to vary. A test asserts neighbours differ. |
+
+## Deliberate departures
+
+| Design | Built | Why |
+|---|---|---|
+| Grain overlay in the display shader (64px noise tile, overlay-blended at 0.42, boosted to 1.9× in a stirred wake) | Removed | Instructed: no grain, noise or film over anything. The dye cloth is the only texture. |
+| Two dye samples at different scales, soft-light blended at 70%; result multiplied up to ~15% brighter | One sample, written unmodified | Instructed: no colour push. Every rendered pixel now lies on the line between `#4F3F79` and `#E9622D` — measured across 4096 live canvas pixels, max deviation 1.16/255, which is 8-bit rounding. This overrides CLAUDE.md's "shader constants are frozen" for colour only; the motion constants (`tau`, `visc`, `disp`, `curl`, `push`) are untouched. |
+| Viewport width tracked in React state to derive `mobile` and `hero` (§9) | Both are CSS | `--hs` is a media query at 1100px; the day filter renders both chip rows and hides one at 860px. Same result, correct on the first painted frame, and no resize listener. `display: none` also takes the hidden row out of the accessibility tree. |
+| Tailwind's preflight (inherited from the 2025 stack) | `box-sizing: content-box` and `line-height: normal` restored | Every measurement in the handoff was taken against a page with neither. Under border-box the widest bubble renders 54px narrow and the content column 152px narrow at desktop widths. Documented at the top of `globals.css`. |
+| `assets/dye-hr/violet-orange-hr.jpg` as a CSS background under the canvas | Not shipped | It is 160KB for a case the canvas already covers: `paintStill()` draws the same ground for reduced motion, no WebGL, and a lost context. Flat `--ground` shows for the few hundred ms before the remap finishes, and that is the exact same hex. |
+| Hero CTA "View the Program" | Dropped | `PHASE-1-PROGRAM.md`: the programme starts immediately below, so there is nothing to link to. Returns with phase 2's Home. |
+
+## Not built yet, on purpose
+
+The film frame, the island intro, the stats row, the acknowledgement, "why we do this", the
+last-year strip, Press, the nav band, the mobile menu and the fade mask are all phase 2. The
+bubble, the day filter, the dye mount, the tokens and the footer are built to carry over unchanged.
+
+## Still open with the festival
+
+These are §13 items that touch what shipped. None were invented around.
+
+1. **Sagana has no Instagram handle on record** and its booking button therefore points at the
+   festival's own account. It is a ₱2,000 dinner, so this one actually costs something. Siargao
+   Corner Café and Lunares Café are also unhandled but are walk-in.
+2. **`@tropicalacademyiao`** is shorter than every other handle on the list and may be truncated at
+   source. Shipped as given.
+3. **Seven events have no confirmed price** and one (Paraluman) has neither line-up nor description.
+   The UI states the absence rather than guessing — that copy is the design.
+4. `info@siargaofoodfest.com` is the only address on the page. The Press page's
+   `hello@siargaofoodandwinefestival.com` is a phase 2 question.

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics=""><meta name="design_doc_mode" content="page">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Beth+Ellen&amp;family=Baloo+2:wght@400;500;600;700;800&amp;family=Arimo:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#4F3F79;font-family:"Arimo",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#E9E7C2}a:hover{color:#E9622D}
+.mono{font-family:ui-monospace,Menlo,monospace}
+@keyframes menuIn{from{opacity:0}to{opacity:1}}
+html{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0}
+</style></helmet>
+
+<svg aria-hidden="true" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden"><defs>
+<clipPath id="b0" clipPathUnits="objectBoundingBox"><path d="M 0.105 0.014 C 0.320 0.000 0.560 0.024 0.760 0.008 C 0.880 -0.002 0.968 0.046 0.982 0.130 C 0.996 0.212 0.984 0.380 0.990 0.520 C 0.996 0.664 1.004 0.842 0.966 0.916 C 0.934 0.980 0.790 0.976 0.580 0.988 C 0.372 1.000 0.150 0.994 0.052 0.960 C 0.006 0.944 0.004 0.790 0.010 0.596 C 0.016 0.404 -0.004 0.190 0.026 0.098 C 0.048 0.030 0.062 0.024 0.105 0.014 Z"></path></clipPath>
+<clipPath id="b1" clipPathUnits="objectBoundingBox"><path d="M 0.086 0.016 C 0.310 0.002 0.570 0.028 0.800 0.010 C 0.918 0.000 0.972 0.054 0.984 0.142 C 0.996 0.228 0.986 0.386 0.990 0.524 C 0.994 0.666 0.998 0.834 0.958 0.910 C 0.926 0.976 0.780 0.970 0.572 0.984 C 0.366 0.998 0.146 0.990 0.050 0.954 C 0.006 0.938 0.006 0.786 0.012 0.592 C 0.018 0.398 -0.002 0.172 0.030 0.090 C 0.052 0.030 0.056 0.026 0.086 0.016 Z"></path></clipPath>
+</defs></svg>
+
+<div style="position:fixed;inset:0;z-index:0;background:#4F3F79 url(assets/dye-hr/violet-orange-hr.jpg) top center no-repeat;background-size:100% auto;pointer-events:none">{{ dyeLayer }}</div>
+
+<div style="position:relative;min-height:100vh">
+  <header style="position:sticky;top:0;z-index:60;pointer-events:none">
+    <div style="max-width:1180px;margin:0 auto;padding:16px 24px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px">
+      <a href="SFWF Home.dc.html" style="flex:none;display:block;text-decoration:none;pointer-events:auto"><img src="assets/logos/sfwf-beige.png" alt="Siargao Food &amp; Wine Festival" style="display:block;height:26px;margin-left:12px"></a>
+      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+        <nav style="display:flex;align-items:center;justify-content:center;justify-self:center;gap:26px;pointer-events:auto">
+          <a href="SFWF Home.dc.html" style="font:400 13px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none">Home</a>
+          <a href="SFWF Programme.dc.html" style="font:400 13px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none">Program</a>
+          <a href="SFWF Press.dc.html" style="font:400 13px/1 'Beth Ellen',cursive;color:#E9622D;text-decoration:none">Press</a>
+        </nav>
+        <div style="display:flex;align-items:center;justify-self:end;gap:26px;pointer-events:auto">
+          <a href="mailto:hello@siargaofoodandwinefestival.com" style="padding:12px 24px 15px;clip-path:url(#b1);background:#E9622D;color:#141210;font:700 14px/1 'Baloo 2',system-ui,sans-serif;letter-spacing:.02em;text-transform:capitalize;text-decoration:none">Apply for a pass</a>
+        </div>
+      </sc-if>
+      <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{ toggleMenu }}" aria-label="Menu" aria-expanded="{{ menuOpen }}" aria-controls="sfwf-menu" style="grid-column:3;justify-self:end;pointer-events:auto;flex:none;width:40px;height:40px;display:grid;place-items:center;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.34);backdrop-filter:blur(6px);border-radius:52% 48% 56% 44% / 60% 42% 58% 40%;color:#E9E7C2;cursor:pointer;padding:0;line-height:0"><span style="display:block;font-family:'Wigglye',system-ui,sans-serif;font-weight:400;line-height:1;font-size:15px">{{ menuGlyph }}</span></button>
+      </sc-if>
+    </div>
+  </header>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div id="sfwf-menu" onClick="{{ closeMenu }}" style="position:fixed;inset:0;z-index:45;display:grid;place-items:center;padding:56px 16px 40px;animation:menuIn .34s ease both">
+      <div style="position:relative;width:min(84vw,322px);aspect-ratio:322/326;display:grid;place-items:center">
+        <svg viewBox="0 0 300 320" aria-hidden="true" style="position:absolute;left:-11%;top:-5%;width:121%;height:118%;overflow:visible"><path d="M152 9 C188 5 212 21 226 45 C240 69 233 91 246 111 C259 131 264 156 253 178 C242 200 247 223 232 245 C217 267 191 281 165 289 C139 297 110 293 88 281 C66 269 50 249 42 227 C34 205 39 182 31 160 C23 138 29 113 43 93 C57 73 55 51 73 33 C91 15 119 13 152 9 Z" fill="none" stroke="#E9E7C2" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"></path></svg>
+        <nav style="position:relative;display:flex;flex-direction:column;align-items:center;gap:26px">
+          <a href="SFWF Home.dc.html" style="font:400 22px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none">Home</a>
+          <a href="SFWF Programme.dc.html" style="font:400 21px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none">Program</a>
+          <a href="SFWF Press.dc.html" style="font:400 21px/1 'Beth Ellen',cursive;color:#E9622D;text-decoration:none">Press</a>
+        </nav>
+      </div>
+    </div>
+  </sc-if>
+
+  <main ref="{{ mainRef }}" style="transition:opacity .34s ease;opacity:{{ contentOpacity }};pointer-events:{{ contentPointer }}">
+
+  <section style="max-width:1180px;margin:0 auto;padding:clamp(30px,5vw,60px) 24px 0;text-align:center">
+    <p class="mono" style="margin:0 0 14px;font-size:11.5px;letter-spacing:.2em;color:#E9E7C2">PRESS</p>
+    <h1 style="margin:0 auto;max-width:16em;font:400 clamp(38px,7vw,74px)/1.1 'Beth Ellen',cursive;color:#E9622D;text-wrap:pretty">media centre</h1>
+    <p style="margin:20px auto 0;max-width:38em;font:400 clamp(15px,0.6vw + 13.3px,16.5px)/1.7 'Arimo',Helvetica,sans-serif;color:#E9E7C2;text-wrap:pretty">We're available to assist media outlets, journalists and food content creators needing information, images, video and interviews for coverage of the festival.</p>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:clamp(44px,6vw,72px) 24px 0">
+    <div style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px">
+      <div style="background:#E9E7C2;clip-path:url(#b0);padding:26px 30px 30px">
+        <p class="mono" style="margin:0 0 10px;font-size:11.5px;letter-spacing:.16em;color:#4F3F79"><span style="font-weight:700;color:#F9621B">NOW OPEN</span> · ACCREDITATION</p>
+        <p style="margin:0;font:700 clamp(16.5px,0.8vw + 13.9px,18.5px)/1.28 'Arimo',Helvetica,sans-serif;color:#3E3064">Media accreditation for the 2026 festival</p>
+        <p style="margin:12px 0 0;font:400 clamp(14px,0.35vw + 13.1px,15px)/1.62 'Arimo',Helvetica,sans-serif;color:#4F3F79;text-wrap:pretty">26 – 31 August 2026, bringing together celebrated chefs, culinary experts, food entrepreneurs and passionate food lovers from across Siargao and the world.</p>
+        <ul style="margin:16px 0 0;padding-left:20px;font:400 clamp(14px,0.35vw + 13.1px,15px)/1.6 'Arimo',Helvetica,sans-serif;color:#4F3F79">
+          <li style="margin-bottom:8px">A media pass with entry to all main programmes across the week — demos, food discussions and live programming at every venue</li>
+          <li style="margin-bottom:8px">Invitations to festival press conferences and the opening celebration</li>
+          <li>Interviews with chefs, speakers and festival representatives</li>
+        </ul>
+        <p class="mono" style="margin:16px 0 0;font-size:11px;line-height:1.7;letter-spacing:.1em;color:#4F3F79">APPLICATIONS CLOSE ON A DATE STILL TO BE CONFIRMED</p>
+        <a href="mailto:hello@siargaofoodandwinefestival.com?subject=Media%20accreditation%202026" style="display:inline-block;margin-top:18px;clip-path:url(#b1);padding:15px 26px 17px;background:#4F3F79;color:#F7F3E4;font:700 14.5px/1.2 'Arimo',Helvetica,sans-serif;text-decoration:none">Apply for accreditation</a>
+      </div>
+      <div style="background:#E9E7C2;clip-path:url(#b1);padding:26px 30px 30px">
+        <p class="mono" style="margin:0 0 10px;font-size:11.5px;letter-spacing:.16em;color:#4F3F79"><span style="font-weight:700;color:#F9621B">MEDIA KIT</span> · IMAGES</p>
+        <p style="margin:0;font:700 clamp(16.5px,0.8vw + 13.9px,18.5px)/1.28 'Arimo',Helvetica,sans-serif;color:#3E3064">Festival media kit</p>
+        <p style="margin:12px 0 0;font:400 clamp(14px,0.35vw + 13.1px,15px)/1.62 'Arimo',Helvetica,sans-serif;color:#4F3F79;text-wrap:pretty">Our media folder holds a curated selection of high-resolution photographs available for download. Please credit “Siargao Food and Wine Festival” when using images in your coverage.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px">
+          <div style="aspect-ratio:4/3;background:repeating-linear-gradient(135deg,rgba(79,63,121,.14) 0 8px,transparent 8px 16px);border:1px solid rgba(79,63,121,.3);display:grid;place-items:center"><p class="mono" style="margin:0;font-size:10px;letter-spacing:.12em;color:#4F3F79">2025 GALA</p></div>
+          <div style="aspect-ratio:4/3;background:repeating-linear-gradient(135deg,rgba(79,63,121,.14) 0 8px,transparent 8px 16px);border:1px solid rgba(79,63,121,.3);display:grid;place-items:center"><p class="mono" style="margin:0;font-size:10px;letter-spacing:.12em;color:#4F3F79">WET MARKET</p></div>
+          <div style="aspect-ratio:4/3;background:repeating-linear-gradient(135deg,rgba(79,63,121,.14) 0 8px,transparent 8px 16px);border:1px solid rgba(79,63,121,.3);display:grid;place-items:center"><p class="mono" style="margin:0;font-size:10px;letter-spacing:.12em;color:#4F3F79">THE FARM</p></div>
+          <div style="aspect-ratio:4/3;background:repeating-linear-gradient(135deg,rgba(79,63,121,.14) 0 8px,transparent 8px 16px);border:1px solid rgba(79,63,121,.3);display:grid;place-items:center"><p class="mono" style="margin:0;font-size:10px;letter-spacing:.12em;color:#4F3F79">LONG TABLE</p></div>
+        </div>
+        <p class="mono" style="margin:14px 0 0;font-size:11px;line-height:1.7;letter-spacing:.1em;color:#4F3F79">FOLDER LINK TO BE ADDED BY THE FESTIVAL</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:clamp(44px,6vw,72px) 24px 0">
+    <div style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px">
+      <div style="background:#E9E7C2;clip-path:url(#b0);padding:22px 26px 26px">
+        <p style="margin:0;font:400 34px/1 'Beth Ellen',cursive;color:#8F3A12">6</p>
+        <p class="mono" style="margin:8px 0 0;font-size:11px;letter-spacing:.16em;color:#4F3F79">THEMED DAYS</p>
+      </div>
+      <div style="background:#E9E7C2;clip-path:url(#b1);padding:22px 26px 26px">
+        <p style="margin:0;font:400 34px/1 'Beth Ellen',cursive;color:#8F3A12">9</p>
+        <p class="mono" style="margin:8px 0 0;font-size:11px;letter-spacing:.16em;color:#4F3F79">MUNICIPALITIES</p>
+      </div>
+      <div style="background:#E9E7C2;clip-path:url(#b1);padding:22px 26px 26px">
+        <p style="margin:0;font:400 34px/1 'Beth Ellen',cursive;color:#8F3A12">30+</p>
+        <p class="mono" style="margin:8px 0 0;font-size:11px;letter-spacing:.16em;color:#4F3F79">COLLABORATORS</p>
+      </div>
+      <div style="background:#E9E7C2;clip-path:url(#b0);padding:22px 26px 26px">
+        <p style="margin:0;font:400 34px/1 'Beth Ellen',cursive;color:#8F3A12">2nd</p>
+        <p class="mono" style="margin:8px 0 0;font-size:11px;letter-spacing:.16em;color:#4F3F79">EDITION</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:clamp(50px,6.4vw,76px) 24px 0;text-align:center">
+    <p style="margin:0 auto;max-width:22em;font:400 clamp(24px,3.4vw,32px)/1.24 'Beth Ellen',cursive;color:#E9E7C2;text-wrap:pretty">Covering the festival?</p>
+    <p style="margin:16px auto 0;max-width:32em;font:400 clamp(14.5px,0.5vw + 13.1px,16px)/1.7 'Arimo',Helvetica,sans-serif;color:#E9E7C2;text-wrap:pretty">Tell us what you're working on and we'll put you with the right people on the island.</p>
+    <a href="mailto:hello@siargaofoodandwinefestival.com" style-hover="background:#f27a49" style="display:inline-block;margin-top:20px;padding:16px 32px 19px;clip-path:url(#b1);background:#E9622D;color:#141210;font:700 15px/1 'Baloo 2',system-ui,sans-serif;letter-spacing:.02em;text-transform:capitalize;text-decoration:none;transition:background .15s ease">hello@siargaofoodandwinefestival.com</a>
+  </section>
+
+  <footer style="margin-top:clamp(50px,6.4vw,80px)"><svg viewBox="0 0 600 6" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:5px;overflow:visible;margin:0"><path d="M2 4.6 C 46 1.4 88 5.8 132 3.2 C 176 0.6 210 6.2 256 4.4 C 300 2.6 332 0.4 378 2.8 C 420 5 452 6.4 496 3.4 C 534 0.8 562 5.4 598 2.2" fill="none" stroke="rgba(233,231,194,.4)" stroke-width="1.4" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg>
+    <div style="max-width:1180px;margin:0 auto;padding:clamp(28px,4vw,40px) 24px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px">
+      <p class="mono" style="margin:0;font-size:11px;line-height:1.9;letter-spacing:.14em;color:#E9E7C2">26 – 31 AUGUST 2026<br>SIARGAO ISLAND, PHILIPPINES</p>
+      <a href="SFWF Home.dc.html" style="text-decoration:none"><img src="assets/logos/sfwf-beige.png" alt="Siargao Food &amp; Wine Festival" style="width:150px;display:block"></a>
+      <a href="mailto:info@siargaofoodfest.com" style="font:400 20px/1 'Beth Ellen',cursive;color:#E9E7C2;text-decoration:none">info@siargaofoodfest.com</a>
+    </div>
+  </footer>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+
+class Component extends DCLogic {
+  state = { w: typeof window !== 'undefined' ? window.innerWidth : 1200, menu: false };
+
+  componentDidMount() {
+    this.onResize = () => {
+      if (window.innerWidth === this.state.w) return;
+      this.setState({ w: window.innerWidth, menu: window.innerWidth >= 860 ? false : this.state.menu });
+    };
+    window.addEventListener('resize', this.onResize);
+    this.onKey = e => { if (e.key === 'Escape' && this.state.menu) this.setState({ menu: false }); };
+    window.addEventListener('keydown', this.onKey);
+    this.onScroll = () => {
+      if (this.q) return;
+      this.q = true;
+      requestAnimationFrame(() => { this.q = false; this.applyFade(); });
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    this.applyFade();
+    this.startDye();
+  }
+
+  startDye() {
+    if (!this.dyeEl || this.flow) return;
+    this.flow = true;
+    import('./components/backgrounds/dye-ground.js')
+      .then(m => m.mountDyeGround(this.dyeEl))
+      .then(flow => { this.flow = flow; })
+      .catch(e => { this.flow = null; console.warn(e); });
+  }
+
+  applyFade() {
+    const el = this.mainEl;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top;
+    const g = 'linear-gradient(to bottom, rgba(0,0,0,0) ' + (-top) + 'px, rgba(0,0,0,0) ' + (-top + 56) + 'px, #000 ' + (-top + 190) + 'px)';
+    el.style.maskImage = g;
+    el.style.webkitMaskImage = g;
+  }
+
+  componentDidUpdate() {
+    this.applyFade();
+    document.body.style.overflow = this.state.menu && this.state.w < 860 ? 'hidden' : '';
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.onKey);
+    window.removeEventListener('scroll', this.onScroll);
+    document.body.style.overflow = '';
+    if (this.flow && this.flow.destroy) this.flow.destroy();
+  }
+
+  renderVals() {
+    const mobile = this.state.w < 860;
+    const open = mobile && this.state.menu;
+    return {
+      mobile,
+      desktop: !mobile,
+      menuOpen: open,
+      menuGlyph: open ? '✕' : '≡',
+      contentOpacity: open ? '0' : '1',
+      contentPointer: open ? 'none' : 'auto',
+      toggleMenu: () => this.setState(s => ({ menu: !s.menu })),
+      closeMenu: () => this.setState({ menu: false }),
+      mainRef: el => { if (el && el !== this.mainEl) { this.mainEl = el; this.applyFade(); } },
+      dyeLayer: React.createElement('canvas', {
+        ref: el => { if (el && el !== this.dyeEl) { this.dyeEl = el; this.startDye(); } },
+        style: { position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' },
+      }),
+    };
+  }
+}
+</script>
+</body>
+</html>

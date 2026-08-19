@@ -1,55 +1,70 @@
-/** Which crawl an event links through to. Both share one ₱500 passport. */
-export type CrawlKey = "coffee" | "karinderya";
-
 /**
- * Event tiers. The 2025 site drew no distinction between a ₱-ticketed gala and a free
- * workshop, which the content audit flagged as its clearest usability gap; the tier is
- * the fix, and it is why every event below carries one.
+ * The programme's shape. Two fields here reverse rules the 2025 site enforced by simply
+ * having nowhere to put them: `time` and `price`.
+ *
+ * The festival supplied both in its own press releases, so the redesign shows them — but
+ * only as far as they are confirmed. `price: "TBD"` is a data state, never printed; the
+ * open bubble states place and time alone rather than "price to be confirmed".
+ * `time: "TIME TBD"` is different: the time is still spoken, as "time to be confirmed".
  */
-export type Tier = "free" | "paid" | "allWeek";
-
 export interface FestivalEvent {
-  /** Stable across content edits — used for the open/closed state of a programme bubble. */
+  /** Stable across content edits — keys the open/closed state of a programme bubble. */
   readonly id: string;
+  /** Uppercase short name, as the collapsed kicker prints it. Keys into `VENUES`. */
+  readonly venue: VenueKey;
+  /** As published: `6PM – 10PM`, `1ST SEATING 5PM · 2ND 8PM`, `TIME TBD`. */
+  readonly time: string;
   readonly title: string;
-  readonly tier: Tier;
-  /** Where it happens. Often narrower than the day's own venue line. */
-  readonly venue: string;
-  readonly blurb: string;
-  /** Chefs, partners and collaborators. Separated by `·` — never a comma list. */
-  readonly credit?: string;
-  /** Present only on the two all-week crawls, which link into the Food Crawl screen. */
-  readonly crawl?: CrawlKey;
+  /** As published, or `TBD`. Read through `priceNote` / `access` — never printed raw. */
+  readonly price: string;
+  /** Chefs and collaborators, separated by `·`. Null where the festival has none on record. */
+  readonly who: string | null;
+  /** Null on the one event with no description yet — the "to be announced" copy is design. */
+  readonly desc: string | null;
 }
 
+/** The six day markers. One hand-drawn PNG each, under `public/doodles/beige/`. */
+export type DoodleName = "wine" | "fish" | "coconut" | "dish" | "ukulele" | "flower";
+
 export interface FestivalDay {
-  /**
-   * Stable id. The programme has two separate August 31 blocks (Mamon Island & Siago,
-   * and Harana Surf Resort); the prototype told them apart with a trailing space in the
-   * date string, which is a hazard waiting to be trimmed away. They key off this instead.
-   */
   readonly id: string;
+  /** The mono date above the day name — `AUG 26`. */
   readonly date: string;
-  readonly venue: string;
-  readonly allWeek?: boolean;
+  /** The filter chip's date — `WED 26`. */
+  readonly weekday: string;
+  /** The count line when this day alone is picked — `Wednesday 26 August`. */
+  readonly longWeekday: string;
+  /** Lowercase by design — that is the voice, not a CSS transform. */
+  readonly name: string;
+  readonly icon: DoodleName;
+  /** Hand-tuned per doodle for optical weight, in px. */
+  readonly iconWidth: number;
   readonly events: readonly FestivalEvent[];
 }
 
-export interface CrawlVenue {
-  readonly name: string;
-  /** The human one-liner. Karinderyas have one; cafés are represented by their logo. */
-  readonly note?: string;
-  /** Filename stem under public/partners/. */
-  readonly logo?: string;
-}
+export type VenueKey =
+  | "WILD"
+  | "SIARGAO CORNER CAFÉ"
+  | "GL PUBLIC MARKET"
+  | "ALMA"
+  | "LUNARES CAFÉ"
+  | "ISLA PANCITERIA"
+  | "LOKAL HUB"
+  | "LYMA"
+  | "TROPICAL ACADEMY SAN ISIDRO"
+  | "KERMIT"
+  | "LAMARI"
+  | "PARALUMAN"
+  | "MAM-ON ISLAND"
+  | "BRAVO"
+  | "SAGANA"
+  | "HUE HOTEL";
 
-export interface Crawl {
-  readonly key: CrawlKey;
-  readonly tab: string;
-  readonly heading: string;
-  readonly intro: string;
-  readonly task: string;
-  readonly prize: string;
-  readonly partnersLabel: string;
-  readonly venues: readonly CrawlVenue[];
+export interface Venue {
+  /** The place as prose names it, for the open bubble's hint line. */
+  readonly place: string;
+  /** Instagram handle without the `@`. `null` where the festival has none on record. */
+  readonly handle: string | null;
+  /** Who the booking button names, where that differs from the place. */
+  readonly bookName?: string;
 }

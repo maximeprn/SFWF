@@ -38,34 +38,13 @@ export const PHOTOS: readonly Photo[] = [
   },
 ];
 
-/**
- * The festival's seven hand-drawn icons. There is no icon font and no vector set — do not
- * link Lucide, Heroicons or any other library alongside these, and never redraw them as
- * SVG. The linework is intentionally slightly wobbly and matches the octopus mascot's hand.
- *
- * `tray`, `grilled-fish` and `fish-leaf` are a best reading of ambiguous drawings; the
- * festival has not confirmed the intended subjects.
- */
-export const ICON_NAMES = [
-  "coffee-beans",
-  "wine-glass",
-  "crab",
-  "tray",
-  "grilled-fish",
-  "bananas",
-  "fish-leaf",
-] as const;
-
-export type IconName = (typeof ICON_NAMES)[number];
-
 /*
- * These point at the derivatives written by `scripts/optimize-images.mjs`, not at the
- * festival's original PNGs, which stay in `public/` as the master copies. None of these
- * three go through next/image — the icons are plain <img>, the seal is an SVG <image> and
- * the dye is a WebGL texture — so the codec has to be right in the file itself.
+ * The dye's source cloth. It is blue: nothing on the site is, because `dyeGround` remaps it
+ * to violet and orange at runtime (§4). It never goes through next/image — it is read into
+ * a canvas and uploaded as a WebGL texture — so the codec has to be right in the file.
+ *
+ * The 2025 icon set, the octopus mark and the gold loading seal are no longer referenced by
+ * anything: they belong to the superseded system. Their files stay in `public/` because
+ * they are the festival's own originals and none of them are regenerable.
  */
-export const iconSrc = (name: IconName): string => `/icons/icon-${name}.avif`;
-
 export const DYE_TEXTURE = "/textures/indigo-shibori.webp";
-export const LOGO = "/logo/sfwf-octopus-official.avif";
-export const LOADER_SEAL = "/logo/loader-seal-art.avif";

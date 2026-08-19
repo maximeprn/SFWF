@@ -1,79 +1,86 @@
-import type { CSSProperties, ReactNode } from "react";
-import { SOCIALS } from "@/content/site";
+import { WobbleRule } from "@/components/ui/Wobble";
+import { CONTACT_EMAIL, DATELINE, SOCIALS } from "@/content/site";
+import { SocialMark } from "./SocialMark";
 
 /**
- * The festival ships no social icon assets, so the marks are drawn here in the same yellow
- * line-weight as the food icons — single weight, round caps, slightly loose. Each sits at
- * its own angle so the row reads hand-placed rather than aligned.
+ * A drawn hairline, then one centred column: the three marks, the address, the dateline.
+ *
+ * The marks rest at −5°, +4° and −3° so the row reads hand-placed rather than aligned, and
+ * a hover stands one upright and steps it forward — the single deliberate overshoot in a
+ * system where the only other moving thing is the dye.
  */
-const ART: Record<string, ReactNode> = {
-  Instagram: (
-    <>
-      <rect x="3.4" y="3.4" width="17.2" height="17.2" rx="5.2" />
-      <circle cx="12" cy="12" r="4.2" />
-      <path d="M17.1 7h.01" strokeWidth="2.6" />
-    </>
-  ),
-  Facebook: (
-    <>
-      <circle cx="12" cy="12" r="8.7" />
-      <path d="M14.5 7.9h-1.3c-1.1 0-1.9.8-1.9 1.9v6.9M9.7 12.2h4.4" />
-    </>
-  ),
-  TikTok: (
-    <>
-      <path d="M14.3 4.1v9.9a3.7 3.7 0 1 1-3.3-3.7" />
-      <path d="M14.3 4.1c.4 2.3 2 3.7 4.2 3.9" />
-    </>
-  ),
-};
-
 export function Footer() {
   return (
-    <footer style={{ padding: "44px 20px 46px", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
-      <p style={{ margin: 0, font: '400 20px var(--font-display)', color: "var(--mark)", letterSpacing: ".01em" }}>
-        Follow us
-      </p>
-      <div style={{ display: "flex", gap: 6 }}>
-        {SOCIALS.map((s) => (
+    <footer style={{ marginTop: "clamp(44px,5vw,68px)" }}>
+      <div
+        style={{
+          maxWidth: "calc(var(--sw) + 60px)",
+          margin: "0 auto",
+          padding: "0 var(--gutter)",
+        }}
+      >
+        <WobbleRule tone="beige-strong" />
+      </div>
+      <div
+        style={{
+          maxWidth: "var(--sw)",
+          margin: "0 auto",
+          padding: "clamp(24px,3vw,34px) var(--gutter) clamp(28px,3.4vw,40px)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "clamp(16px,2vw,22px)",
+          textAlign: "center",
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+          <div style={{ display: "flex", gap: 4 }}>
+            {SOCIALS.map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noopener"
+                aria-label={social.name}
+                className="social-mark"
+                style={
+                  {
+                    width: 40,
+                    height: 40,
+                    display: "grid",
+                    placeItems: "center",
+                    color: "var(--beige)",
+                    "--tilt": `${social.tilt}deg`,
+                  } as React.CSSProperties
+                }
+              >
+                <SocialMark name={social.name} />
+              </a>
+            ))}
+          </div>
           <a
-            key={s.name}
-            href={s.href}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={s.name}
-            className="social-mark"
-            /* --tilt is the mark's resting angle; the hover rule in globals.css returns
-               to it, so the two can never drift apart. */
-            style={
-              {
-                width: 44,
-                height: 44,
-                display: "grid",
-                placeItems: "center",
-                color: "var(--mark)",
-                textDecoration: "none",
-                WebkitTapHighlightColor: "transparent",
-                "--tilt": `${s.tilt}deg`,
-              } as CSSProperties
-            }
+            href={`mailto:${CONTACT_EMAIL}`}
+            style={{
+              font: "400 16px/1 var(--font-display)",
+              color: "var(--beige)",
+              transition: "color var(--hover)",
+            }}
           >
-            <svg
-              width="27"
-              height="27"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-              stroke="currentColor"
-              strokeWidth="1.9"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{ display: "block" }}
-            >
-              {ART[s.name]}
-            </svg>
+            {CONTACT_EMAIL}
           </a>
-        ))}
+        </div>
+        <p
+          className="mono"
+          style={{
+            margin: 0,
+            fontSize: 10,
+            lineHeight: 1.9,
+            letterSpacing: ".14em",
+            color: "var(--dateline)",
+          }}
+        >
+          {DATELINE}
+        </p>
       </div>
     </footer>
   );
