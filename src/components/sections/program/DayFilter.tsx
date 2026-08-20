@@ -17,16 +17,16 @@ interface Tab {
   readonly name: string;
 }
 
-/** `WED 26` → `WE 26` — the weekday cut to two letters, which is what makes seven chips fit
- * a 320px phone. */
-const shortDate = (weekday: string): string => weekday.replace(/^(\w{2})\w/, "$1");
-
+/* The mobile chip carries the weekday whole — `WED 26`, not `WE 26`. The two-letter cut was
+   how seven chips used to fit a 320px phone; the room now comes from the padding and tracking
+   clamps instead, which buys back more than the extra glyph costs and leaves every chip wider
+   than it was. `short` differs from `date` on the summary chip alone. */
 const TABS: readonly Tab[] = [
   { key: "all", date: "ALL SIX DAYS", short: "ALL", name: "" },
   ...DAYS.map((day, i) => ({
     key: i as DayPick,
     date: day.weekday,
-    short: shortDate(day.weekday),
+    short: day.weekday,
     name: day.name,
   })),
 ];
@@ -194,7 +194,12 @@ export function DayFilter({
           </div>
         </div>
 
-        {/* Mobile: one line, dates only, two-letter weekdays, 44px touch targets. */}
+        {/* Mobile: one line, dates only, whole three-letter weekdays, 44px touch targets.
+            The row is framed by the same `--gutter` every section uses, so the chips can never
+            run wider than the content column beside them — and `nowrap` with no `overflow-x`
+            means a chip that did not fit would be visibly clipped rather than quietly
+            scrollable. That is deliberate: it makes an overflow impossible to miss. The clamps
+            below are sized so it cannot happen down to 320px. */}
         <div
           className="flex wide:hidden"
           style={{
@@ -202,10 +207,16 @@ export function DayFilter({
             pointerEvents: "auto",
             flexWrap: "nowrap",
             justifyContent: "center",
-            gap: "clamp(2px,0.9vw,7px)",
+            gap: "clamp(2px,0.6vw,7px)",
             maxWidth: "var(--sw)",
             margin: "0 auto",
-            padding: "16px var(--gutter) 11px",
+            /* A tighter gutter than the sections use, and the one place on the page that takes
+               one. A control bar is not a column of prose: at 320px the section gutter left
+               seven six-character chips about 3.9px of side padding each, which is the whole
+               row reading as cramped. Pulling 24px back to 10px buys 28px of budget and spends
+               all of it inside the chips. It resolves back to the section gutter by 800px, so
+               the two only differ where the difference pays for something. */
+            padding: "16px clamp(10px,3vw,24px) 11px",
           }}
         >
           {TABS.map((tab, i) => {
@@ -216,22 +227,67 @@ export function DayFilter({
                 type="button"
                 onClick={() => onPick(tab.key)}
                 aria-pressed={on}
-                style={{ flex: "none", display: "flex", alignItems: "center", minHeight: 44, padding: 0, background: "transparent", border: 0, cursor: "pointer" }}
+                /* Grows to fill the column rather than sitting centred with slack either side.
+                   Spreading the *gaps* instead would leave seven small chips adrift at the top
+                   of this range, where the column is 811px wide; growing the chips puts that
+                   width into the tap target, which is where it is worth something. */
+                style={{ flex: "1 1 auto", minWidth: 0, display: "flex", alignItems: "center", minHeight: 44, padding: 0, background: "transparent", border: 0, cursor: "pointer" }}
               >
                 <span
                   className={"mono" + (on ? "" : " day-chip-m")}
                   style={{
                     position: "relative",
                     display: "block",
+                    width: "100%",
+                    textAlign: "center",
                     boxSizing: "border-box",
                     background: on ? "var(--orange)" : "var(--beige)",
                     color: on ? "var(--button-ink)" : "var(--ink-body)",
-                    fontSize: on ? "clamp(7.5px,2.05vw,11px)" : "clamp(7.5px,2vw,10.5px)",
-                    letterSpacing: "clamp(.01em,0.16vw,.1em)",
+                    /* The extra glyph is paid for at the narrow end and only there: the vw
+                       terms on tracking and side padding are cut back, which frees more width
+                       at 320px than `WED` costs over `WE`. The ceilings go *up* in exchange,
+                       so anything above ~430px draws a larger chip than the two-letter version
+                       ever did.
+
+                       The cheapest character to buy back is the space itself — a monospace
+                       space takes a full advance, the same width as `W`, purely to separate a
+                       weekday from a number that are already told apart by being letters and
+                       digits. Tightening it is worth ~1.7px a chip, and that saving is what
+                       pays for the side padding above rather than being pocketed. */
+                    /* Readability is the floor that does not move. Seven six-character chips
+                       inside a 272px column at 320px is a hard budget, and the type is the last
+                       thing to give — so the width is bought from the two things that are not
+                       type. Side padding goes first, then the space between weekday and number:
+                       a monospace space takes a full advance, the same width as `W`, to separate
+                       letters from digits that are already unmistakable, which makes it the
+                       cheapest width on the row.
+
+                       Vertical padding is deliberately *not* part of that trade. It buys no
+                       width at all, and the 44px target lives on the button rather than on the
+                       chip, so trimming it would cost proportion and return nothing.
+
+                       Side padding is an offset rather than a bare vw term so it can be tight at
+                       320 and still open up on a larger phone — a bare term tuned to fit 320
+                       would stay just as cramped at 430. */
+                    /* An offset ramp, not a bare vw term. A bare `2vw` sits pinned on its 9px
+                       floor until ~450px, which is most of the phone range — so every width
+                       between 320 and 450 was reading at the minimum size while its spare room
+                       grew to 66px and went unused. This starts at 9px where the row is
+                       genuinely tight and reaches the cap by the breakpoint. */
+                    fontSize: on
+                      ? "clamp(9px,calc(0.58vw + 7.3px),12.5px)"
+                      : "clamp(9px,calc(0.56vw + 7.2px),12px)",
+                    /* The one legibility gain that costs no width: a monospace face holds the
+                       same advance at every weight, so this is free against the budget above.
+                       Meta lines elsewhere in the product are 400 — this is heavier because it
+                       is a control set near its own size floor, not a line of copy. */
+                    fontWeight: 600,
+                    letterSpacing: "clamp(.01em,0.06vw,.1em)",
+                    wordSpacing: "-0.22em",
                     whiteSpace: "nowrap",
                     padding: on
-                      ? "clamp(8px,2.4vw,11px) clamp(5px,2vw,15px) clamp(9px,2.6vw,12px)"
-                      : "clamp(8px,2.4vw,11px) clamp(4px,1.9vw,14px) clamp(9px,2.6vw,12px)",
+                      ? "clamp(8px,2.4vw,13px) clamp(4.5px,calc(2vw - 1.7px),16px) clamp(9px,2.6vw,14px)"
+                      : "clamp(8px,2.4vw,13px) clamp(4px,calc(1.9vw - 1.6px),15px) clamp(9px,2.6vw,14px)",
                     clipPath: soft(i),
                     transition: "color var(--hover)",
                   }}

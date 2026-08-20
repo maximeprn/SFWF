@@ -71,6 +71,48 @@ a {
   display: none;
 }
 
+/* The programme's bubbles centre in their track, but only while the page has nowhere that
+ * shows two of them side by side.
+ *
+ * A bubble is capped at 440px of content — around 516px with its padding — inside a track that
+ * is a full `1fr`. Once that track is wider than the cap the bubble sits left and the remainder
+ * is dead ground: 195px at a 735px viewport, and 616px at 1440px on a day that has a single
+ * gathering.
+ *
+ * It is only worth reclaiming in the first case. The second track appears as soon as the
+ * content box clears 2 × 380px + 12px = 772px, which is a 820px viewport once the two gutters
+ * are counted — and from there a lone gathering has to stay left, because it is sharing the
+ * page with days that are two columns wide and it lines up with them. Below that nothing on the
+ * page is two columns, there is no alignment left to keep, and centring is simply the bubble
+ * sitting in the middle of the room it has.
+ *
+ * Under ~565px the track is narrower than the bubble, the bubble fills it, and this does
+ * nothing.
+ *
+ * The centring is done to the *track*, never to the item. Both of the obvious ways to centre
+ * an item — `justify-items: center` and `margin-inline: auto` — drop it out of stretch and
+ * size it to its own content instead, and a day's three bubbles then came out three different
+ * widths on three different left edges, stepping down the page. Stretch is what carries every
+ * bubble to the shared cap, so it has to survive; sizing the track to exactly one bubble and
+ * centring that leaves it untouched.
+ *
+ * The track repeats the bubble's own two numbers — `max-width: 440` and its
+ * `clamp(26px,3vw,38px)` side padding, both in `EventBubble` — because it has to be that width
+ * exactly. Change either there and this follows, or the row goes back to sitting off-centre. */
+/* The tracks live here rather than beside the rest of the grid in `DaySection`, because the
+ * override below has to beat them and an inline style wins over any stylesheet rule short of
+ * `!important`. Splitting one property out is the cheaper of the two. */
+.day-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+}
+
+@media (max-width: 819.98px) {
+  .day-grid {
+    grid-template-columns: min(100%, calc(440px + 2 * clamp(26px, 3vw, 38px)));
+    justify-content: center;
+  }
+}
+
 /* The last-year strip: flush with the content column at every width, in line with the
  * eyebrow above it and with every other section on the page.
  *

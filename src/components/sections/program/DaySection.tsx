@@ -92,6 +92,7 @@ export function DaySection({
       </div>
 
       <div
+        className="day-grid"
         style={{
           display: "grid",
           /* Two up at the full frame, and no cap on the grid itself: the 440px cap on each
@@ -101,8 +102,12 @@ export function DaySection({
              a lone bubble the whole row.
              At the old 280px minimum this drew four columns of 249px, and the type below
              was rebuilt at sizes that column cannot hold — a 21px open title wants the
-             380px this one gives it. */
-          gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,380px),1fr))",
+             380px this one gives it.
+             The tracks themselves are `.day-grid` in globals.css, not here: once the page drops
+             to a single column they narrow to one bubble and centre, and a rule can only
+             override them from there — an inline value would outrank it. Above that width a
+             lone gathering stays left, lining up with the two-column days around it rather than
+             floating off on its own. */
           gap: 12,
           alignItems: "start",
         }}

@@ -5,11 +5,8 @@ import type { DayPick } from "@/components/sections/program/DayFilter";
 
 /** The gap kept between the sticky header's own bottom edge and the landed day block. */
 const PICK_GAP = 10;
-/** Pull-at-top and re-fold are both ignored this long after a pick, while the programmatic
- * scroll from `land()` is still settling. */
+/** The pull is ignored this long after a pick, while `land()`'s own scroll is still settling. */
 const PEEK_GRACE_MS = 450;
-/** Scrolling back down past this many pixels folds a peeked hero away again. */
-const REFOLD_Y = 40;
 /** How hard an upward wheel has to move to count as a pull. */
 const WHEEL_THRESHOLD = -10;
 /** How far a finger has to travel downward to count as a pull. */
@@ -41,7 +38,6 @@ export function useDayHero() {
   const railRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const pickAtRef = useRef(0);
-  const lastYRef = useRef(0);
   const landTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const heroOpen = !chosen || heroPeek;
@@ -106,21 +102,31 @@ export function useDayHero() {
       setChosen(true);
       setHeroPeek(false);
       pickAtRef.current = Date.now();
-      lastYRef.current = window.scrollY;
       land();
     },
     [land],
   );
 
-  /* Pull-at-top brings the week back; scrolling down past 40px folds it away again. This has
-     to read the gesture, not the scroll position: folding the hero shrinks the document, the
-     browser clamps the scroll, and that clamp is indistinguishable from "scrolled to the
-     top" — position-based logic re-triggers the reveal in a loop. */
+  /* Pulling at the top brings the week back, and that is the end of it — the page goes to the
+     very top and behaves like an ordinary page again until the next pick.
+
+     It reads the gesture rather than the scroll position because folding the hero shrinks the
+     document, the browser clamps the scroll to the new bottom, and that clamp is
+     indistinguishable from "the reader scrolled to the top" — position-based logic re-triggers
+     the reveal in a loop.
+
+     Nothing re-folds on the way down. Scrolling down used to put the hero away again past 40px,
+     which meant the first downward flick after asking for the week took it straight back: the
+     reveal could not be read without fighting it. A pick is the thing that folds the hero, so a
+     pick is the only thing that folds it. */
   useEffect(() => {
     const peek = () => {
       if (heroOpen) return;
       if (window.scrollY > 2 || Date.now() - pickAtRef.current < PEEK_GRACE_MS) return;
       setHeroPeek(true);
+      /* Land on the top rather than wherever the pull happened to stop. The hero opens above
+         the reading position, and a couple of pixels of offset is enough to cut its first line. */
+      window.scrollTo({ top: 0, behavior: "smooth" });
     };
     const onWheel = (e: WheelEvent) => {
       if (e.deltaY < WHEEL_THRESHOLD) peek();
@@ -133,30 +139,16 @@ export function useDayHero() {
       const y = e.touches[0]?.clientY ?? touchY;
       if (y - touchY > TOUCH_THRESHOLD) peek();
     };
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (
-        heroPeek &&
-        Date.now() - pickAtRef.current > PEEK_GRACE_MS &&
-        y > REFOLD_Y &&
-        y > lastYRef.current + 6
-      ) {
-        setHeroPeek(false);
-      }
-      lastYRef.current = y;
-    };
 
     window.addEventListener("wheel", onWheel, { passive: true });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
-    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("scroll", onScroll);
     };
-  }, [heroOpen, heroPeek]);
+  }, [heroOpen]);
 
   return { pick, onPick, heroOpen, anchorRef, railRef, heroRef };
 }
