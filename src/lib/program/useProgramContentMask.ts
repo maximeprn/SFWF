@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type RefObject } from "react";
+import { paintUntilSettled } from "@/lib/chrome/paintUntilSettled";
 
 /** The ramp back to opaque, below the band — same value the sitewide mask uses. */
 const RAMP = 26;
@@ -62,19 +63,23 @@ export function useProgramContentMask(
       requestAnimationFrame(paint);
     };
 
-    paint();
-    /* And again on the next frame — the same reason as `useFadeMask`: this can run before the
-       new page's scroll has settled, and a mask written from a stale one is transparent across
-       the whole viewport until something repaints it. */
-    const settle = requestAnimationFrame(paint);
+    /* Repainted until the page stops moving, for the same reason as `useFadeMask` — this can
+       run before a new route's scroll has settled, and a mask written from a stale offset is
+       transparent across the whole viewport. */
+    const stopSettling = paintUntilSettled(paint);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     still.addEventListener("change", paint);
+    const vv = window.visualViewport;
+    vv?.addEventListener("resize", onScroll);
+    vv?.addEventListener("scroll", onScroll);
     return () => {
-      cancelAnimationFrame(settle);
+      stopSettling();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       still.removeEventListener("change", paint);
+      vv?.removeEventListener("resize", onScroll);
+      vv?.removeEventListener("scroll", onScroll);
       el.style.maskImage = "";
       el.style.webkitMaskImage = "";
     };
