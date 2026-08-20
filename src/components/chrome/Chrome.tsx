@@ -20,7 +20,22 @@ const routeOf = (pathname: string): NavLink["href"] =>
 export function Chrome({ children }: { readonly children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const main = useRef<HTMLElement>(null);
-  const route = routeOf(usePathname());
+  const pathname = usePathname();
+  const route = routeOf(pathname);
+
+  /* Every route arrives at its own top, whatever the last one was scrolled to.
+   *
+   * The router restores a position rather than resetting one, and `html` carries
+   * `scroll-behavior: smooth`, so a link taken from halfway down a long page could hand the
+   * next route a scroll it never asked for and then ease into it. `instant` because this is
+   * not a movement anyone should watch — the previous page is already gone.
+   *
+   * A hash is the one case that means the opposite: `/#purpose` is a request for a position,
+   * and the browser is already on its way there. */
+  useEffect(() => {
+    if (window.location.hash) return;
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [pathname]);
   /* Every route but one takes the nav-height mask. The programme's day rail is sticky chrome
      that lives inside <main>, so this mask's ramp would fall across the top of its own chips —
      that page measures its own band around the rail instead. See `useFadeMask`. */

@@ -26,8 +26,25 @@
 const SELECTOR = ".press-btn";
 /** However fast a tap is, the press is never on screen for less than this. */
 const HOLD = 160;
-/** Press-down to navigation — long enough to see the press before the page turns. */
+/** Press-down to release — long enough to see the press before the page turns. */
 const NAV = 240;
+
+/**
+ * Below this the press is carried by travel alone — the colour half is a pointer-only rule, in
+ * `globals.css` on the same number — so the travel is the whole of the feedback and it is worth
+ * waiting for. The two have to stay in step: change one and change the other.
+ */
+const TOUCH_WIDTH = "(max-width: 859.98px)";
+
+/**
+ * How long the surface takes to rise, mirroring `.press-btn.releasing`'s own transform
+ * transition. Written here as well because JS has to know when the button is back up, and
+ * there is no reading it off the element mid-flight.
+ */
+const RISE = 160;
+
+/** The beat held after the button is fully back up, before the page is allowed to turn. */
+const SETTLE = 100;
 
 let pressedEl: HTMLElement | null = null;
 let pressedAt = 0;
@@ -144,11 +161,25 @@ export function bindPressSystem() {
       e.preventDefault();
       clearTimeout(navTimer);
       const el2 = el;
+      /* On a pointer the page turns as the surface starts back up: the colour has already
+         inverted and come back, so the press has been read by then and waiting only adds lag.
+         On a touch width there is no colour, so the travel is the entire feedback — the button
+         is let all the way up and held a beat there before the route changes, rather than the
+         page turning out from under a surface still in motion. */
+      const settle = window.matchMedia(TOUCH_WIDTH).matches ? RISE + SETTLE : 0;
+      const go = () => {
+        passthrough.add(el2);
+        el2.click();
+      };
       navTimer = setTimeout(
         () => {
           pressOff(0);
-          passthrough.add(el2);
-          el2.click();
+          if (settle === 0) {
+            go();
+            return;
+          }
+          /* Re-using `navTimer` keeps the whole sequence cancellable by the next press. */
+          navTimer = setTimeout(go, settle);
         },
         Math.max(60, NAV - (Date.now() - pressedAt)),
       );
