@@ -63,10 +63,15 @@ export function useProgramContentMask(
     };
 
     paint();
+    /* And again on the next frame — the same reason as `useFadeMask`: this can run before the
+       new page's scroll has settled, and a mask written from a stale one is transparent across
+       the whole viewport until something repaints it. */
+    const settle = requestAnimationFrame(paint);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     still.addEventListener("change", paint);
     return () => {
+      cancelAnimationFrame(settle);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       still.removeEventListener("change", paint);

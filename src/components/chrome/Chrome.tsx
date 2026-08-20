@@ -27,14 +27,22 @@ export function Chrome({ children }: { readonly children: React.ReactNode }) {
    *
    * The router restores a position rather than resetting one, and `html` carries
    * `scroll-behavior: smooth`, so a link taken from halfway down a long page could hand the
-   * next route a scroll it never asked for and then ease into it. `instant` because this is
-   * not a movement anyone should watch — the previous page is already gone.
+   * next route a scroll it never asked for and then ease into it. The sheet's own property is
+   * turned off for the one call rather than asking `scrollTo` for `behavior: 'instant'`: that
+   * is an enum member WebKit only learned late, and an unknown member does not degrade — it
+   * throws, out of an effect, with no boundary above it, which takes the whole tree down and
+   * leaves a blank page. The two-argument call and a property that has always existed cannot
+   * fail that way.
    *
    * A hash is the one case that means the opposite: `/#purpose` is a request for a position,
    * and the browser is already on its way there. */
   useEffect(() => {
     if (window.location.hash) return;
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    const html = document.documentElement;
+    const eased = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto";
+    window.scrollTo(0, 0);
+    html.style.scrollBehavior = eased;
   }, [pathname]);
   /* Every route but one takes the nav-height mask. The programme's day rail is sticky chrome
      that lives inside <main>, so this mask's ramp would fall across the top of its own chips —
