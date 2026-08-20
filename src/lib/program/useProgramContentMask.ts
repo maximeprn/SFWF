@@ -47,9 +47,14 @@ export function useProgramContentMask(
       const navHeight = header?.getBoundingClientRect().height ?? 0;
       const railHeight = railRef?.current?.getBoundingClientRect().height ?? 0;
       const band = navHeight + railHeight;
+      /* The leading `#000` is the fail-safe — see `useFadeMask` for the full account. A
+         gradient is its first stop's colour everywhere above it, so with transparent first a
+         stale paint blanked the whole viewport; opaque first, the same mistake shows the
+         content unmasked for a beat instead, and the next scroll event repaints it out. */
       const mask = still.matches
         ? "none"
         : `linear-gradient(to bottom,` +
+          `#000 ${-top}px,` +
           `rgba(0,0,0,0) ${-top}px,` +
           `rgba(0,0,0,0) ${-top + band}px,` +
           `#000 ${-top + band + RAMP}px)`;
