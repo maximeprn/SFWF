@@ -6,6 +6,7 @@ import { VideoControls } from "@/components/ui/VideoControls";
 import { mediaFrame } from "@/lib/design/shapes";
 import { useFullscreen } from "@/lib/media/useFullscreen";
 import { usePlayback } from "@/lib/media/usePlayback";
+import { useWarmStream } from "@/lib/media/useWarmStream";
 import { useIdleControls } from "@/lib/media/useIdleControls";
 import { useVideoControls } from "@/lib/media/useVideoControls";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
@@ -51,7 +52,12 @@ export function VideoFrame({
   const [playing, setPlaying] = useState(false);
   const [focused, setFocused] = useState(false);
 
-  const { video, toggle, toggleMute, seek } = usePlayback(playing, streamUrl(clip.playbackId));
+  const src = streamUrl(clip.playbackId);
+  const { video, toggle, toggleMute, seek } = usePlayback(playing, src);
+  /* `priority` already means "this is the frame the page leads with" — the poster loads eagerly
+     for it and lazily for the strip. The same line divides the warm-up: the film is worth
+     opening a connection for before it is asked for, six clips further down the page are not. */
+  useWarmStream(src, priority === true && !playing);
   const { paused, muted } = useVideoControls(video, playing);
   const fullscreen = useFullscreen(frame, video);
   const reduced = usePrefersReducedMotion();

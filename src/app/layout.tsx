@@ -87,6 +87,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           crossOrigin="anonymous"
           fetchPriority="high"
         />
+        {/* Mux serves the film from two hosts and the poster from a third, none of them this
+            origin — so the first request to each pays DNS, TCP and TLS before it can ask for
+            anything. These open the doors while the page is still parsing. `image` is the
+            poster, which every visitor loads; `stream` is the film's master playlist, which
+            only a press needs but which `useWarmStream` reaches for during idle.
+            The regional `manifest-*.fastly.mux.com` behind `stream` cannot be named here —
+            it is chosen per viewer, and warming it is exactly what that hook's second fetch
+            is for. */}
+        <link rel="preconnect" href="https://image.mux.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://stream.mux.com" crossOrigin="anonymous" />
       </head>
       <body>
         <BlobDefs />
