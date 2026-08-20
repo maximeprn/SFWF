@@ -82,8 +82,15 @@ export function Hero() {
           here to set them apart. `tests/design.test.ts` holds it. */}
       {/* Still one owner per boundary, written as one shorthand — but no longer symmetric.
           Once the button joined the group the two ends stopped being the same kind of gap:
-          above is the headline meeting its dateline, below is the hero meeting the film. */}
-      <div style={{ margin: "calc(var(--sec) - 10px) auto calc(var(--sec) - 45px)" }}>
+          above is the headline meeting its dateline, below is the hero meeting the film.
+
+          The top end is scaled, not shortened by a fixed amount. At a full `--sec` the
+          dateline was spaced off the festival's own name as though it were a separate
+          section — 84px on a phone, 115px wide — when it belongs to the same block, whose
+          other internal gap (wordmark to headline) is 14–22px. A flat subtraction would have
+          taken a quarter off the phone and a sixth off the desktop; the multiplier takes the
+          same 40% at every width, so the ramp between the breakpoints is unchanged. */}
+      <div style={{ margin: "calc((var(--sec) - 10px) * 0.6) auto calc(var(--sec) - 45px)" }}>
         <div
           style={{
             margin: "0 auto",
