@@ -163,7 +163,13 @@ export function DayFilter({
                     <span
                       className="mono day-chip-d"
                       style={{
-                        fontSize: tab.key === "all" ? "clamp(9.5px,1vw,12px)" : "clamp(7.4px,0.78vw,8.5px)",
+                        /* The ceilings were set where the row was tight and stayed there once
+                           it no longer was: past ~1150px the rail's own width stops growing at
+                           `--sw` while the type had already stopped at 8.5px, leaving 256px of
+                           the row unused at 1600. Both lines climb together — the date is the
+                           only thing in the summary chip, so it has to keep pace with the names
+                           beside it or that chip shrinks away from the row. */
+                        fontSize: tab.key === "all" ? "clamp(9.5px,1.15vw,13px)" : "clamp(7.4px,0.9vw,10.5px)",
                         letterSpacing: "clamp(.06em,0.09vw,.14em)",
                         whiteSpace: "nowrap",
                         color: on ? "var(--button-ink)" : "var(--ink-body)",
@@ -177,7 +183,12 @@ export function DayFilter({
                         className="day-chip-n"
                         style={{
                           marginTop: 1,
-                          font: "400 clamp(11.5px,1.1vw,15px)/1.1 var(--font-display)",
+                          /* `nowrap` above and below is what makes this safe to grow: a name
+                             too big for its chip cannot wrap and quietly deepen the row — it
+                             widens it, and the row is measured across the whole desktop range
+                             so that never reaches the column's edge. `closing celebration` is
+                             the one that decides the ceiling; every other name has slack. */
+                          font: "400 clamp(11.5px,1.4vw,18.5px)/1.1 var(--font-display)",
                           whiteSpace: "nowrap",
                           color: on ? "var(--button-ink)" : "var(--ink-title)",
                           transition: "color var(--hover)",
