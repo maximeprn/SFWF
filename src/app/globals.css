@@ -405,20 +405,35 @@ a {
     color 0.18s ease;
 }
 
-.press-btn[data-press="beige"].pressed {
-  background: var(--beige);
-}
+/* The colour half of the press is desktop only. On a pointer the inversion is continuous with
+ * the hover that already preceded it — the button is the target colour before the click lands,
+ * and pressing only holds it there. A touch has no hover to arrive from, so the same rule reads
+ * as the button changing colour under the finger and staying changed for as long as it is held,
+ * which is the look of a control that has latched rather than one being pressed.
+ *
+ * The travel below is not gated and stays on every width: that is the press, and it is the half
+ * that reads correctly without a hover in front of it.
+ *
+ * Keyed on the width where the layout already turns, so there is one breakpoint in the product
+ * rather than two. `(hover: none)` would follow the input rather than the viewport and catch a
+ * wide tablet as well — worth the swap if one turns up, but it would also strip the colour from
+ * a desktop browser in touch-emulation, which is where most of this gets looked at. */
+@media (min-width: 860px) {
+  .press-btn[data-press="beige"].pressed {
+    background: var(--beige);
+  }
 
-.press-btn[data-press="orange"].pressed {
-  background: var(--orange);
-}
+  .press-btn[data-press="orange"].pressed {
+    background: var(--orange);
+  }
 
-.press-btn[data-press="ground"].pressed {
-  background: var(--ground);
-}
+  .press-btn[data-press="ground"].pressed {
+    background: var(--ground);
+  }
 
-.press-btn[data-press="cream"].pressed {
-  background: var(--cream);
+  .press-btn[data-press="cream"].pressed {
+    background: var(--cream);
+  }
 }
 
 /* The press-in: fast enough to feel immediate under a finger. */
