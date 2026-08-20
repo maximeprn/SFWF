@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, type RefObject } from "react";
-import { paintUntilSettled } from "./paintUntilSettled";
 
 /** The band the copy is masked out under, and the ramp back to opaque below it. */
 const BAND = 56;
@@ -75,25 +74,25 @@ export function useFadeMask(ref: RefObject<HTMLElement | null>, enabled = true) 
       requestAnimationFrame(paint);
     };
 
-    /* Not a single paint: on a route change this runs before the browser has settled the new
-       page's scroll, and a mask written from a stale offset is transparent across the whole
-       viewport until something repaints it. See `paintUntilSettled`. */
-    const stopSettling = paintUntilSettled(paint);
+    paint();
+    /* And again on the next frame.
+     *
+     * On a route change this effect can run before the browser has settled the new page's
+     * scroll position, and the mask is written in the element's own coordinate space — so a
+     * stale scroll puts the first stop hundreds of pixels down, and a gradient is its first
+     * stop's colour all the way above it. That colour is transparent: the whole viewport goes
+     * invisible over a background that stays, and only a scroll brings it back, because a
+     * scroll is the thing that repaints it. Safari lands there arriving from a scrolled page;
+     * Chromium happened not to, which is the sort of difference that ships. */
+    const settle = requestAnimationFrame(paint);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     still.addEventListener("change", paint);
-    /* iOS moves the visual viewport on its own — the URL bar retracting on the way down is a
-       resize the window never hears about, and it changes where this band belongs. */
-    const vv = window.visualViewport;
-    vv?.addEventListener("resize", onScroll);
-    vv?.addEventListener("scroll", onScroll);
     return () => {
-      stopSettling();
+      cancelAnimationFrame(settle);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       still.removeEventListener("change", paint);
-      vv?.removeEventListener("resize", onScroll);
-      vv?.removeEventListener("scroll", onScroll);
     };
   }, [ref, enabled]);
 }
