@@ -190,23 +190,6 @@ a {
   background: var(--ground);
 }
 
-/* A hand-drawn underline that survives a line break.
- *
- * `WobbleUnderline` is an absolutely-positioned SVG and can only underline one box, so it
- * cannot mark a sentence that wraps. This is the same stroke as a repeating background:
- * backgrounds on an inline element follow each line box, so every line gets its own wave.
- *
- * The stroke colour is written into the data URI because an SVG url() resolves no custom
- * properties. It is the beige, and it is the only place in the stylesheet that repeats a
- * palette hex — keep it in step with --beige. */
-.drawn-underline {
-  padding-bottom: 5px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M1 3.4 C 18 1 34 5.2 52 3 C 68 1.1 84 5 99 2.6' fill='none' stroke='%23E9E7C2' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: repeat-x;
-  background-position: 0 100%;
-  background-size: 116px 6px;
-}
-
 /* ── motion ──────────────────────────────────────────────────────────────
    The whole inventory. Motion is response, not ambience: if it is not answering a tap, a
    hover or a scroll, it does not move. The dye is the one exception, and it is slow enough
@@ -428,11 +411,72 @@ a {
   transform: translateY(var(--raise));
 }
 
+/* The shimmer on the programme's one instruction — a band travelling left to right across
+   the glyphs. Ported from motion-primitives' TextShimmer, which drives `background-position`
+   from JS every frame: same two-layer gradient and linear sweep, as a keyframe the compositor
+   runs off the main thread. One infinite tween is not worth an animation runtime.
+
+   Left inline rather than upstream's `inline-block`, so the sentence keeps wrapping inside
+   its paragraph instead of becoming one atomic box that cannot break across lines.
+
+   --shimmer-rest and --shimmer-band are upstream's --base-color and --base-gradient-color,
+   and the one deliberate step outside tokens.css in this release. The sentence rests whiter
+   than --beige and the band passing through it is greyer, without the hue jump that made
+   orange look like a different brand. The gap is 23 points of L*, and that is as wide as it
+   goes with every glyph still clearing AA: the band is 4.55:1 on the violet and one more step
+   down puts the letters it covers under 4.5:1. Widen it past that by darkening --shimmer-band
+   alone — #a9a79c is 3.75:1 and a 29-point gap. --shimmer-time is one pass end to end
+   (upstream ships 2s); --shimmer-spread the half-width of the band, and widening it dips more
+   glyphs at once. */
+.shimmer {
+  --shimmer-time: 5s;
+  --shimmer-spread: 96px;
+  --shimmer-rest: #faf8f0;
+  --shimmer-band: #bab8ad;
+  color: transparent;
+  background-image:
+    linear-gradient(
+      90deg,
+      transparent calc(50% - var(--shimmer-spread)),
+      var(--shimmer-band),
+      transparent calc(50% + var(--shimmer-spread))
+    ),
+    linear-gradient(var(--shimmer-rest), var(--shimmer-rest));
+  background-repeat: no-repeat;
+  background-size: 250% 100%, auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer var(--shimmer-time) linear infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% center;
+  }
+  to {
+    background-position: 0 center;
+  }
+}
+
+/* Transparent ink with no clip to paint it is an invisible sentence. */
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .shimmer {
+    background-image: none;
+    color: var(--shimmer-rest);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   /* Land every reveal in its finished state rather than removing content. The dye pauses
      itself in BloomLayer — paintStill draws the same ground, flat. */
   .page-in {
     animation: none;
+  }
+  /* Halting the sweep would leave half the sentence transparent; the ink comes back flat. */
+  .shimmer {
+    animation: none;
+    background-image: none;
+    color: var(--shimmer-rest);
   }
   .bubble,
   .reveal,

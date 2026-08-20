@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SFWF 2026 — sticky day selector reference</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&family=Beth+Ellen&display=swap" rel="stylesheet">
+<style>
+  :root{ --chip-edge:1.4px; --violet:#4F3F79; --orange:#E9622D; --beige:#E9E7C2;
+         --ink:#3E3064; --black:#191218; --ease:cubic-bezier(.22,.75,.2,1); }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--violet);font-family:'Arimo',Helvetica,Arial,sans-serif;
+       -webkit-font-smoothing:antialiased;color:var(--beige)}
+  /* stand-in for the dye: the point is that it stays visible through the header */
+  body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+       background:radial-gradient(60% 40% at 20% 15%, rgba(233,98,45,.5), transparent 60%),
+                  radial-gradient(50% 35% at 80% 60%, rgba(233,98,45,.42), transparent 60%),
+                  radial-gradient(45% 30% at 45% 85%, rgba(233,98,45,.35), transparent 60%)}
+  .mono{font-family:ui-monospace,Menlo,monospace}
+
+  header{position:sticky;top:0;z-index:60;pointer-events:none}
+  /* transparent on purpose: it only keeps clicks off the content sliding underneath */
+  .shield{position:absolute;inset:0;background:transparent;pointer-events:auto}
+  .navrow{position:relative;max-width:1100px;margin:0 auto;padding:15px clamp(18px,5vw,52px);
+          display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:22px}
+  .brand{font-weight:700;font-size:11px;line-height:1.15;letter-spacing:.02em;pointer-events:auto}
+  .links{justify-self:center;display:flex;gap:clamp(16px,2.2vw,28px);pointer-events:auto;
+         font-family:'Beth Ellen',cursive;font-size:15px}
+  .links a{color:var(--beige);text-decoration:none}
+  .links a[aria-current]{color:var(--orange)}
+
+  .railwrap{position:relative;max-width:1100px;margin:0 auto;padding:0 clamp(18px,5vw,52px) 11px}
+  .rail{display:flex;flex-wrap:nowrap;align-items:stretch;justify-content:center;
+        gap:clamp(3px,0.5vw,6px);pointer-events:auto}
+  .rail button{flex:none;display:flex;padding:0;background:transparent;border:0;cursor:pointer;
+        text-align:center;-webkit-tap-highlight-color:transparent}
+  .chip{position:relative;display:flex;flex-direction:column;justify-content:center;
+        width:100%;background:var(--beige);padding:6px clamp(5px,0.8vw,10px) 8px}
+  .on .chip{background:var(--orange);padding:6px clamp(6px,1vw,13px) 8px}
+  .chip .d{font-size:clamp(7.4px,0.78vw,8.5px);letter-spacing:clamp(.06em,0.09vw,.14em);
+        color:var(--violet);white-space:nowrap;transition:color .15s ease}
+  .chip .n{margin-top:1px;font:400 clamp(11.5px,1.1vw,15px)/1.1 'Beth Ellen',cursive;
+        color:var(--ink);white-space:nowrap;transition:color .15s ease}
+  .on .chip .d,.on .chip .n{color:var(--black)}
+  button:not(.on):hover .chip .d{color:#8F3A12}
+  button:not(.on):hover .chip .n{color:var(--black)}
+  /* the summary chip has no script line, so its label is set larger to fill the same box */
+  .summary .chip .d{font-size:clamp(9.5px,1vw,12px)}
+  .ring{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .ring path{fill:none;stroke:var(--black);stroke-width:var(--chip-edge);
+        vector-effect:non-scaling-stroke}
+
+  /* mobile rail: one line of dates, two-letter weekdays, 44px targets on the button */
+  .mrail{display:none}
+  @media (max-width:859px){
+    .railwrap{display:none}
+    .mrail{position:relative;display:flex;flex-wrap:nowrap;align-items:center;
+           justify-content:center;gap:clamp(2px,0.9vw,7px);
+           padding:0 clamp(6px,2.2vw,40px) 11px;pointer-events:auto}
+    .mrail button{flex:none;display:flex;align-items:center;min-height:44px;padding:0;
+           background:transparent;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .mchip{position:relative;display:block;background:var(--beige);color:var(--violet);
+           font-size:clamp(7.5px,2vw,10.5px);letter-spacing:clamp(.01em,0.16vw,.1em);
+           white-space:nowrap;padding:clamp(8px,2.4vw,11px) clamp(4px,1.9vw,14px) clamp(9px,2.6vw,12px)}
+    .on .mchip{background:var(--orange);color:var(--black);font-size:clamp(7.5px,2.05vw,11px);
+           padding:clamp(8px,2.4vw,11px) clamp(5px,2vw,15px) clamp(9px,2.6vw,12px)}
+  }
+
+  main{position:relative;z-index:1}
+  /* the hero folds; it is never unmounted */
+  .fold{display:grid;grid-template-rows:1fr;opacity:1;overflow:hidden;
+        transition:grid-template-rows .34s var(--ease), opacity .26s var(--ease)}
+  .fold.shut{grid-template-rows:0fr;opacity:0}
+  .fold > div{min-height:0;min-width:0}
+  .hero{max-width:980px;margin:0 auto;padding:clamp(28px,4vw,46px) clamp(24px,7vw,76px) 0;text-align:center}
+  .hero h1{margin:0 auto;max-width:16em;font:400 clamp(27px,3.8vw,40px)/1.12 'Beth Ellen',cursive;color:var(--orange)}
+  .hero p{margin:11px auto 0;max-width:50ch;font-size:14px;line-height:1.66}
+  .figure{height:170px;margin:24px auto 0;max-width:300px;
+          background:repeating-linear-gradient(-45deg,rgba(233,98,45,.5) 0 2px,transparent 2px 9px)}
+  .count{max-width:980px;margin:0 auto;padding:clamp(20px,2.8vw,32px) clamp(24px,7vw,76px) 0}
+  .count p{margin:0;font-size:10px;letter-spacing:.2em}
+  .list{max-width:980px;margin:0 auto;padding:clamp(14px,2vw,20px) clamp(24px,7vw,76px) 60px}
+  .day{padding:clamp(22px,3vw,32px) 0 clamp(14px,2vw,20px)}
+  .rule{display:block;width:100%;height:5px;overflow:visible;margin:0 0 clamp(22px,3vw,30px)}
+  .rule path{fill:none;stroke:rgba(233,231,194,.5);stroke-width:1.3;stroke-linecap:round;
+        vector-effect:non-scaling-stroke}
+  .day .date{margin:0;font-size:10px;letter-spacing:.2em}
+  .day h2{margin:2px 0 16px;font:400 clamp(22px,2.6vw,30px)/1.1 'Beth Ellen',cursive;color:var(--beige)}
+  .card{max-width:440px;margin:0 0 12px;padding:20px 26px 22px;background:var(--beige);color:var(--ink)}
+  .card b{display:block;font-size:11px;letter-spacing:.14em;color:#F9621B}
+  .card span{display:block;margin-top:6px;font-weight:700;font-size:14px}
+  .hint{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:70;margin:0;
+        white-space:nowrap;font-size:11px;letter-spacing:.08em;opacity:.75}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<clipPath id="pb0" clipPathUnits="objectBoundingBox"><path d="M 0.098 0.988 C 0.324 1.002 0.556 0.974 0.774 0.990 C 0.892 0.998 0.974 0.956 0.984 0.864 C 0.994 0.778 0.982 0.622 0.988 0.478 C 0.994 0.332 1.000 0.152 0.962 0.082 C 0.930 0.022 0.796 0.022 0.586 0.010 C 0.376 -0.002 0.148 0.008 0.054 0.038 C 0.008 0.052 0.002 0.204 0.008 0.400 C 0.014 0.596 0.000 0.818 0.028 0.906 C 0.046 0.972 0.066 0.980 0.098 0.988 Z"></path></clipPath>
+<clipPath id="pb1" clipPathUnits="objectBoundingBox"><path d="M 0.895 0.986 C 0.680 1.000 0.440 0.976 0.240 0.992 C 0.120 1.002 0.032 0.954 0.018 0.870 C 0.004 0.788 0.016 0.620 0.010 0.480 C 0.004 0.336 -0.004 0.158 0.034 0.084 C 0.066 0.020 0.210 0.024 0.420 0.012 C 0.628 0.000 0.850 0.006 0.948 0.040 C 0.994 0.056 0.996 0.210 0.990 0.404 C 0.984 0.596 1.004 0.810 0.974 0.902 C 0.952 0.970 0.938 0.976 0.895 0.986 Z"></path></clipPath>
+<clipPath id="pb2" clipPathUnits="objectBoundingBox"><path d="M 0.922 0.980 C 0.700 0.994 0.420 0.980 0.188 0.994 C 0.074 1.002 0.024 0.938 0.014 0.848 C 0.004 0.760 0.018 0.608 0.012 0.472 C 0.006 0.332 0.006 0.174 0.048 0.094 C 0.082 0.028 0.230 0.034 0.434 0.020 C 0.640 0.006 0.860 0.014 0.954 0.054 C 0.996 0.072 0.992 0.218 0.986 0.412 C 0.980 0.606 1.000 0.836 0.966 0.916 C 0.944 0.968 0.952 0.970 0.922 0.980 Z"></path></clipPath>
+<clipPath id="pb3" clipPathUnits="objectBoundingBox"><path d="M 0.888 0.992 C 0.664 1.004 0.452 0.970 0.214 0.986 C 0.098 0.994 0.020 0.962 0.012 0.874 C 0.004 0.792 0.020 0.628 0.014 0.484 C 0.008 0.328 -0.006 0.144 0.040 0.078 C 0.074 0.028 0.196 0.018 0.406 0.008 C 0.616 -0.002 0.844 0.010 0.942 0.034 C 0.990 0.046 0.998 0.196 0.992 0.394 C 0.986 0.592 0.998 0.824 0.970 0.910 C 0.956 0.974 0.930 0.982 0.888 0.992 Z"></path></clipPath>
+<clipPath id="pb4" clipPathUnits="objectBoundingBox"><path d="M 0.914 0.984 C 0.690 0.998 0.430 0.972 0.200 0.990 C 0.082 1.000 0.028 0.946 0.016 0.858 C 0.004 0.772 0.014 0.614 0.010 0.476 C 0.006 0.334 0.002 0.166 0.042 0.090 C 0.074 0.024 0.220 0.030 0.428 0.016 C 0.634 0.002 0.854 0.010 0.950 0.046 C 0.994 0.062 0.994 0.214 0.988 0.408 C 0.982 0.602 1.002 0.828 0.970 0.910 C 0.948 0.970 0.944 0.974 0.914 0.984 Z"></path></clipPath>
+<clipPath id="pb5" clipPathUnits="objectBoundingBox"><path d="M 0.902 0.988 C 0.676 1.002 0.444 0.974 0.226 0.990 C 0.108 0.998 0.026 0.956 0.016 0.864 C 0.006 0.778 0.018 0.622 0.012 0.478 C 0.006 0.332 0.000 0.152 0.038 0.082 C 0.070 0.022 0.204 0.022 0.414 0.010 C 0.624 -0.002 0.852 0.008 0.946 0.038 C 0.992 0.052 0.998 0.204 0.992 0.400 C 0.986 0.596 1.000 0.818 0.972 0.906 C 0.954 0.972 0.934 0.980 0.902 0.988 Z"></path></clipPath>
+</defs></svg>
+
+<header id="hdr">
+  <div class="shield"></div>
+  <div class="navrow">
+    <span class="brand">SIARGAO<br>FOOD &amp; WINE<br>FESTIVAL</span>
+    <nav class="links"><a href="#">Home</a><a href="#" aria-current="page">Program</a><a href="#">Press</a></nav>
+    <span></span>
+  </div>
+  <div class="railwrap"><div class="rail" id="rail"></div></div>
+  <div class="mrail" id="mrail"></div>
+</header>
+
+<main id="main">
+  <div class="fold" id="heroFold"><div>
+    <section class="hero">
+      <h1>the six-day journey</h1>
+      <p>Tap any gathering to see who is cooking and how to get in. Every reservation is made with the venue itself.</p>
+      <div class="figure" aria-hidden="true"></div>
+    </section>
+  </div></div>
+
+  <div id="anchor" aria-hidden="true"></div>
+
+  <div class="fold" id="countFold"><div>
+    <section class="count"><p class="mono" id="count">16 GATHERINGS · SIX DAYS</p></section>
+  </div></div>
+
+  <section class="list" id="list"></section>
+</main>
+
+<p class="hint mono" id="hint">pick a day · then pull down at the top to bring the week back</p>
+
+<script>
+const RULE = 'M2 3.8 C 108 1.1 216 5.2 300 2.9 C 392 0.6 500 4.9 598 2.4';
+const CHIPS = [
+  {
+    "key": "all",
+    "date": "ALL SIX DAYS",
+    "short": "ALL",
+    "name": ""
+  },
+  {
+    "key": 0,
+    "date": "WED 26",
+    "short": "WE 26",
+    "name": "gala opening"
+  },
+  {
+    "key": 1,
+    "date": "THU 27",
+    "short": "TH 27",
+    "name": "ocean day"
+  },
+  {
+    "key": 2,
+    "date": "FRI 28",
+    "short": "FR 28",
+    "name": "coconut day"
+  },
+  {
+    "key": 3,
+    "date": "SAT 29",
+    "short": "SA 29",
+    "name": "producer day"
+  },
+  {
+    "key": 4,
+    "date": "SUN 30",
+    "short": "SU 30",
+    "name": "community day"
+  },
+  {
+    "key": 5,
+    "date": "MON 31",
+    "short": "MO 31",
+    "name": "closing celebration"
+  }
+];
+const DAYS = [
+  { date: 'AUG 26', name: 'gala opening', events: [['WILD', 'Ani sang Siargao opening celebration']] },
+  { date: 'AUG 27', name: 'ocean day', events: [['SIARGAO CORNER CAFÉ', 'Brewed by the Pioneers'], ['GL PUBLIC MARKET', 'Wet market experience by Roots'], ['ALMA', 'Alma × CMD Supper Club tasting menu']] },
+  { date: 'AUG 28', name: 'coconut day', events: [['LUNARES CAFÉ', 'Brewed by the Pioneers'], ['LYMA', 'Chef Jarrod Moore × Lyma dinner']] },
+  { date: 'AUG 29', name: 'producer day', events: [['SAGANA', 'Producers\u2019 long table']] },
+  { date: 'AUG 30', name: 'community day', events: [['LOKAL HUB', 'Meet the Changemakers']] },
+  { date: 'AUG 31', name: 'closing celebration', events: [['WILD', 'Closing party']] },
+];
+const PICK_GAP = 10;
+
+const hdr = document.getElementById('hdr');
+const main = document.getElementById('main');
+const anchor = document.getElementById('anchor');
+const heroFold = document.getElementById('heroFold');
+const countFold = document.getElementById('countFold');
+
+let day = 'all', heroPeek = false, pickAt = 0, lastY = 0, railT = null;
+
+/* ---------- chips ---------- */
+function chipSvg(pathD) {
+  return '<svg class="ring" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true">'
+    + '<path d="' + pathD + '"></path></svg>';
+}
+const BLOBS = [
+  'M 0.098 0.988 C 0.324 1.002 0.556 0.974 0.774 0.990 C 0.892 0.998 0.974 0.956 0.984 0.864 C 0.994 0.778 0.982 0.622 0.988 0.478 C 0.994 0.332 1.000 0.152 0.962 0.082 C 0.930 0.022 0.796 0.022 0.586 0.010 C 0.376 -0.002 0.148 0.008 0.054 0.038 C 0.008 0.052 0.002 0.204 0.008 0.400 C 0.014 0.596 0.000 0.818 0.028 0.906 C 0.046 0.972 0.066 0.980 0.098 0.988 Z',
+  'M 0.895 0.986 C 0.680 1.000 0.440 0.976 0.240 0.992 C 0.120 1.002 0.032 0.954 0.018 0.870 C 0.004 0.788 0.016 0.620 0.010 0.480 C 0.004 0.336 -0.004 0.158 0.034 0.084 C 0.066 0.020 0.210 0.024 0.420 0.012 C 0.628 0.000 0.850 0.006 0.948 0.040 C 0.994 0.056 0.996 0.210 0.990 0.404 C 0.984 0.596 1.004 0.810 0.974 0.902 C 0.952 0.970 0.938 0.976 0.895 0.986 Z',
+  'M 0.922 0.980 C 0.700 0.994 0.420 0.980 0.188 0.994 C 0.074 1.002 0.024 0.938 0.014 0.848 C 0.004 0.760 0.018 0.608 0.012 0.472 C 0.006 0.332 0.006 0.174 0.048 0.094 C 0.082 0.028 0.230 0.034 0.434 0.020 C 0.640 0.006 0.860 0.014 0.954 0.054 C 0.996 0.072 0.992 0.218 0.986 0.412 C 0.980 0.606 1.000 0.836 0.966 0.916 C 0.944 0.968 0.952 0.970 0.922 0.980 Z',
+  'M 0.888 0.992 C 0.664 1.004 0.452 0.970 0.214 0.986 C 0.098 0.994 0.020 0.962 0.012 0.874 C 0.004 0.792 0.020 0.628 0.014 0.484 C 0.008 0.328 -0.006 0.144 0.040 0.078 C 0.074 0.028 0.196 0.018 0.406 0.008 C 0.616 -0.002 0.844 0.010 0.942 0.034 C 0.990 0.046 0.998 0.196 0.992 0.394 C 0.986 0.592 0.998 0.824 0.970 0.910 C 0.956 0.974 0.930 0.982 0.888 0.992 Z',
+  'M 0.914 0.984 C 0.690 0.998 0.430 0.972 0.200 0.990 C 0.082 1.000 0.028 0.946 0.016 0.858 C 0.004 0.772 0.014 0.614 0.010 0.476 C 0.006 0.334 0.002 0.166 0.042 0.090 C 0.074 0.024 0.220 0.030 0.428 0.016 C 0.634 0.002 0.854 0.010 0.950 0.046 C 0.994 0.062 0.994 0.214 0.988 0.408 C 0.982 0.602 1.002 0.828 0.970 0.910 C 0.948 0.970 0.944 0.974 0.914 0.984 Z',
+  'M 0.902 0.988 C 0.676 1.002 0.444 0.974 0.226 0.990 C 0.108 0.998 0.026 0.956 0.016 0.864 C 0.006 0.778 0.018 0.622 0.012 0.478 C 0.006 0.332 0.000 0.152 0.038 0.082 C 0.070 0.022 0.204 0.022 0.414 0.010 C 0.624 -0.002 0.852 0.008 0.946 0.038 C 0.992 0.052 0.998 0.204 0.992 0.400 C 0.986 0.596 1.000 0.818 0.972 0.906 C 0.954 0.972 0.934 0.980 0.902 0.988 Z',
+];
+
+function buildChips() {
+  const rail = document.getElementById('rail'), mrail = document.getElementById('mrail');
+  rail.innerHTML = ''; mrail.innerHTML = '';
+  CHIPS.forEach((c, i) => {
+    const clip = 'url(#pb' + (i % 6) + ')';
+    const on = String(c.key) === String(day);
+
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = (on ? 'on ' : '') + (c.key === 'all' ? 'summary' : '');
+    b.innerHTML = '<span class="chip" style="clip-path:' + clip + '">'
+      + '<span class="d mono">' + c.date + '</span>'
+      + (c.name ? '<span class="n">' + c.name + '</span>' : '')
+      + chipSvg(BLOBS[i % 6]) + '</span>';
+    b.addEventListener('click', () => pick(c.key));
+    rail.appendChild(b);
+
+    const m = document.createElement('button');
+    m.type = 'button';
+    m.className = on ? 'on' : '';
+    m.innerHTML = '<span class="mchip mono" style="clip-path:' + clip + '">' + c.short
+      + chipSvg(BLOBS[i % 6]) + '</span>';
+    m.addEventListener('click', () => pick(c.key));
+    mrail.appendChild(m);
+  });
+}
+
+/* ---------- list ---------- */
+function buildList() {
+  const shown = day === 'all' ? DAYS : [DAYS[day]];
+  document.getElementById('count').textContent = day === 'all'
+    ? DAYS.reduce((n, d) => n + d.events.length, 0) + ' GATHERINGS · SIX DAYS'
+    : DAYS[day].date;
+  document.getElementById('list').innerHTML = shown.map(d =>
+    '<div class="day"><svg class="rule" viewBox="0 0 600 6" preserveAspectRatio="none" aria-hidden="true">'
+    + '<path d="' + RULE.replace(/398/g, '598') + '"></path></svg>'
+    + '<p class="date mono">' + d.date + '</p><h2>' + d.name + '</h2>'
+    + d.events.map(e => '<div class="card"><b class="mono">' + e[0] + '</b><span>' + e[1] + '</span></div>').join('')
+    + '</div>').join('');
+}
+
+/* ---------- the fold + the landing ---------- */
+function syncFold() {
+  const open = day === 'all' || heroPeek;
+  heroFold.classList.toggle('shut', !open);
+  countFold.classList.toggle('shut', !open);
+}
+
+/* twice: the target moves while the hero collapses, and the second pass is what makes a
+ * one-event day land where a four-event day lands */
+function land() {
+  const go = () => {
+    const band = hdr.getBoundingClientRect().height + PICK_GAP;
+    const target = Math.max(0, anchor.getBoundingClientRect().top + window.scrollY - band);
+    if (Math.abs(window.scrollY - target) > 2) window.scrollTo({ top: target, behavior: 'smooth' });
+  };
+  go();
+  clearTimeout(railT);
+  railT = setTimeout(go, 380);
+}
+
+function pick(key) {
+  day = key; heroPeek = false; pickAt = Date.now(); lastY = window.scrollY;
+  buildChips(); buildList(); syncFold(); applyFade();
+  land();
+}
+
+/* ---------- the mask ---------- */
+function applyFade() {
+  const top = main.getBoundingClientRect().top;
+  const band = Math.round(hdr.getBoundingClientRect().height);
+  const g = 'linear-gradient(to bottom, rgba(0,0,0,0) ' + (-top) + 'px,'
+          + ' rgba(0,0,0,0) ' + (-top + band) + 'px,'
+          + ' #000 ' + (-top + band + 26) + 'px)';
+  main.style.maskImage = g;
+  main.style.webkitMaskImage = g;
+}
+
+let queued = false;
+addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (day !== 'all' && heroPeek && Date.now() - pickAt > 450 && y > 40 && y > lastY + 6) {
+    heroPeek = false; syncFold();
+  }
+  lastY = y;
+  if (queued) return;
+  queued = true;
+  requestAnimationFrame(() => { queued = false; applyFade(); });
+}, { passive: true });
+addEventListener('resize', applyFade);
+
+/* ---------- pull at the top to bring the week back ---------- */
+function peek() {
+  if (day === 'all' || heroPeek) return;
+  if (window.scrollY > 2 || Date.now() - pickAt < 450) return;
+  heroPeek = true; syncFold();
+}
+let touchY = 0;
+addEventListener('wheel', e => { if (e.deltaY < -10) peek(); }, { passive: true });
+addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive: true });
+addEventListener('touchmove', e => { if (e.touches[0].clientY - touchY > 26) peek(); }, { passive: true });
+
+buildChips(); buildList(); syncFold(); applyFade();
+</script>
+</body>
+</html>

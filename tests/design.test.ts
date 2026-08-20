@@ -239,11 +239,16 @@ describe("surfaces", () => {
 
   it("lays no gradient over the violet", () => {
     // Phase 2 introduces gradients, so this can no longer be "none anywhere" — but each one
-    // is a decision, and an undocumented fourth is the way a wash ends up on the dye. The
-    // three that exist: the media-kit hatching inside a beige card, the nav fade mask
-    // (which paints no colour at all — it removes the content's own alpha), and the film
-    // caption scrim on top of a photograph.
-    const ALLOWED = ["app/globals.css", "lib/chrome/useFadeMask.ts"];
+    // is a decision, and an undocumented fifth is the way a wash ends up on the dye. The
+    // four that exist: the media-kit hatching inside a beige card, the nav fade mask, the
+    // programme's own taller fade mask under its sticky day rail, and the film caption
+    // scrim on top of a photograph. Both masks paint no colour at all — they remove the
+    // content's own alpha, which is exactly what lets the dye through at full strength.
+    const ALLOWED = [
+      "app/globals.css",
+      "lib/chrome/useFadeMask.ts",
+      "lib/program/useProgramContentMask.ts",
+    ];
     const sheet = readFileSync(new URL("../src/app/globals.css", import.meta.url), "utf8");
     for (const [path, text] of page) {
       if (!/gradient/i.test(text)) continue;

@@ -21,7 +21,10 @@ export function Chrome({ children }: { readonly children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const main = useRef<HTMLElement>(null);
   const route = routeOf(usePathname());
-  useFadeMask(main);
+  /* Every route but one takes the nav-height mask. The programme's day rail is sticky chrome
+     that lives inside <main>, so this mask's ramp would fall across the top of its own chips —
+     that page measures its own band around the rail instead. See `useFadeMask`. */
+  useFadeMask(main, route !== "/program");
 
   const close = useCallback(() => setMenuOpen(false), []);
 

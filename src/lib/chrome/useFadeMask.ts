@@ -21,11 +21,25 @@ const RAMP = 26;
  * Written straight to the node on a rAF-throttled scroll listener. This recomputes on every
  * frame of every scroll; routing it through React state would re-render the whole page each
  * time to change one string.
+ *
+ * `enabled` exists for the one page that cannot use this band. A mask clips every descendant,
+ * so a page whose sticky chrome is taller than the nav — the programme's day rail sits *under*
+ * it, inside <main> — gets the top of that chrome eaten by this 56px ramp. Such a page stands
+ * this one down and masks its own regions around the rail instead. Anything left masked here
+ * would be a second gradient over the same pixels, recomputed on the same frames.
  */
-export function useFadeMask(ref: RefObject<HTMLElement | null>) {
+export function useFadeMask(ref: RefObject<HTMLElement | null>, enabled = true) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    /* Hand the element back exactly as it was found: a page that owns its own mask must not
+       inherit a half-applied one from the last route. */
+    if (!enabled) {
+      el.style.maskImage = "";
+      el.style.webkitMaskImage = "";
+      return;
+    }
 
     /* Honour the reader's setting by simply never masking: the effect exists to keep copy
        off the wordmark, and at rest there is nothing to keep off it. */
@@ -57,5 +71,5 @@ export function useFadeMask(ref: RefObject<HTMLElement | null>) {
       window.removeEventListener("resize", onScroll);
       still.removeEventListener("change", paint);
     };
-  }, [ref]);
+  }, [ref, enabled]);
 }

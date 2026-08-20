@@ -1,8 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import { useLayoutEffect, useState, type RefObject } from "react";
+import { Ring } from "@/components/ui/Ring";
 import { DAYS } from "@/content/events";
+import { foldInner, foldStyle } from "@/lib/program/heroFold";
 import { soft } from "@/lib/design/shapes";
+import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 
 export type DayPick = "all" | number;
 
@@ -13,121 +17,232 @@ interface Tab {
   readonly name: string;
 }
 
+/** `WED 26` → `WE 26` — the weekday cut to two letters, which is what makes seven chips fit
+ * a 320px phone. */
+const shortDate = (weekday: string): string => weekday.replace(/^(\w{2})\w/, "$1");
+
 const TABS: readonly Tab[] = [
-  { key: "all", date: "ALL SIX DAYS", short: "ALL", name: "the whole week" },
+  { key: "all", date: "ALL SIX DAYS", short: "ALL", name: "" },
   ...DAYS.map((day, i) => ({
     key: i as DayPick,
     date: day.weekday,
-    /* THUR reads as a weekday at a glance where THU reads as a typo. */
-    short: day.weekday.replace("THU ", "THUR "),
+    short: shortDate(day.weekday),
     name: day.name,
   })),
 ];
 
 /**
- * Seven controls above the programme. Nothing about them moves: the active chip swaps
- * instantly and an unselected one only eases its opacity on hover. A filter that animates
- * is a filter you have to wait for.
+ * The farmer illustration above the desktop rail — the hero's own decorative flourish, folded
+ * away with the headline and intro line. Kept separate from `DayFilter` below because the two
+ * pieces need different DOM homes: this stays inside the hero section's normal flow, while the
+ * rail has to sit *outside* it — see `DayFilter`'s own note.
+ */
+export function DayFilterIllustration({ heroOpen }: { readonly heroOpen: boolean }) {
+  const reduced = usePrefersReducedMotion();
+
+  return (
+    <div className="hidden wide:block" style={foldStyle(heroOpen, reduced)}>
+      <div style={foldInner}>
+        <Image
+          src="/doodles/orange/farmer.png"
+          alt=""
+          width={2548}
+          height={1453}
+          style={{
+            width: "min(56%,300px)",
+            height: "auto",
+            margin: "clamp(34px,4.4vw,54px) auto clamp(10px,1.6vw,18px)",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The day rail: seven filled, hand-cut chips that never wrap and never scroll. It sticks
+ * directly under the nav band once the page scrolls past the hero — its own height is
+ * measured live (`navHeight`) rather than assumed, since the nav's rendered height changes
+ * across the site's one breakpoint. `useProgramContentMask` measures this same element to
+ * know how much content to hide passing underneath it.
  *
- * The two rows are the same seven buttons in two shapes, switched in CSS rather than off a
- * measured viewport width — so the first paint is already right and there is no resize
- * listener holding layout hostage. `display: none` takes the hidden row out of the
- * accessibility tree with it.
+ * Rendered as a sibling of the page's sections, not nested inside the (short) hero one: a
+ * sticky element can only stay pinned for as long as its own parent still has height left to
+ * scroll through, and the hero section alone is nowhere near tall enough to hold the rail
+ * stuck for the rest of the page. This is also how the reference prototype is built — its
+ * header sits outside `<main>`, a sibling to all the scrolling content, not inside the hero.
+ *
+ * Two layouts, one behaviour: desktop chips carry the date over the day's script name;
+ * mobile chips carry the date alone. The switch is the site's one breakpoint, not a resize
+ * listener — every dimension that affects a chip's *width* (font, padding, gap) is a vw
+ * clamp instead, so the row shrinks to fit rather than wrapping or scrolling.
+ *
+ * The picked chip is orange with near-black ink; every other chip is cream, and only those
+ * darken their ink on hover — done here with a scoped `<style>` rather than a shared class,
+ * since nothing else on the site needs this exact rule.
  */
 export function DayFilter({
   pick,
   onPick,
+  railRef,
 }: {
   readonly pick: DayPick;
   readonly onPick: (day: DayPick) => void;
+  readonly railRef: RefObject<HTMLDivElement | null>;
 }) {
+  const [navHeight, setNavHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    const header = document.querySelector("header");
+    if (!header) return;
+    const measure = () => setNavHeight(header.getBoundingClientRect().height);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(header);
+    return () => ro.disconnect();
+  }, []);
+
   return (
     <>
-      <Image
-        src="/doodles/orange/farmer.png"
-        alt=""
-        width={2548}
-        height={1453}
-        className="hidden wide:block"
-        style={{
-          width: "min(56%,300px)",
-          height: "auto",
-          margin: "clamp(34px,4.4vw,54px) auto clamp(10px,1.6vw,18px)",
-        }}
-      />
+      <style>{`
+        @media (hover: hover) {
+          .day-chip:hover .day-chip-d { color: var(--orange-on-light); }
+          .day-chip:hover .day-chip-n { color: var(--button-ink); }
+          .day-chip-m:hover { color: var(--orange-on-light); }
+        }
+      `}</style>
 
-      {/* Seven chips on one line that never wraps. The rail is what stops them overflowing
-          the section on a narrow desktop — it scrolls instead, with no visible bar. Its
-          −6px margin is cancelled by the row's own 6px padding, so the first chip still
-          lines up with the day headings below while its hand-cut edge can overhang. */}
-      <div className="rail hidden wide:block" style={{ margin: "0 -6px" }}>
+      {/* The sticky rail. `pointer-events:none` on the wrapper plus a transparent shield
+          covering it keeps a click near the bar off a card sliding underneath once the rail
+          is pinned; the rail's own buttons re-enable pointer events for themselves. The
+          column framing (`--sw`/`--gutter`) is reapplied here on an inner wrapper, matching
+          the nav band's own pattern, since this no longer inherits it from a parent section. */}
+      <div ref={railRef} style={{ position: "sticky", top: navHeight, zIndex: 60, pointerEvents: "none" }}>
         <div
+          aria-hidden="true"
+          style={{ position: "absolute", inset: 0, background: "transparent", pointerEvents: "auto" }}
+        />
+
+        {/* Desktop: two-line chips. Framed exactly like the nav band's own content column,
+            so the rail lines up with it at every width. */}
+        <div className="hidden wide:block" style={{ position: "relative", pointerEvents: "auto", maxWidth: "var(--sw)", margin: "0 auto", padding: "0 var(--gutter)" }}>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "nowrap",
+              alignItems: "stretch",
+              justifyContent: "center",
+              gap: "clamp(3px,0.5vw,6px)",
+              padding: "16px 0 11px",
+            }}
+          >
+            {TABS.map((tab, i) => {
+              const on = pick === tab.key;
+              return (
+                <button
+                  key={String(tab.key)}
+                  type="button"
+                  onClick={() => onPick(tab.key)}
+                  aria-pressed={on}
+                  className={on ? undefined : "day-chip"}
+                  style={{ flex: "none", display: "flex", padding: 0, background: "transparent", border: 0, cursor: "pointer", textAlign: "center" }}
+                >
+                  <span
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      boxSizing: "border-box",
+                      width: "100%",
+                      background: on ? "var(--orange)" : "var(--beige)",
+                      padding: on ? "6px clamp(6px,1vw,13px) 8px" : "6px clamp(5px,0.8vw,10px) 8px",
+                      clipPath: soft(i),
+                    }}
+                  >
+                    <span
+                      className="mono day-chip-d"
+                      style={{
+                        fontSize: tab.key === "all" ? "clamp(9.5px,1vw,12px)" : "clamp(7.4px,0.78vw,8.5px)",
+                        letterSpacing: "clamp(.06em,0.09vw,.14em)",
+                        whiteSpace: "nowrap",
+                        color: on ? "var(--button-ink)" : "var(--ink-body)",
+                        transition: "color var(--hover)",
+                      }}
+                    >
+                      {tab.date}
+                    </span>
+                    {tab.name && (
+                      <span
+                        className="day-chip-n"
+                        style={{
+                          marginTop: 1,
+                          font: "400 clamp(11.5px,1.1vw,15px)/1.1 var(--font-display)",
+                          whiteSpace: "nowrap",
+                          color: on ? "var(--button-ink)" : "var(--ink-title)",
+                          transition: "color var(--hover)",
+                        }}
+                      >
+                        {tab.name}
+                      </span>
+                    )}
+                    <Ring shapeIndex={i} weight="calc(var(--bubble-edge) / 2)" />
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Mobile: one line, dates only, two-letter weekdays, 44px touch targets. */}
+        <div
+          className="flex wide:hidden"
           style={{
-            display: "flex",
+            position: "relative",
+            pointerEvents: "auto",
             flexWrap: "nowrap",
-            alignItems: "flex-end",
-            gap: 4,
-            padding: "44px 6px",
-            justifyContent: "space-between",
+            justifyContent: "center",
+            gap: "clamp(2px,0.9vw,7px)",
+            maxWidth: "var(--sw)",
+            margin: "0 auto",
+            padding: "16px var(--gutter) 11px",
           }}
         >
-          {TABS.map((tab, i) => (
-            <button
-              key={String(tab.key)}
-              type="button"
-              onClick={() => onPick(tab.key)}
-              aria-pressed={pick === tab.key}
-              style={{ flex: "none", padding: 0, background: "transparent", border: 0, cursor: "pointer", textAlign: "center" }}
-            >
-              {pick === tab.key ? (
-                <span style={{ display: "block", background: "var(--beige)", clipPath: soft(i), padding: "9px 16px 11px" }}>
-                  <span className="mono" style={{ display: "block", fontSize: 12, letterSpacing: ".14em", color: "var(--orange-on-light)" }}>
-                    {tab.date}
-                  </span>
-                  <span style={{ display: "block", marginTop: 1, font: "400 clamp(15px,0.5vw + 11.8px,18px)/1.1 var(--font-display)", color: "var(--ink-title)", whiteSpace: "nowrap" }}>
-                    {tab.name}
-                  </span>
+          {TABS.map((tab, i) => {
+            const on = pick === tab.key;
+            return (
+              <button
+                key={String(tab.key)}
+                type="button"
+                onClick={() => onPick(tab.key)}
+                aria-pressed={on}
+                style={{ flex: "none", display: "flex", alignItems: "center", minHeight: 44, padding: 0, background: "transparent", border: 0, cursor: "pointer" }}
+              >
+                <span
+                  className={"mono" + (on ? "" : " day-chip-m")}
+                  style={{
+                    position: "relative",
+                    display: "block",
+                    boxSizing: "border-box",
+                    background: on ? "var(--orange)" : "var(--beige)",
+                    color: on ? "var(--button-ink)" : "var(--ink-body)",
+                    fontSize: on ? "clamp(7.5px,2.05vw,11px)" : "clamp(7.5px,2vw,10.5px)",
+                    letterSpacing: "clamp(.01em,0.16vw,.1em)",
+                    whiteSpace: "nowrap",
+                    padding: on
+                      ? "clamp(8px,2.4vw,11px) clamp(5px,2vw,15px) clamp(9px,2.6vw,12px)"
+                      : "clamp(8px,2.4vw,11px) clamp(4px,1.9vw,14px) clamp(9px,2.6vw,12px)",
+                    clipPath: soft(i),
+                    transition: "color var(--hover)",
+                  }}
+                >
+                  {tab.short}
+                  <Ring shapeIndex={i} weight="calc(var(--bubble-edge) / 2)" />
                 </span>
-              ) : (
-                <span className="day-chip-off" style={{ display: "block", padding: "9px 12px 11px", opacity: 0.7, transition: "opacity var(--hover)" }}>
-                  <span className="mono" style={{ display: "block", fontSize: 12, letterSpacing: ".14em", color: "var(--beige)" }}>
-                    {tab.date}
-                  </span>
-                  <span style={{ display: "block", marginTop: 1, font: "400 clamp(15px,0.5vw + 11.8px,18px)/1.1 var(--font-display)", color: "var(--beige)", whiteSpace: "nowrap" }}>
-                    {tab.name}
-                  </span>
-                </span>
-              )}
-            </button>
-          ))}
+              </button>
+            );
+          })}
         </div>
-      </div>
-
-      {/* Below 860px the chips carry dates only — one line, no script, so the row reads as
-          a control rather than a second block of headline. */}
-      <div
-        className="flex wide:hidden"
-        style={{ flexWrap: "wrap", gap: 6, marginTop: "clamp(28px,4vw,40px)" }}
-      >
-        {TABS.map((tab, i) => (
-          <button
-            key={String(tab.key)}
-            type="button"
-            onClick={() => onPick(tab.key)}
-            aria-pressed={pick === tab.key}
-            style={{ flex: "none", padding: 0, background: "transparent", border: 0, cursor: "pointer" }}
-          >
-            {pick === tab.key ? (
-              <span className="mono" style={{ display: "block", padding: "8px 13px 9px", clipPath: soft(i), background: "var(--orange)", fontSize: 12, letterSpacing: ".1em", color: "var(--beige)" }}>
-                {tab.short}
-              </span>
-            ) : (
-              <span className="mono day-chip-off" style={{ display: "block", margin: "1px 0", padding: "6px 11px 7px", clipPath: soft(i), background: "var(--chip-well)", fontSize: 11.5, letterSpacing: ".1em", color: "var(--beige)", opacity: 0.72, transition: "opacity var(--hover)" }}>
-                {tab.short}
-              </span>
-            )}
-          </button>
-        ))}
       </div>
     </>
   );

@@ -19,10 +19,24 @@ const TOP = { ...FRAME, padding: "var(--page-top) var(--gutter) 0" } as const;
 const HEADING = "400 clamp(24px,3.4vw,32px)/1.2 var(--font-display)";
 const PROSE = "400 clamp(14.5px,0.5vw + 13.1px,16px)/1.7 var(--font-body)";
 
-/* The two the prototype places here: the long table at dusk, and the lights in the palms. */
+/* The two the prototype places here: the long table at dusk, and the lights in the palms.
+ *
+ * Only the second survives on a phone. The grid below holds two 260px tracks down to a 582px
+ * viewport (260 + a 14px gap + 260 against `--sw` less two gutters); under that it collapses
+ * to one column and the pair stops being a spread — it becomes two full-width photographs
+ * stacked, which is a third of a screen of scrolling to say what one of them already says.
+ *
+ * `display` has to come from the class rather than the style object below: an inline
+ * `display: block` beats the breakpoint utility, and the photograph stays up at every width.
+ * The nav band's burger had the same bug. */
 const SPREAD = [
-  { photo: PHOTOS[2]!, alt: "The long communal table at dusk", shape: 0 },
-  { photo: PHOTOS[3]!, alt: "String lights strung between the palms", shape: 1 },
+  {
+    photo: PHOTOS[2]!,
+    alt: "The long communal table at dusk",
+    shape: 0,
+    className: "hidden min-[582px]:block",
+  },
+  { photo: PHOTOS[3]!, alt: "String lights strung between the palms", shape: 1, className: "block" },
 ];
 
 /**
@@ -88,7 +102,7 @@ export function PressSection() {
             gap: "clamp(14px,2.2vw,24px)",
           }}
         >
-          {SPREAD.map(({ photo, alt, shape }) => (
+          {SPREAD.map(({ photo, alt, shape, className }) => (
             <Image
               key={photo.src}
               src={photo.src}
@@ -96,8 +110,8 @@ export function PressSection() {
               width={photo.width}
               height={photo.height}
               loading="lazy"
+              className={className}
               style={{
-                display: "block",
                 width: "100%",
                 height: "auto",
                 aspectRatio: "2 / 1",
