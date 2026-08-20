@@ -46,24 +46,12 @@ export function useFadeMask(ref: RefObject<HTMLElement | null>, enabled = true) 
     const still = window.matchMedia("(prefers-reduced-motion: reduce)");
     let queued = false;
 
-    /* The leading `#000` stop is the fail-safe, and it must never be removed.
-     *
-     * A gradient paints its first stop's colour everywhere above that stop, without limit.
-     * With transparent first, any paint made from a stale scroll offset — a route change the
-     * browser has not finished settling, a scroll this hook was never told about — pushes the
-     * stops far down the element and turns the entire viewport invisible over a background
-     * that stays: a blank page, curable only by the next repaint. That shipped, twice.
-     *
-     * The hard cut costs nothing when the paint is correct — everything above `-top` is above
-     * the viewport, off screen by definition — and converts every stale paint from "the page
-     * is blank" into "the top of the content is briefly unmasked", which the next scroll
-     * event repaints out. Wrong stays wrong for a frame; it no longer stays catastrophic. */
     const paint = () => {
       queued = false;
       const { top } = el.getBoundingClientRect();
       const mask = still.matches
         ? "none"
-        : `linear-gradient(to bottom,#000 ${-top}px,rgba(0,0,0,0) ${-top}px,rgba(0,0,0,0) ${-top + BAND}px,#000 ${-top + BAND + RAMP}px)`;
+        : `linear-gradient(to bottom,rgba(0,0,0,0) ${-top}px,rgba(0,0,0,0) ${-top + BAND}px,#000 ${-top + BAND + RAMP}px)`;
       el.style.maskImage = mask;
       el.style.webkitMaskImage = mask;
     };
