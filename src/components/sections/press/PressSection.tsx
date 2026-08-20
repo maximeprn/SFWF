@@ -1,8 +1,11 @@
 import Image from "next/image";
 import { COVERING, MEDIA_KIT } from "@/content/press";
 import { PHOTOS } from "@/content/photos";
+import { Ring } from "@/components/ui/Ring";
+import { Slab } from "@/components/ui/Slab";
 import { CONTACT_EMAIL } from "@/content/site";
 import { soft } from "@/lib/design/shapes";
+import type { StyleWithVars } from "@/lib/ui/cssVars";
 
 const FRAME = {
   maxWidth: "var(--sw)",
@@ -45,22 +48,31 @@ export function PressSection() {
 
         {/* A real address rather than a dead download. The folder does not exist yet and the
             line under this says what the mail is for, so the one control on the page still
-            does something when it is pressed. */}
-        <a
-          href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(MEDIA_KIT.subject)}`}
-          className="cta-in-bubble"
-          style={{
-            display: "inline-block",
-            marginTop: 16,
-            clipPath: soft(2),
-            padding: "12px 22px 14px",
-            background: "var(--orange)",
-            color: "var(--beige)",
-            font: "700 clamp(13px,0.3vw + 12.1px,14.5px)/1.2 var(--font-body)",
-          }}
-        >
-          {MEDIA_KIT.cta}
-        </a>
+            does something when it is pressed.
+
+            Orange fill, black ink, directly on the violet ground — the same ink every
+            primary button on the site already sets against orange, so this one reads as the
+            same kind of control rather than a bubble button stranded outside a bubble. Its
+            press target is cream rather than the bubble button's violet for the matching
+            reason: a bubble inverts to the ground because it can't invert to its own card,
+            but this button IS on the ground already, so that target is unavailable to it. */}
+        <Slab shapeIndex={2} style={{ display: "inline-block", marginTop: 16 }}>
+          <a
+            href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(MEDIA_KIT.subject)}`}
+            className="press-btn"
+            data-press="cream"
+            style={{
+              clipPath: soft(2),
+              padding: "12px 22px 14px",
+              "--btn-fill": "var(--orange)",
+              color: "var(--button-ink)",
+              font: "700 clamp(13px,0.3vw + 12.1px,14.5px)/1.2 var(--font-body)",
+            } as StyleWithVars}
+          >
+            {MEDIA_KIT.cta}
+            <Ring shapeIndex={2} weight="var(--button-edge)" />
+          </a>
+        </Slab>
         <p
           className="mono"
           style={{ margin: "9px 0 0", fontSize: 11, letterSpacing: ".14em", color: "var(--beige)" }}

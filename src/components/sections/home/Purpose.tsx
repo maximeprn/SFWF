@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { PURPOSE } from "@/content/home";
+import { Ring } from "@/components/ui/Ring";
+import { Slab } from "@/components/ui/Slab";
 import { soft } from "@/lib/design/shapes";
+import type { StyleWithVars } from "@/lib/ui/cssVars";
 
 const PROSE = "400 clamp(14.5px,0.5vw + 13.1px,16px)/1.7 var(--font-body)";
 
@@ -23,24 +26,24 @@ export function Purpose() {
       {/* This boundary is a button rather than a wave. It carries the air on both sides of
           itself exactly as a flourish does — `<air> auto`, two values, so the halves cannot
           drift — which is why the section still takes no top padding of its own. */}
-      <Link
-        href="/program"
-        className="cta"
-        style={{
-          display: "block",
-          width: "fit-content",
-          margin: "var(--flourish-air) auto",
-          clipPath: soft(4),
-          padding: "16px 32px 19px",
-          background: "var(--orange)",
-          color: "var(--button-ink)",
-          font: "700 15px/1 var(--font-button)",
-          letterSpacing: ".02em",
-          transition: "background var(--hover)",
-        }}
-      >
-        Celebrate with Us
-      </Link>
+      <Slab shapeIndex={4} style={{ display: "block", width: "fit-content", margin: "var(--flourish-air) auto" }}>
+        <Link
+          href="/program"
+          className="press-btn"
+          data-press="beige"
+          style={{
+            clipPath: soft(4),
+            padding: "16px 32px 19px",
+            "--btn-fill": "var(--orange)",
+            color: "var(--button-ink)",
+            font: "700 15px/1 var(--font-button)",
+            letterSpacing: ".02em",
+          } as StyleWithVars}
+        >
+          Celebrate with Us
+          <Ring shapeIndex={4} weight="var(--button-edge)" />
+        </Link>
+      </Slab>
       <div style={{ maxWidth: "min(80vw,820px)", margin: "0 auto", textAlign: "left" }}>
         {/* Beige, not orange — README §3's section-h2 row and the canonical prototype both.
             The orange script belongs to the hero and the sign-offs; here it would compete
@@ -131,27 +134,27 @@ export function Purpose() {
         >
           {PURPOSE.closing}
         </p>
-        <Link
-          href="/program"
-          className="cta"
-          /* The one centred thing in a left-aligned block. The column is prose and reads
-             from the left edge; the button is a control and belongs to the whole column
-             rather than to the last line of it. */
-          style={{
-            display: "block",
-            width: "fit-content",
-            margin: "clamp(26px,3.4vw,34px) auto 0",
-            clipPath: soft(5),
-            padding: "16px 32px 19px",
-            background: "var(--orange)",
-            color: "var(--button-ink)",
-            font: "700 15px/1 var(--font-button)",
-            letterSpacing: ".02em",
-            transition: "background var(--hover)",
-          }}
-        >
-          {PURPOSE.cta}
-        </Link>
+        {/* The one centred thing in a left-aligned block. The column is prose and reads
+            from the left edge; the button is a control and belongs to the whole column
+            rather than to the last line of it. */}
+        <Slab shapeIndex={5} style={{ display: "block", width: "fit-content", margin: "clamp(26px,3.4vw,34px) auto 0" }}>
+          <Link
+            href="/program"
+            className="press-btn"
+            data-press="beige"
+            style={{
+              clipPath: soft(5),
+              padding: "16px 32px 19px",
+              "--btn-fill": "var(--orange)",
+              color: "var(--button-ink)",
+              font: "700 15px/1 var(--font-button)",
+              letterSpacing: ".02em",
+            } as StyleWithVars}
+          >
+            {PURPOSE.cta}
+            <Ring shapeIndex={5} weight="var(--button-edge)" />
+          </Link>
+        </Slab>
       </div>
     </section>
   );

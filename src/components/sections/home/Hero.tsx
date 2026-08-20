@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { Mark } from "@/components/ui/Mark";
+import { Ring } from "@/components/ui/Ring";
+import { Slab } from "@/components/ui/Slab";
+import type { StyleWithVars } from "@/lib/ui/cssVars";
 import { WobbleTick } from "@/components/ui/Wobble";
 import { FESTIVAL_DATES, SITE } from "@/content/site";
 import { soft } from "@/lib/design/shapes";
@@ -112,23 +115,27 @@ export function Hero() {
             thing under the festival's own name and the orange is already spoken for by the
             headline directly above it — two oranges that close together read as one block
             of colour rather than as a headline and a control. */}
-        <Link
-          href="/program"
-          className="cta"
-          style={{
-            display: "inline-block",
-            marginTop: "clamp(42px,4.7vw,60px)",
-            clipPath: soft(1),
-            padding: "17px 36px 20px",
-            background: "var(--beige)",
-            color: "var(--button-ink)",
-            font: "700 16px/1 var(--font-button)",
-            letterSpacing: ".02em",
-            transition: "background var(--hover)",
-          }}
-        >
-          View the Program
-        </Link>
+        {/* Beige at rest and inverts to orange under press — the "light fill" case, since
+            the orange is already spoken for by the headline directly above it. See
+            `design_handoff_button_press/README.md`. */}
+        <Slab shapeIndex={1} style={{ display: "inline-block", marginTop: "clamp(42px,4.7vw,60px)" }}>
+          <Link
+            href="/program"
+            className="press-btn"
+            data-press="orange"
+            style={{
+              clipPath: soft(1),
+              padding: "17px 36px 20px",
+              "--btn-fill": "var(--beige)",
+              color: "var(--button-ink)",
+              font: "700 16px/1 var(--font-button)",
+              letterSpacing: ".02em",
+            } as StyleWithVars}
+          >
+            View the Program
+            <Ring shapeIndex={1} weight="var(--button-edge)" />
+          </Link>
+        </Slab>
       </div>
     </section>
   );

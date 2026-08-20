@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { Mark } from "@/components/ui/Mark";
+import { Ring } from "@/components/ui/Ring";
+import { Slab } from "@/components/ui/Slab";
 import { WobbleUnderline } from "@/components/ui/Wobble";
 import { NAV_CTA, NAV_LINKS, type NavLink } from "@/content/nav";
 import { SITE } from "@/content/site";
 import { soft } from "@/lib/design/shapes";
+import type { StyleWithVars } from "@/lib/ui/cssVars";
 
 /**
  * Fixed chrome, sitting straight on the dye: no plate, no blur, no border. The band itself
@@ -13,6 +16,11 @@ import { soft } from "@/lib/design/shapes";
  *
  * The current page is marked twice — orange, and a hand-drawn underline. Colour alone would
  * be the only signal, and orange on violet is 2.73:1.
+ *
+ * The one primary button is dropped on the page it points to. README §1 pins it to every
+ * page, and that holds for Home and Press; on the programme it is a control offering to take
+ * you where you already are, sitting directly above the thing it names. The grid keeps its
+ * three columns either way, so the nav does not shift when it goes.
  */
 export function NavBand({
   route,
@@ -64,23 +72,30 @@ export function NavBand({
           ))}
         </nav>
 
-        <Link
-          href={NAV_CTA.href}
-          className="cta hidden wide:block"
-          style={{
-            justifySelf: "end",
-            pointerEvents: "auto",
-            clipPath: soft(NAV_CTA.shape),
-            padding: "12px 24px 15px",
-            background: "var(--orange)",
-            color: "var(--button-ink)",
-            font: "700 14px/1 var(--font-button)",
-            letterSpacing: ".02em",
-            transition: "background var(--hover)",
-          }}
-        >
-          {NAV_CTA.label}
-        </Link>
+        {route !== NAV_CTA.href && (
+          <Slab
+            shapeIndex={NAV_CTA.shape}
+            className="hidden wide:block"
+            style={{ gridColumn: 3, justifySelf: "end", pointerEvents: "auto" }}
+          >
+            <Link
+              href={NAV_CTA.href}
+              className="press-btn"
+              data-press="beige"
+              style={{
+                clipPath: soft(NAV_CTA.shape),
+                padding: "12px 24px 15px",
+                "--btn-fill": "var(--orange)",
+                color: "var(--button-ink)",
+                font: "700 14px/1 var(--font-button)",
+                letterSpacing: ".02em",
+              } as StyleWithVars}
+            >
+              {NAV_CTA.label}
+              <Ring shapeIndex={NAV_CTA.shape} weight="var(--button-edge)" />
+            </Link>
+          </Slab>
+        )}
 
         {/* The one organic border-radius in the product, and the only surface that carries
             a blur — it has to read as a control on top of a moving photograph. */}

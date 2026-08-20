@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SFWF 2026 — button press reference</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* the tunables */
+    --raise: 2.5px;
+    --button-edge: 1.3px;
+
+    --violet:#4F3F79; --orange:#E9622D; --beige:#E9E7C2; --card:#E9E7C2; --black:#191218;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:clamp(24px,5vw,56px);background:var(--violet);
+       font-family:'Arimo',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;color:var(--beige)}
+  h1{margin:0 0 6px;font-size:15px;font-weight:700}
+  p.note{margin:0 0 30px;max-width:64ch;font-size:13px;line-height:1.6;opacity:.82}
+  h2{margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+  section{margin-bottom:34px}
+  .row{display:flex;flex-wrap:wrap;align-items:flex-start;gap:20px;margin-top:14px}
+  .card{display:inline-block;padding:20px 22px 22px;background:var(--card);max-width:420px}
+  .card p{margin:0 0 12px;font-size:12.5px;line-height:1.5;color:var(--violet)}
+  .controls{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-top:26px;
+            padding-top:18px;border-top:1px solid rgba(233,231,194,.25);font-size:12px}
+  .controls label{display:flex;align-items:center;gap:8px}
+
+  /* ---------- the press system ---------- */
+  .slab{position:relative;display:inline-block;max-width:100%;margin-bottom:var(--raise)}
+  .side{position:absolute;top:0;bottom:0;left:1.6px;right:1.6px;background:var(--black);
+        transform:translateY(var(--raise))}
+
+  .btn{position:relative;display:block;padding:12px 24px 14px;text-decoration:none;
+       font-weight:700;font-size:13px;line-height:1.2;text-align:center;white-space:nowrap;
+       cursor:pointer;border:0;
+       -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+       transition:background-color .18s ease, color .18s ease}
+  .ring{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .ring path{fill:none;stroke:var(--black);stroke-width:calc(var(--button-edge) * 2);
+             vector-effect:non-scaling-stroke}
+
+  /* three variants, by the ground they stand on */
+  .btn.primary{background-color:var(--orange);color:var(--black)}
+  .btn.primary:hover,.btn.primary.pressed{background-color:var(--beige);color:var(--black)}
+  .btn.light{background-color:var(--beige);color:var(--black)}
+  .btn.light:hover,.btn.light.pressed{background-color:var(--orange);color:var(--black)}
+  .btn.oncard{background-color:var(--orange);color:var(--beige);font-size:12px;padding:10px 18px 11px}
+  .btn.oncard:hover,.btn.oncard.pressed{background-color:var(--violet);color:var(--beige)}
+
+  /* the press: down by exactly the side's height, so the side is spent and the bottom holds */
+  .btn.pressed{transform:translateY(var(--raise));
+       transition:transform .07s cubic-bezier(.3,.9,.4,1),
+                  background-color .07s linear, color .07s linear}
+  .btn.releasing{transition:transform .16s cubic-bezier(.2,.8,.3,1),
+                  background-color .2s ease, color .2s ease}
+</style>
+</head>
+<body>
+<h1>Button press — design reference</h1>
+<p class="note">Press with a mouse, a finger, or Enter/Space — one code path, same result. Links wait
+240ms so the press is seen before the page turns; a fast tap is held for at least 160ms. The
+surface travels exactly the height of its drawn side, so the side disappears and the bottom edge
+never moves.</p>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<clipPath id="pb0" clipPathUnits="objectBoundingBox"><path d="M 0.098 0.988 C 0.324 1.002 0.556 0.974 0.774 0.990 C 0.892 0.998 0.974 0.956 0.984 0.864 C 0.994 0.778 0.982 0.622 0.988 0.478 C 0.994 0.332 1.000 0.152 0.962 0.082 C 0.930 0.022 0.796 0.022 0.586 0.010 C 0.376 -0.002 0.148 0.008 0.054 0.038 C 0.008 0.052 0.002 0.204 0.008 0.400 C 0.014 0.596 0.000 0.818 0.028 0.906 C 0.046 0.972 0.066 0.980 0.098 0.988 Z"></path></clipPath>
+<clipPath id="pb1" clipPathUnits="objectBoundingBox"><path d="M 0.895 0.986 C 0.680 1.000 0.440 0.976 0.240 0.992 C 0.120 1.002 0.032 0.954 0.018 0.870 C 0.004 0.788 0.016 0.620 0.010 0.480 C 0.004 0.336 -0.004 0.158 0.034 0.084 C 0.066 0.020 0.210 0.024 0.420 0.012 C 0.628 0.000 0.850 0.006 0.948 0.040 C 0.994 0.056 0.996 0.210 0.990 0.404 C 0.984 0.596 1.004 0.810 0.974 0.902 C 0.952 0.970 0.938 0.976 0.895 0.986 Z"></path></clipPath>
+<clipPath id="pb2" clipPathUnits="objectBoundingBox"><path d="M 0.922 0.980 C 0.700 0.994 0.420 0.980 0.188 0.994 C 0.074 1.002 0.024 0.938 0.014 0.848 C 0.004 0.760 0.018 0.608 0.012 0.472 C 0.006 0.332 0.006 0.174 0.048 0.094 C 0.082 0.028 0.230 0.034 0.434 0.020 C 0.640 0.006 0.860 0.014 0.954 0.054 C 0.996 0.072 0.992 0.218 0.986 0.412 C 0.980 0.606 1.000 0.836 0.966 0.916 C 0.944 0.968 0.952 0.970 0.922 0.980 Z"></path></clipPath>
+<clipPath id="pb3" clipPathUnits="objectBoundingBox"><path d="M 0.888 0.992 C 0.664 1.004 0.452 0.970 0.214 0.986 C 0.098 0.994 0.020 0.962 0.012 0.874 C 0.004 0.792 0.020 0.628 0.014 0.484 C 0.008 0.328 -0.006 0.144 0.040 0.078 C 0.074 0.028 0.196 0.018 0.406 0.008 C 0.616 -0.002 0.844 0.010 0.942 0.034 C 0.990 0.046 0.998 0.196 0.992 0.394 C 0.986 0.592 0.998 0.824 0.970 0.910 C 0.956 0.974 0.930 0.982 0.888 0.992 Z"></path></clipPath>
+<clipPath id="pb4" clipPathUnits="objectBoundingBox"><path d="M 0.914 0.984 C 0.690 0.998 0.430 0.972 0.200 0.990 C 0.082 1.000 0.028 0.946 0.016 0.858 C 0.004 0.772 0.014 0.614 0.010 0.476 C 0.006 0.334 0.002 0.166 0.042 0.090 C 0.074 0.024 0.220 0.030 0.428 0.016 C 0.634 0.002 0.854 0.010 0.950 0.046 C 0.994 0.062 0.994 0.214 0.988 0.408 C 0.982 0.602 1.002 0.828 0.970 0.910 C 0.948 0.970 0.944 0.974 0.914 0.984 Z"></path></clipPath>
+<clipPath id="pb5" clipPathUnits="objectBoundingBox"><path d="M 0.902 0.988 C 0.676 1.002 0.444 0.974 0.226 0.990 C 0.108 0.998 0.026 0.956 0.016 0.864 C 0.006 0.778 0.018 0.622 0.012 0.478 C 0.006 0.332 0.000 0.152 0.038 0.082 C 0.070 0.022 0.204 0.022 0.414 0.010 C 0.624 -0.002 0.852 0.008 0.946 0.038 C 0.992 0.052 0.998 0.204 0.992 0.400 C 0.986 0.596 1.000 0.818 0.972 0.906 C 0.954 0.972 0.934 0.980 0.902 0.988 Z"></path></clipPath>
+</defs></svg>
+
+<section>
+  <h2>Primary — on the page ground</h2>
+  <div class="row">
+    <span class="slab">
+      <span class="side" style="clip-path:url(#pb1)" aria-hidden="true"></span>
+      <a class="btn primary" style="clip-path:url(#pb1)" href="#a">See the Program
+        <svg class="ring" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true"><path d="M 0.895 0.986 C 0.680 1.000 0.440 0.976 0.240 0.992 C 0.120 1.002 0.032 0.954 0.018 0.870 C 0.004 0.788 0.016 0.620 0.010 0.480 C 0.004 0.336 -0.004 0.158 0.034 0.084 C 0.066 0.020 0.210 0.024 0.420 0.012 C 0.628 0.000 0.850 0.006 0.948 0.040 C 0.994 0.056 0.996 0.210 0.990 0.404 C 0.984 0.596 1.004 0.810 0.974 0.902 C 0.952 0.970 0.938 0.976 0.895 0.986 Z"></path></svg>
+      </a>
+    </span>
+    <span class="slab">
+      <span class="side" style="clip-path:url(#pb2)" aria-hidden="true"></span>
+      <button class="btn primary" style="clip-path:url(#pb2)" type="button">Download the media kit
+        <svg class="ring" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true"><path d="M 0.922 0.980 C 0.700 0.994 0.420 0.980 0.188 0.994 C 0.074 1.002 0.024 0.938 0.014 0.848 C 0.004 0.760 0.018 0.608 0.012 0.472 C 0.006 0.332 0.006 0.174 0.048 0.094 C 0.082 0.028 0.230 0.034 0.434 0.020 C 0.640 0.006 0.860 0.014 0.954 0.054 C 0.996 0.072 0.992 0.218 0.986 0.412 C 0.980 0.606 1.000 0.836 0.966 0.916 C 0.944 0.968 0.952 0.970 0.922 0.980 Z"></path></svg>
+      </button>
+    </span>
+  </div>
+</section>
+
+<section>
+  <h2>Light — inverts to the brand fill</h2>
+  <div class="row">
+    <span class="slab">
+      <span class="side" style="clip-path:url(#pb0)" aria-hidden="true"></span>
+      <a class="btn light" style="clip-path:url(#pb0)" href="#a">View the Program
+        <svg class="ring" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true"><path d="M 0.098 0.988 C 0.324 1.002 0.556 0.974 0.774 0.990 C 0.892 0.998 0.974 0.956 0.984 0.864 C 0.994 0.778 0.982 0.622 0.988 0.478 C 0.994 0.332 1.000 0.152 0.962 0.082 C 0.930 0.022 0.796 0.022 0.586 0.010 C 0.376 -0.002 0.148 0.008 0.054 0.038 C 0.008 0.052 0.002 0.204 0.008 0.400 C 0.014 0.596 0.000 0.818 0.028 0.906 C 0.046 0.972 0.066 0.980 0.098 0.988 Z"></path></svg>
+      </a>
+    </span>
+  </div>
+</section>
+
+<section>
+  <h2>On a light card — inverts to the page ground, not the card</h2>
+  <div class="row">
+    <div class="card">
+      <p>Inverting this one to the card's own colour would erase it, so it flips to the page
+      ground instead.</p>
+      <span class="slab">
+        <span class="side" style="clip-path:url(#pb5)" aria-hidden="true"></span>
+        <a class="btn oncard" style="clip-path:url(#pb5)" target="_blank" rel="noopener"
+           href="https://example.com/">Message Alma to reserve
+          <svg class="ring" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true"><path d="M 0.902 0.988 C 0.676 1.002 0.444 0.974 0.226 0.990 C 0.108 0.998 0.026 0.956 0.016 0.864 C 0.006 0.778 0.018 0.622 0.012 0.478 C 0.006 0.332 0.000 0.152 0.038 0.082 C 0.070 0.022 0.204 0.022 0.414 0.010 C 0.624 -0.002 0.852 0.008 0.946 0.038 C 0.992 0.052 0.998 0.204 0.992 0.400 C 0.986 0.596 1.000 0.818 0.972 0.906 C 0.954 0.972 0.934 0.980 0.902 0.988 Z"></path></svg>
+        </a>
+      </span>
+    </div>
+  </div>
+</section>
+
+<div class="controls">
+  <label>raise <input id="raise" type="range" min="0" max="8" step="0.5" value="2.5"> <output id="raiseOut">2.5px</output></label>
+  <label>edge <input id="edge" type="range" min="0" max="3" step="0.1" value="1.3"> <output id="edgeOut">1.3px</output></label>
+</div>
+
+<script>
+/* ---------- press system: pointer events, bound once, capture phase ---------- */
+const HOLD = 160;   /* shortest time a press stays down, however fast the tap */
+const NAV  = 240;   /* press-down to navigation */
+
+let pressed = null, pressAt = 0, upT = null, navT = null;
+const styles = new WeakMap();
+
+const hit = e => (e.target && e.target.closest ? e.target.closest('.btn') : null);
+
+function pressOn(el) {
+  if (pressed === el) return;
+  if (pressed) restore(pressed);
+  clearTimeout(upT);
+  if (!styles.has(el)) styles.set(el, el.getAttribute('class'));
+  el.classList.remove('releasing');
+  el.classList.add('pressed');
+  pressed = el; pressAt = Date.now();
+}
+
+function pressOff(hold) {
+  const el = pressed; if (!el) return;
+  pressed = null;
+  clearTimeout(upT);
+  const wait = Math.max(0, pressAt + hold - Date.now());
+  if (!wait) return restore(el);
+  upT = setTimeout(() => restore(el), wait);
+}
+
+/* put the element's own state back rather than unsetting properties one by one */
+function restore(el) {
+  el.classList.add('releasing');
+  el.classList.remove('pressed');
+  setTimeout(() => el.classList.remove('releasing'), 200);
+}
+
+addEventListener('pointerdown', e => { if (e.button === 0) { const el = hit(e); if (el) pressOn(el); } }, true);
+addEventListener('pointerup', () => pressOff(HOLD), true);
+addEventListener('pointercancel', () => pressOff(HOLD), true);
+addEventListener('keydown', e => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const el = hit(e); if (el) pressOn(el);
+}, true);
+addEventListener('keyup', () => pressOff(HOLD), true);
+
+addEventListener('click', e => {
+  const el = hit(e); if (!el) return;
+  pressOn(el);
+  const plain = el.tagName === 'A' && el.target !== '_blank'
+    && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
+  /* new tabs and modified clicks are never deferred — a delayed window.open reads as a popup */
+  if (!plain) { pressOff(HOLD); return; }
+  e.preventDefault();
+  const href = el.href;
+  clearTimeout(navT);
+  navT = setTimeout(() => { pressOff(0); location.href = href; },
+                    Math.max(60, NAV - (Date.now() - pressAt)));
+}, true);
+
+/* ---------- the tunables ---------- */
+const root = document.documentElement;
+const bind = (id, prop, out) => {
+  const input = document.getElementById(id), o = document.getElementById(out);
+  input.addEventListener('input', () => {
+    root.style.setProperty(prop, input.value + 'px');
+    o.textContent = input.value + 'px';
+  });
+};
+bind('raise', '--raise', 'raiseOut');
+bind('edge', '--button-edge', 'edgeOut');
+</script>
+</body>
+</html>
