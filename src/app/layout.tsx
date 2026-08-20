@@ -6,6 +6,7 @@ import { BloomLayer } from "@/components/background/BloomLayer";
 import { Chrome } from "@/components/chrome/Chrome";
 import { Footer } from "@/components/chrome/Footer";
 import { BackToTop } from "@/components/chrome/BackToTop";
+import { PressSystem } from "@/components/chrome/PressSystem";
 import { DYE_TEXTURE } from "@/content/photos";
 import { FESTIVAL_DATES, SITE, SITE_URL } from "@/content/site";
 import "./globals.css";
@@ -90,6 +91,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <BlobDefs />
         <BloomLayer />
+        <PressSystem />
         {/* The page sits on z-index 1; the dye is fixed at 0 underneath. `Chrome` owns the
             band, the menu and the masked scroller — the three things that share one piece
             of state — and renders the page inside its own <main>. */}

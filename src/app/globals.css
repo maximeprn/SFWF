@@ -244,11 +244,21 @@ a {
   .bubble:hover {
     background: var(--bubble-hover);
   }
-  .cta:hover {
-    background: var(--orange-hover);
+  /* Four inversion targets, keyed by what a button's fill already is and where it stands —
+     see the `.press-btn` block below for the full mechanism. Ink never changes state in any
+     of them; each one's ink was chosen up front to keep reading against both its rest fill
+     and whichever of these four it inverts to. */
+  .press-btn[data-press="beige"]:hover {
+    background: var(--beige);
   }
-  .cta-in-bubble:hover {
-    background: var(--orange-hover-in-bubble);
+  .press-btn[data-press="orange"]:hover {
+    background: var(--orange);
+  }
+  .press-btn[data-press="ground"]:hover {
+    background: var(--ground);
+  }
+  .press-btn[data-press="cream"]:hover {
+    background: var(--cream);
   }
   .day-chip-off:hover {
     opacity: 1;
@@ -296,6 +306,128 @@ a {
   min-width: 0;
 }
 
+/* The closed-only half of the same mechanism, and the reason opening and closing now read
+   as one gesture instead of two.
+
+   The kicker and the access mark are never removed — they collapse. When they were mounted
+   and unmounted, closing ran in two acts: the detail finished collapsing, and only then did
+   the header snap back into place. Collapsed instead, they slide back up *during* the close,
+   on the same clock as everything else.
+
+   The kicker's opacity is the one value that is not 340ms. At 260ms the text is gone before
+   the row has finished closing, so the line never appears crushed inside a shrinking box. */
+.kicker-row {
+  display: grid;
+  overflow: hidden;
+  transition:
+    grid-template-rows var(--open) var(--ease),
+    opacity 0.26s var(--ease);
+}
+
+/* The horizontal twin: the mark sits beside the title, so its track is a column. */
+.mark-slot {
+  display: grid;
+  overflow: hidden;
+  transition:
+    grid-template-columns var(--open) var(--ease),
+    opacity 0.26s var(--ease);
+}
+
+.kicker-row > *,
+.mark-slot > * {
+  min-height: 0;
+  min-width: 0;
+}
+
+/* The title grows rather than being swapped for a bigger one. A class swap has nothing to
+   interpolate; `font-size` and `line-height` are both animatable, so the two values the
+   design already specifies become the two ends of one move. */
+.bubble-title {
+  transition:
+    font-size var(--open) var(--ease),
+    line-height var(--open) var(--ease);
+}
+
+/* The button press system — see `design_handoff_button_press/README.md` and `Slab`.
+
+   A button is a surface standing on a drawn side (`.slab-side`, in `Slab`). Pressing puts
+   it down: the surface travels `var(--raise)` — exactly the side's height — so the side
+   disappears completely and the bottom edge never moves. No scaling; scaling reads soft and
+   web-like, pure travel reads drawn.
+
+   Colour inverts rather than dims: a lighter tint of the fill reads as "disabled", which is
+   the opposite of what a press means. Ink is never touched by any of this — every button's
+   ink is chosen up front to keep reading against both its rest fill and its pressed one, so
+   only `background` ever moves. That is also why the rest fill lives in `--btn-fill` rather
+   than in the element's own `background`: a custom property has no cascade weight of its
+   own, so `.pressed` can override the *property* by ordinary specificity. Setting
+   `background` directly inline would out-rank every rule below it and the press would never
+   show.
+
+   Hover and the pressed state share their target for the same reason a die shows the same
+   face turned either way: hovering and pressing are the same intent read at two different
+   distances. Hover is gated behind `(hover: hover)`, same as every other hover in this
+   product, so a tap never leaves a phone stuck in the hovered colour; `.pressed` is not —
+   it has to fire identically on a touchscreen, which is the one thing hover cannot do. */
+.press-btn {
+  position: relative;
+  display: block;
+  background: var(--btn-fill);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.press-btn[data-press="beige"].pressed {
+  background: var(--beige);
+}
+
+.press-btn[data-press="orange"].pressed {
+  background: var(--orange);
+}
+
+.press-btn[data-press="ground"].pressed {
+  background: var(--ground);
+}
+
+.press-btn[data-press="cream"].pressed {
+  background: var(--cream);
+}
+
+/* The press-in: fast enough to feel immediate under a finger. */
+.press-btn.pressed {
+  transform: translateY(var(--raise));
+  transition:
+    transform 0.07s cubic-bezier(0.3, 0.9, 0.4, 1),
+    background-color 0.07s linear,
+    color 0.07s linear;
+}
+
+/* The release: slower, so it rises rather than snaps. `.releasing` is held for 200ms after
+   `.pressed` is removed — 40ms of slack past its own longest transition — purely so a
+   second press arriving mid-release still reads as a press and not as an interruption. */
+.press-btn.releasing {
+  transition:
+    transform 0.16s cubic-bezier(0.2, 0.8, 0.3, 1),
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* The drawn side a button stands on. Inset 1.6px horizontally: the shapes are hand-cut and
+   asymmetric, so an identical copy offset straight down pokes out past the surface at the
+   ends and the join reads as a step. */
+.slab-side {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1.6px;
+  right: 1.6px;
+  background: var(--edge-ink);
+  transform: translateY(var(--raise));
+}
+
 @media (prefers-reduced-motion: reduce) {
   /* Land every reveal in its finished state rather than removing content. The dye pauses
      itself in BloomLayer — paintStill draws the same ground, flat. */
@@ -304,9 +436,15 @@ a {
   }
   .bubble,
   .reveal,
+  .kicker-row,
+  .mark-slot,
+  .bubble-title,
   .social-mark,
   .media-key,
-  .video-controls {
+  .video-controls,
+  .press-btn,
+  .press-btn.pressed,
+  .press-btn.releasing {
     transition: none;
   }
   html {

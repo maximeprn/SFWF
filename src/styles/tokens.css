@@ -35,8 +35,6 @@
   --button-ink: #191218; /* label on orange and beige buttons */
   --cream: #f7f3e4; /* the one ink that clears contrast on violet (8.4:1) */
   --bubble-hover: #f2f0d4;
-  --orange-hover: #f27a49; /* primary buttons */
-  --orange-hover-in-bubble: #d4551f;
   --hairline-beige: rgba(233, 231, 194, 0.4); /* drawn rules on the ground */
   --hairline-beige-strong: rgba(233, 231, 194, 0.5);
   --chip-edge: rgba(233, 231, 194, 0.45); /* the day filter's drawn chip edge */
@@ -52,6 +50,22 @@
 
   /* The palette's cyan is in the brand and used nowhere on the site yet. It stays unused
      rather than being found a job, so it is deliberately not a token here. */
+
+  /* ── the drawn edge ─────────────────────────────────────────────────────
+     Not a new colour: the same #191218 the buttons set their labels in, named for its
+     second job. A hand-cut shape cannot take a border or a shadow — `clip-path` cuts both
+     away at the curve — so its edge is stroked on the clip's own geometry. See `Ring`.
+
+     Weights live here so they are tuned in one place. Small elements take half the bubble's
+     weight: the same line reads much heavier on a chip a third the height. */
+  --edge-ink: #191218;
+  --bubble-edge: 1.8px;
+  --button-edge: 1.3px;
+
+  /* How far a button stands off the page — and so exactly how far it travels when pressed.
+     The side is spent, not squashed: the surface moves down by this much, the side vanishes
+     underneath it, and the bottom edge never moves. See `Slab`. */
+  --raise: 2.5px;
 
   /* ── layout ─────────────────────────────────────────────────────────────
      One column, one gutter. 1040px and the 80ch measure were the prototype's own frame,

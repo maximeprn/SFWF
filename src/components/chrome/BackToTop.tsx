@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Ring } from "@/components/ui/Ring";
+import { Slab } from "@/components/ui/Slab";
 import { soft } from "@/lib/design/shapes";
+import type { StyleWithVars } from "@/lib/ui/cssVars";
 
 /** Far enough down that the day filter is out of reach and scrolling back is a chore. */
 const THRESHOLD = 640;
@@ -30,28 +33,36 @@ export function BackToTop() {
   if (!shown) return null;
 
   return (
-    <button
-      type="button"
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      aria-label="Back to top"
-      className="cta"
+    <Slab
+      shapeIndex={4}
       style={{
+        display: "inline-block",
         position: "fixed",
         right: "clamp(14px,3vw,26px)",
         bottom: "clamp(14px,3vw,26px)",
         zIndex: 50,
-        width: 44,
-        height: 44,
-        border: 0,
-        clipPath: soft(4),
-        background: "var(--orange)",
-        color: "var(--button-ink)",
-        font: "700 14.3px/1 var(--font-body)",
-        cursor: "pointer",
-        transition: "background var(--hover)",
       }}
     >
-      ↑
-    </button>
+      <button
+        type="button"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        aria-label="Back to top"
+        className="press-btn"
+        data-press="beige"
+        style={{
+          width: 44,
+          height: 44,
+          border: 0,
+          clipPath: soft(4),
+          "--btn-fill": "var(--orange)",
+          color: "var(--button-ink)",
+          font: "700 14.3px/1 var(--font-body)",
+          cursor: "pointer",
+        } as StyleWithVars}
+      >
+        ↑
+        <Ring shapeIndex={4} weight="var(--button-edge)" />
+      </button>
+    </Slab>
   );
 }

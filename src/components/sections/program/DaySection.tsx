@@ -18,7 +18,12 @@ const DOODLE_SIZE: Record<string, readonly [number, number]> = {
 };
 
 /**
- * One day: a drawn rule, the date, the day name beside its doodle marker, then the grid.
+ * One day: a drawn rule, the date, then the day name beside its doodle marker, then the grid.
+ *
+ * The date sits on its own line above the name rather than beside it. Set inline, a 12px
+ * mono date and a 30px script name are two different registers sharing one baseline, and
+ * the eye reads them as one run of text; stacked, the date is a label and the name is the
+ * heading it labels.
  *
  * The rule is a hand-drawn path, never a `border-top` — that is the tell that a section was
  * built wrong. The doodles are day markers now, punctuating a heading rather than drifting
@@ -41,39 +46,49 @@ export function DaySection({
     <div style={{ padding: "clamp(22px,3vw,32px) 0 clamp(14px,2vw,20px)" }}>
       <WobbleRule style={{ margin: "0 0 clamp(22px,3vw,32px)" }} />
 
-      {/* Date, name and marker on one baseline — the doodle punctuates the heading rather
-          than sitting beside a stack of two lines. */}
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          gap: "10px 16px",
-          margin: "0 0 clamp(16px,2.2vw,22px)",
-        }}
-      >
+      <div style={{ margin: "0 0 clamp(32px,4.4vw,44px)" }}>
         <p
           className="mono"
-          style={{ margin: 0, fontSize: 12, letterSpacing: ".2em", color: "var(--beige)" }}
+          style={{ margin: "0 0 6px", fontSize: 12, letterSpacing: ".2em", color: "var(--beige)" }}
         >
           {day.date}
         </p>
-        <h2
-          style={{
-            margin: 0,
-            font: "400 clamp(26px,3.4vw,30px)/1.15 var(--font-display)",
-            color: "var(--beige)",
-          }}
-        >
-          {day.name}
-        </h2>
-        <Image
-          src={`/doodles/beige/${day.icon}.png`}
-          alt=""
-          width={w}
-          height={h}
-          style={{ width: day.iconWidth, height: "auto", flex: "none" }}
-        />
+        {/* The marker stays on the name's own line — it punctuates the heading, and dropped
+            to a third line it would read as an illustration sitting under one.
+
+            It is positioned rather than laid out beside the name, so the row measures the
+            script line and nothing else. The doodles are portrait and their widths are the
+            festival's own: at 20px wide the flower stands 39px tall against a 30px line, and
+            in flow it grew the row and pushed the name down with it. That put the gap under
+            the date at 6px on `ocean day` and 10px on `closing celebration` — six headings
+            on six different rhythms. Out of flow, every one of them is 6px. */}
+        <div style={{ position: "relative", width: "fit-content" }}>
+          <h2
+            style={{
+              margin: 0,
+              font: "400 clamp(26px,3.4vw,30px)/1.15 var(--font-display)",
+              color: "var(--beige)",
+            }}
+          >
+            {day.name}
+          </h2>
+          <Image
+            src={`/doodles/beige/${day.icon}.png`}
+            alt=""
+            width={w}
+            height={h}
+            style={{
+              position: "absolute",
+              left: "100%",
+              top: "50%",
+              transform: "translateY(-50%)",
+              marginLeft: 16,
+              width: day.iconWidth,
+              height: "auto",
+              maxWidth: "none",
+            }}
+          />
+        </div>
       </div>
 
       <div

@@ -22,6 +22,13 @@ export const BLOB_PATHS: readonly string[] = [
 export const soft = (i: number): string => `url(#pb${i % BLOB_PATHS.length})`;
 
 /**
+ * The same outline as a path string, for anything that has to *draw* the edge rather than
+ * cut it — see `Ring`. It takes the identical index arithmetic as `soft` so a shape and its
+ * stroke can never drift apart; give both the same number and they are the same curve.
+ */
+export const blobPath = (i: number): string => BLOB_PATHS[i % BLOB_PATHS.length]!;
+
+/**
  * The outline every 9:16 media frame takes, paused and playing alike.
  *
  * It is the same irregular hand as the six above with far less bite at the corners, and it

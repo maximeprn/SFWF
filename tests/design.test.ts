@@ -148,6 +148,57 @@ describe("stylesheet rules", () => {
     expect(tokens).toMatch(/--open: 0\.34s/);
     expect(css).toMatch(/grid-template-rows var\(--open\) var\(--ease\)/);
   });
+
+  /**
+   * Every collapsing track and the title's own growth run on `--open`; only the kicker and
+   * the mark fade early, at 260ms, so their text is gone before the row has finished
+   * closing. A second duration anywhere in this component is what made opening and closing
+   * look like two different moves.
+   */
+  it("runs the whole bubble on one clock, with one deliberate exception", () => {
+    for (const rule of [".kicker-row", ".mark-slot", ".bubble-title"]) {
+      const block = css.slice(css.indexOf(`${rule} {`));
+      expect(block.slice(0, block.indexOf("}")), `${rule} is off the shared curve`).toMatch(
+        /var\(--open\) var\(--ease\)/,
+      );
+    }
+    expect(css.match(/opacity 0\.26s var\(--ease\)/g)).toHaveLength(2);
+  });
+});
+
+/**
+ * The bubble's two flags are not interchangeable, and mixing them up is the one bug this
+ * component has actually shipped: the header and the padding were bound to `open`, which
+ * only goes false *after* the animation has run, so closing collapsed the detail first and
+ * snapped the header back afterwards. One gesture, read as two events.
+ */
+describe("the event bubble's state machine", () => {
+  const bubble = stripComments(
+    readFileSync(join(SRC, "components/sections/program/EventBubble.tsx"), "utf8"),
+  );
+
+  it("drives every transition from `grown`, never from `open`", () => {
+    /* `open` may do exactly two things: label the control, and mount the detail. */
+    const uses = bubble.match(/\bopen\b(?! =)/g) ?? [];
+    expect(uses.length, "`open` reaches something it should not").toBe(3);
+    expect(bubble).toMatch(/aria-expanded=\{open\}/);
+    expect(bubble).toMatch(/\{open && \(/);
+    expect(bubble).toMatch(/padding: grown/);
+  });
+
+  it("collapses the closed-only rows instead of unmounting them", () => {
+    /* A ternary around either one would bring back the snap it exists to prevent. */
+    expect(bubble).not.toMatch(/\{!open &&/);
+    expect(bubble).toMatch(/className="kicker-row"/);
+    expect(bubble).toMatch(/className="mark-slot"/);
+    expect(bubble).toMatch(/gridTemplateRows: grown \? "0fr" : "1fr"/);
+    expect(bubble).toMatch(/gridTemplateColumns: grown \? "0fr" : "1fr"/);
+  });
+
+  it("grows the title rather than swapping it for a bigger one", () => {
+    expect(bubble).toMatch(/fontSize: grown/);
+    expect(bubble.match(/className="bubble-title"/g), "one title, not two").toHaveLength(1);
+  });
 });
 
 /**
@@ -312,5 +363,70 @@ describe("media frames", () => {
     // for, and puts two players on one frame.
     const frame = sources.find(([path]) => path === "components/ui/VideoFrame.tsx")?.[1] ?? "";
     expect(frame).not.toMatch(/^\s*controls\s*$/m);
+  });
+});
+
+/**
+ * The button press system: a raised side that goes flush on press, colour inverting by
+ * variant, one global binding rather than one per button. Loosely mirrors the same
+ * discipline as the bubble's state machine above — the one bug worth guarding against here
+ * is a button whose rest colour is set directly rather than through `--btn-fill`, since a
+ * direct `background` on the inline style would always out-rank `.pressed` and the press
+ * would silently stop showing.
+ */
+describe("the button press system", () => {
+  const pressFiles = [
+    "components/sections/home/Hero.tsx",
+    "components/sections/home/Purpose.tsx",
+    "components/chrome/NavBand.tsx",
+    "components/chrome/BackToTop.tsx",
+    "components/sections/press/PressSection.tsx",
+    "components/sections/program/BubbleDetail.tsx",
+  ].map((path) => [path, stripComments(readFileSync(join(SRC, path), "utf8"))] as const);
+
+  const css = readFileSync(new URL("../src/app/globals.css", import.meta.url), "utf8");
+  const tokens = readFileSync(new URL("../src/styles/tokens.css", import.meta.url), "utf8");
+
+  it("never sets a press-btn's background directly — only through --btn-fill", () => {
+    for (const [path, text] of pressFiles) {
+      for (const match of text.matchAll(/className="[^"]*\bpress-btn\b[^"]*"[\s\S]{0,400}?\}/g)) {
+        expect(match[0], `${path} sets background directly on a press-btn`).not.toMatch(
+          /[^-]background:\s*["']var\(--(?:orange|beige|ground|cream)\)/,
+        );
+      }
+    }
+  });
+
+  it("gives every press-btn one of the four named inversion targets", () => {
+    for (const [path, text] of pressFiles) {
+      const buttons = text.match(/className="[^"]*\bpress-btn\b[^"]*"/g) ?? [];
+      const targets = text.match(/data-press="(?:beige|orange|ground|cream)"/g) ?? [];
+      expect(targets.length, `${path} has a press-btn with no (or an unknown) data-press`).toBe(
+        buttons.length,
+      );
+    }
+  });
+
+  it("keeps the raise and the drawn side off `--bubble-edge`", () => {
+    expect(tokens).toMatch(/--raise: 2\.5px/);
+    expect(css).toMatch(/\.slab-side \{/);
+  });
+
+  it("holds a press for the reference's own timings", () => {
+    expect(css).toMatch(/transform 0\.07s cubic-bezier\(0\.3, 0\.9, 0\.4, 1\)/);
+    expect(css).toMatch(/transform 0\.16s cubic-bezier\(0\.2, 0\.8, 0\.3, 1\)/);
+  });
+
+  it("leaves no dead hover token behind", () => {
+    // These two were replaced outright by the inversion targets above, not layered under
+    // them — a leftover reference means the swap missed a spot.
+    expect(tokens).not.toMatch(/--orange-hover/);
+    expect(css).not.toMatch(/cta-in-bubble/);
+  });
+
+  it("binds the interaction once, not per element", () => {
+    const src = stripComments(readFileSync(join(SRC, "lib/ui/pressSystem.ts"), "utf8"));
+    expect(src).toMatch(/addEventListener\(\s*"pointerdown"/);
+    expect(src).toMatch(/let bound = false/);
   });
 });

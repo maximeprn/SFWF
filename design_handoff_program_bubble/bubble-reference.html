@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SFWF 2026 — programme bubble reference</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* the three tunables */
+    --bubble-edge: 1.4px;
+    --button-edge: 1.3px;
+    --raise: 2.5px;
+
+    --violet:#4F3F79; --orange:#E9622D; --venue:#F9621B; --beige:#E9E7C2;
+    --beige-hover:#F2F0D4; --ink:#3E3064; --black:#191218;
+    --ease: cubic-bezier(.22,.75,.2,1);
+    --dur: .34s;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:clamp(24px,5vw,56px);background:var(--violet);
+       font-family:'Arimo',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .mono{font-family:ui-monospace,Menlo,monospace}
+  a{color:var(--beige)}
+  h1{margin:0 0 6px;font-size:15px;font-weight:700;letter-spacing:.02em;color:var(--beige)}
+  .note{margin:0 0 26px;max-width:62ch;font-size:13px;line-height:1.6;color:var(--beige);opacity:.8}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));
+        gap:12px;align-items:start;max-width:900px}
+
+  /* ---- bubble ---- */
+  .bubble{position:relative;max-width:440px;background:var(--beige);cursor:pointer;
+          overflow-wrap:break-word;padding:22px clamp(26px,3vw,38px) 26px;
+          transition:padding var(--dur) var(--ease), background .15s ease}
+  .bubble:hover{background:var(--beige-hover)}
+  .bubble.grown{padding:24px clamp(26px,3vw,38px) 28px}
+  .bubble:focus-visible{outline:2px solid var(--black);outline-offset:3px}
+  .ring{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .ring path{fill:none;stroke:var(--black);stroke-width:calc(var(--bubble-edge) * 2);
+              vector-effect:non-scaling-stroke}
+
+  /* kicker: collapses, never unmounts */
+  .kicker{display:grid;grid-template-rows:1fr;opacity:1;overflow:hidden;
+          transition:grid-template-rows var(--dur) var(--ease), opacity .26s var(--ease)}
+  .grown .kicker{grid-template-rows:0fr;opacity:0}
+  .kicker > div{min-height:0;min-width:0}
+  .kicker p{margin:0 0 7px;font-size:10px;line-height:1.5;letter-spacing:.14em;color:var(--violet)}
+  .kicker b{font-weight:700;color:var(--venue)}
+  .kicker .t{white-space:nowrap}
+
+  .head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding-right:6px}
+  .title{margin:0;max-width:22em;font-weight:700;line-height:1.32;color:var(--ink);text-wrap:pretty;
+         font-size:clamp(13.2px,0.14vw + 12.7px,14.5px);transition:font-size var(--dur) var(--ease)}
+  .grown .title{font-size:clamp(15px,0.2vw + 14.25px,16.5px)}
+  .mark{flex:none;display:flex;align-items:center;gap:10px;margin-top:2px}
+  .mark .acc{flex:none;display:flex;align-items:center;gap:6px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--orange)}
+  .acc span{font-size:10px;letter-spacing:.12em;color:var(--violet);white-space:nowrap}
+  .caret{flex:none;font-weight:700;font-size:11px;line-height:1;color:rgba(79,63,121,.92);
+         transition:transform var(--dur) var(--ease)}
+  .grown .caret{transform:rotate(180deg)}
+
+  /* detail: mounted only while open */
+  .detail{display:grid;grid-template-rows:0fr;opacity:0;overflow:hidden;
+          transition:grid-template-rows var(--dur) var(--ease), opacity var(--dur) var(--ease)}
+  .grown .detail{grid-template-rows:1fr;opacity:1}
+  .detail > div{min-height:0;min-width:0}
+  .hint{margin:6px 0 0;font-weight:900;font-size:8.5px;line-height:1.5;text-transform:uppercase;color:var(--violet)}
+  .hint b{color:var(--orange);font-weight:900}
+  .desc{margin:11px 0 0;max-width:78ch;font-weight:400;font-size:11.5px;line-height:1.62;color:var(--ink);text-wrap:pretty}
+  .desc.tba{font-style:italic;color:var(--violet)}
+  .foot{display:flex;flex-direction:column;align-items:flex-start;gap:13px;margin-top:14px}
+  .rule{display:block;width:100%;height:5px;overflow:visible}
+  .rule path{fill:none;stroke:rgba(79,63,121,.3);stroke-width:1.3;stroke-linecap:round}
+  .who{margin:0;max-width:52ch;font-weight:400;font-size:clamp(12px,0.11vw + 11.6px,13px);line-height:1.5;color:var(--violet)}
+  .who.tba{font-style:italic}
+
+  /* reserve button: raised slab */
+  .slab{position:relative;display:inline-block;max-width:100%;margin:0 var(--raise) var(--raise)}
+  .side{position:absolute;top:0;bottom:0;left:1.6px;right:1.6px;background:var(--black);
+        transform:translateY(var(--raise))}
+  .book{position:relative;display:block;padding:10px 18px 11px;background:var(--orange);
+        color:var(--beige);font-weight:700;font-size:12px;line-height:1.2;text-align:center;
+        text-wrap:balance;text-decoration:none;-webkit-tap-highlight-color:transparent;
+        touch-action:manipulation;
+        transition:background .18s ease, color .18s ease}
+  .book:hover{background:var(--violet);color:var(--beige)}
+  .book .ring path{stroke-width:calc(var(--button-edge) * 2)}
+  .book.pressed{background:var(--violet);color:var(--beige);
+        transform:translateY(var(--raise));
+        transition:transform .07s cubic-bezier(.3,.9,.4,1), background-color .07s linear, color .07s linear}
+</style>
+</head>
+<body>
+<h1>Programme bubble — design reference</h1>
+<p class="note">Click a bubble. Opening and closing are the same 340ms move: the kicker row
+collapses while the title grows, and on the way back everything reverses together. The three
+tunables live at the top of the stylesheet.</p>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<clipPath id="pb0" clipPathUnits="objectBoundingBox"><path d="M 0.098 0.988 C 0.324 1.002 0.556 0.974 0.774 0.990 C 0.892 0.998 0.974 0.956 0.984 0.864 C 0.994 0.778 0.982 0.622 0.988 0.478 C 0.994 0.332 1.000 0.152 0.962 0.082 C 0.930 0.022 0.796 0.022 0.586 0.010 C 0.376 -0.002 0.148 0.008 0.054 0.038 C 0.008 0.052 0.002 0.204 0.008 0.400 C 0.014 0.596 0.000 0.818 0.028 0.906 C 0.046 0.972 0.066 0.980 0.098 0.988 Z"></path></clipPath>
+<clipPath id="pb1" clipPathUnits="objectBoundingBox"><path d="M 0.895 0.986 C 0.680 1.000 0.440 0.976 0.240 0.992 C 0.120 1.002 0.032 0.954 0.018 0.870 C 0.004 0.788 0.016 0.620 0.010 0.480 C 0.004 0.336 -0.004 0.158 0.034 0.084 C 0.066 0.020 0.210 0.024 0.420 0.012 C 0.628 0.000 0.850 0.006 0.948 0.040 C 0.994 0.056 0.996 0.210 0.990 0.404 C 0.984 0.596 1.004 0.810 0.974 0.902 C 0.952 0.970 0.938 0.976 0.895 0.986 Z"></path></clipPath>
+<clipPath id="pb2" clipPathUnits="objectBoundingBox"><path d="M 0.922 0.980 C 0.700 0.994 0.420 0.980 0.188 0.994 C 0.074 1.002 0.024 0.938 0.014 0.848 C 0.004 0.760 0.018 0.608 0.012 0.472 C 0.006 0.332 0.006 0.174 0.048 0.094 C 0.082 0.028 0.230 0.034 0.434 0.020 C 0.640 0.006 0.860 0.014 0.954 0.054 C 0.996 0.072 0.992 0.218 0.986 0.412 C 0.980 0.606 1.000 0.836 0.966 0.916 C 0.944 0.968 0.952 0.970 0.922 0.980 Z"></path></clipPath>
+<clipPath id="pb3" clipPathUnits="objectBoundingBox"><path d="M 0.888 0.992 C 0.664 1.004 0.452 0.970 0.214 0.986 C 0.098 0.994 0.020 0.962 0.012 0.874 C 0.004 0.792 0.020 0.628 0.014 0.484 C 0.008 0.328 -0.006 0.144 0.040 0.078 C 0.074 0.028 0.196 0.018 0.406 0.008 C 0.616 -0.002 0.844 0.010 0.942 0.034 C 0.990 0.046 0.998 0.196 0.992 0.394 C 0.986 0.592 0.998 0.824 0.970 0.910 C 0.956 0.974 0.930 0.982 0.888 0.992 Z"></path></clipPath>
+<clipPath id="pb4" clipPathUnits="objectBoundingBox"><path d="M 0.914 0.984 C 0.690 0.998 0.430 0.972 0.200 0.990 C 0.082 1.000 0.028 0.946 0.016 0.858 C 0.004 0.772 0.014 0.614 0.010 0.476 C 0.006 0.334 0.002 0.166 0.042 0.090 C 0.074 0.024 0.220 0.030 0.428 0.016 C 0.634 0.002 0.854 0.010 0.950 0.046 C 0.994 0.062 0.994 0.214 0.988 0.408 C 0.982 0.602 1.002 0.828 0.970 0.910 C 0.948 0.970 0.944 0.974 0.914 0.984 Z"></path></clipPath>
+<clipPath id="pb5" clipPathUnits="objectBoundingBox"><path d="M 0.902 0.988 C 0.676 1.002 0.444 0.974 0.226 0.990 C 0.108 0.998 0.026 0.956 0.016 0.864 C 0.006 0.778 0.018 0.622 0.012 0.478 C 0.006 0.332 0.000 0.152 0.038 0.082 C 0.070 0.022 0.204 0.022 0.414 0.010 C 0.624 -0.002 0.852 0.008 0.946 0.038 C 0.992 0.052 0.998 0.204 0.992 0.400 C 0.986 0.596 1.000 0.818 0.972 0.906 C 0.954 0.972 0.934 0.980 0.902 0.988 Z"></path></clipPath>
+</defs></svg>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const BLOBS = [
+  'M 0.098 0.988 C 0.324 1.002 0.556 0.974 0.774 0.990 C 0.892 0.998 0.974 0.956 0.984 0.864 C 0.994 0.778 0.982 0.622 0.988 0.478 C 0.994 0.332 1.000 0.152 0.962 0.082 C 0.930 0.022 0.796 0.022 0.586 0.010 C 0.376 -0.002 0.148 0.008 0.054 0.038 C 0.008 0.052 0.002 0.204 0.008 0.400 C 0.014 0.596 0.000 0.818 0.028 0.906 C 0.046 0.972 0.066 0.980 0.098 0.988 Z',
+  'M 0.895 0.986 C 0.680 1.000 0.440 0.976 0.240 0.992 C 0.120 1.002 0.032 0.954 0.018 0.870 C 0.004 0.788 0.016 0.620 0.010 0.480 C 0.004 0.336 -0.004 0.158 0.034 0.084 C 0.066 0.020 0.210 0.024 0.420 0.012 C 0.628 0.000 0.850 0.006 0.948 0.040 C 0.994 0.056 0.996 0.210 0.990 0.404 C 0.984 0.596 1.004 0.810 0.974 0.902 C 0.952 0.970 0.938 0.976 0.895 0.986 Z',
+  'M 0.922 0.980 C 0.700 0.994 0.420 0.980 0.188 0.994 C 0.074 1.002 0.024 0.938 0.014 0.848 C 0.004 0.760 0.018 0.608 0.012 0.472 C 0.006 0.332 0.006 0.174 0.048 0.094 C 0.082 0.028 0.230 0.034 0.434 0.020 C 0.640 0.006 0.860 0.014 0.954 0.054 C 0.996 0.072 0.992 0.218 0.986 0.412 C 0.980 0.606 1.000 0.836 0.966 0.916 C 0.944 0.968 0.952 0.970 0.922 0.980 Z',
+  'M 0.888 0.992 C 0.664 1.004 0.452 0.970 0.214 0.986 C 0.098 0.994 0.020 0.962 0.012 0.874 C 0.004 0.792 0.020 0.628 0.014 0.484 C 0.008 0.328 -0.006 0.144 0.040 0.078 C 0.074 0.028 0.196 0.018 0.406 0.008 C 0.616 -0.002 0.844 0.010 0.942 0.034 C 0.990 0.046 0.998 0.196 0.992 0.394 C 0.986 0.592 0.998 0.824 0.970 0.910 C 0.956 0.974 0.930 0.982 0.888 0.992 Z',
+  'M 0.914 0.984 C 0.690 0.998 0.430 0.972 0.200 0.990 C 0.082 1.000 0.028 0.946 0.016 0.858 C 0.004 0.772 0.014 0.614 0.010 0.476 C 0.006 0.334 0.002 0.166 0.042 0.090 C 0.074 0.024 0.220 0.030 0.428 0.016 C 0.634 0.002 0.854 0.010 0.950 0.046 C 0.994 0.062 0.994 0.214 0.988 0.408 C 0.982 0.602 1.002 0.828 0.970 0.910 C 0.948 0.970 0.944 0.974 0.914 0.984 Z',
+  'M 0.902 0.988 C 0.676 1.002 0.444 0.974 0.226 0.990 C 0.108 0.998 0.026 0.956 0.016 0.864 C 0.006 0.778 0.018 0.622 0.012 0.478 C 0.006 0.332 0.000 0.152 0.038 0.082 C 0.070 0.022 0.204 0.022 0.414 0.010 C 0.624 -0.002 0.852 0.008 0.946 0.038 C 0.992 0.052 0.998 0.204 0.992 0.400 C 0.986 0.596 1.000 0.818 0.972 0.906 C 0.954 0.972 0.934 0.980 0.902 0.988 Z',
+];
+const RULE = 'M2 3.8 C 108 1.1 216 5.2 300 2.9 C 392 0.6 500 4.9 598 2.4';
+
+const EVENTS = [
+  { venue:'ALMA', time:'1st seating 5pm · 2nd 8pm', title:'Alma × CMD Supper Club tasting menu',
+    place:'Alma', hintRest:'Thu 27 Aug · 5pm · ₱2,400 per head', bookable:true, host:'Alma',
+    handle:'alma.siargao',
+    desc:'Chef Luis Martinez and Chef Morris Danzen prepare a dinner focused on the bounty of Siargao\u2019s prime and native seafood.',
+    who:'Chef Luis · Chef Morris' },
+  { venue:'GL PUBLIC MARKET', time:'4pm — 6pm', title:'Wet market experience by Roots',
+    place:'General Luna public market', hintRest:'Thu 27 Aug · 4pm — 6pm · free', bookable:false,
+    desc:'Walk the market with the Roots team and learn what to look for in a morning catch.',
+    who:'the Roots team' },
+  { venue:'LUNARES CAFÉ', time:'8am — 11am', title:'Brewed by the Pioneers',
+    place:'Lunares Café', hintRest:'Fri 28 Aug · 8am — 11am · ₱600', bookable:true,
+    host:'Lunares Café', handle:'siargaofoodwinefestival', desc:'', who:'' },
+];
+
+/* --- state machine: open mounts the detail, grown drives every transition --- */
+const shut = {};
+
+function ring(blob) {
+  return '<svg class="ring" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true">'
+    + '<path d="' + blob + '"></path></svg>';
+}
+
+function render(ev, i) {
+  const blob = BLOBS[(i * 5 + 2) % 6];
+  const clip = 'url(#pb' + ((i * 5 + 2) % 6) + ')';
+  const el = document.createElement('div');
+  el.className = 'bubble';
+  el.setAttribute('role', 'button');
+  el.tabIndex = 0;
+  el.style.clipPath = clip;
+  el.innerHTML = ring(blob)
+    + '<div class="kicker"><div><p class="mono"><b>' + ev.venue + '</b> ·<span class="t"> '
+      + ev.time + '</span></p></div></div>'
+    + '<div class="head"><p class="title">' + ev.title + '</p>'
+      + '<div class="mark"><div class="acc">' + (ev.bookable ? '<span class="dot"></span>' : '')
+      + '<span class="mono">' + (ev.bookable ? 'RESERVE' : 'WALK IN') + '</span></div>'
+      + '<span class="caret">▾</span></div></div>';
+  el.addEventListener('click', () => toggle(el, ev, i, clip, blob));
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(el, ev, i, clip, blob); }
+  });
+  return el;
+}
+
+function detailHTML(ev, clip, blob) {
+  const desc = ev.desc
+    ? '<p class="desc">' + ev.desc + '</p>'
+    : '<p class="desc tba">Program details to be announced.</p>';
+  const who = ev.who
+    ? '<p class="who">' + ev.who + '</p>'
+    : '<p class="who tba">Line-up to be announced</p>';
+  const book = ev.bookable
+    ? '<span class="slab"><span class="side" style="clip-path:' + clip + '" aria-hidden="true"></span>'
+      + '<a class="book" style="clip-path:' + clip + '" target="_blank" rel="noopener" href="https://www.instagram.com/'
+      + ev.handle + '/">Message ' + ev.host + ' to reserve' + ring(blob) + '</a></span>'
+    : '';
+  return '<div class="detail"><div>'
+    + '<p class="hint"><b>' + ev.place + '</b> · ' + ev.hintRest + '</p>'
+    + desc
+    + '<div class="foot"><svg class="rule" viewBox="0 0 400 6" preserveAspectRatio="none" aria-hidden="true">'
+      + '<path d="' + RULE + '" vector-effect="non-scaling-stroke"></path></svg>'
+    + who + book + '</div></div></div>';
+}
+
+function toggle(el, ev, i, clip, blob) {
+  clearTimeout(shut[i]);
+  if (el.classList.contains('grown')) {
+    /* close: everything animates now, the subtree leaves 360ms later */
+    el.classList.remove('grown');
+    shut[i] = setTimeout(() => { const d = el.querySelector('.detail'); if (d) d.remove(); }, 360);
+    return;
+  }
+  if (!el.querySelector('.detail')) el.insertAdjacentHTML('beforeend', detailHTML(ev, clip, blob));
+  /* two frames: the detail must be laid out collapsed before the targets change */
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('grown')));
+}
+
+const grid = document.getElementById('grid');
+EVENTS.forEach((ev, i) => grid.appendChild(render(ev, i)));
+
+/* --- press system: one path for mouse, touch and keyboard --- */
+const HOLD = 160, NAV = 240;
+let pressed = null, pressAt = 0, upT = null, navT = null;
+
+function pressOn(el) {
+  if (pressed === el) return;
+  if (pressed) pressed.classList.remove('pressed');
+  clearTimeout(upT);
+  el.classList.add('pressed');
+  pressed = el; pressAt = Date.now();
+}
+function pressOff(hold) {
+  const el = pressed; if (!el) return;
+  pressed = null;
+  const wait = Math.max(0, pressAt + hold - Date.now());
+  clearTimeout(upT);
+  upT = setTimeout(() => el.classList.remove('pressed'), wait);
+}
+const hit = e => e.target.closest ? e.target.closest('.book') : null;
+
+addEventListener('pointerdown', e => { if (e.button === 0) { const el = hit(e); if (el) pressOn(el); } }, true);
+addEventListener('pointerup', () => pressOff(HOLD), true);
+addEventListener('pointercancel', () => pressOff(HOLD), true);
+addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { const el = hit(e); if (el) pressOn(el); } }, true);
+addEventListener('keyup', () => pressOff(HOLD), true);
+addEventListener('click', e => {
+  const el = hit(e); if (!el) return;
+  e.stopPropagation();                     /* booking must not collapse the bubble */
+  pressOn(el);
+  /* new tabs and modified clicks are never deferred — a delayed window.open reads as a popup */
+  if (el.target === '_blank' || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { pressOff(HOLD); return; }
+  e.preventDefault();
+  const href = el.href;
+  clearTimeout(navT);
+  navT = setTimeout(() => { pressOff(0); location.href = href; }, Math.max(60, NAV - (Date.now() - pressAt)));
+}, true);
+</script>
+</body>
+</html>
