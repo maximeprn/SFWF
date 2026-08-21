@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /* Development only, and it has no effect on a build. Next blocks requests for its own dev
+     chunks unless they come from an origin named here, so opening the dev server on a phone
+     over the LAN serves the HTML and then silently drops every script: the page renders, and
+     nothing on it is clickable, because React never hydrates. The wildcard covers the whole
+     home subnet, since DHCP moves the machine's last octet around. */
+  allowedDevOrigins: ["192.168.*.*", "10.0.*.*"],
+
   /* The 2025 paths that are not coming back. `/program` is a real route again as of phase
      2, so it has left this list; `/media-center` becomes `/press` rather than home, because
      the page it named still exists under a new name. About, tickets, food-crawl and purpose
