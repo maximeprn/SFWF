@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type RefObject } from "react";
+import { createScrollSlack } from "@/lib/chrome/scrollSlack";
 
 /** The ramp back to opaque, below the band — same value the sitewide mask uses. */
 const RAMP = 26;
@@ -39,13 +40,18 @@ export function useProgramContentMask(
     const still = window.matchMedia("(prefers-reduced-motion: reduce)");
     let queued = false;
 
+    /* Carried further down while the page moves, so a mask written a frame behind the
+       compositor still covers the ground crossed since — see `createScrollSlack`. This is the
+       mask the day rail sits on, so it is the one where falling behind is visible. */
+    const slack = createScrollSlack(() => paint());
+
     const paint = () => {
       queued = false;
       const { top } = el.getBoundingClientRect();
       const header = document.querySelector("header");
       const navHeight = header?.getBoundingClientRect().height ?? 0;
       const railHeight = railRef?.current?.getBoundingClientRect().height ?? 0;
-      const band = navHeight + railHeight;
+      const band = navHeight + railHeight + slack.current();
       const mask = still.matches
         ? "none"
         : `linear-gradient(to bottom,` +
@@ -57,6 +63,9 @@ export function useProgramContentMask(
     };
 
     const onScroll = () => {
+      /* Unthrottled: this samples the speed, and one sample per frame would under-report the
+         fast scroll it exists to cover. Only the paint is throttled. */
+      slack.measure();
       if (queued) return;
       queued = true;
       requestAnimationFrame(paint);
@@ -72,6 +81,7 @@ export function useProgramContentMask(
     still.addEventListener("change", paint);
     return () => {
       cancelAnimationFrame(settle);
+      slack.stop();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       still.removeEventListener("change", paint);

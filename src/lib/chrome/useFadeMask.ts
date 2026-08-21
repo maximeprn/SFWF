@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type RefObject } from "react";
+import { createScrollSlack } from "./scrollSlack";
 
 /** The band the copy is masked out under, and the ramp back to opaque below it. */
 const BAND = 56;
@@ -46,17 +47,27 @@ export function useFadeMask(ref: RefObject<HTMLElement | null>, enabled = true) 
     const still = window.matchMedia("(prefers-reduced-motion: reduce)");
     let queued = false;
 
+    /* How much further down the band is carried while the page is moving — see
+       `createScrollSlack`. Zero at rest, so the band is exactly where the design puts it; wider
+       under a flick, so a mask written a frame late still covers the ground the compositor has
+       crossed since. Settling repaints once more, at zero. */
+    const slack = createScrollSlack(() => paint());
+
     const paint = () => {
       queued = false;
       const { top } = el.getBoundingClientRect();
+      const band = BAND + slack.current();
       const mask = still.matches
         ? "none"
-        : `linear-gradient(to bottom,rgba(0,0,0,0) ${-top}px,rgba(0,0,0,0) ${-top + BAND}px,#000 ${-top + BAND + RAMP}px)`;
+        : `linear-gradient(to bottom,rgba(0,0,0,0) ${-top}px,rgba(0,0,0,0) ${-top + band}px,#000 ${-top + band + RAMP}px)`;
       el.style.maskImage = mask;
       el.style.webkitMaskImage = mask;
     };
 
     const onScroll = () => {
+      /* Unthrottled on purpose: this reads the speed, and a sample taken once per frame would
+         under-report the very scroll it is here to cover. The paint stays throttled. */
+      slack.measure();
       if (queued) return;
       queued = true;
       requestAnimationFrame(paint);
@@ -78,6 +89,7 @@ export function useFadeMask(ref: RefObject<HTMLElement | null>, enabled = true) 
     still.addEventListener("change", paint);
     return () => {
       cancelAnimationFrame(settle);
+      slack.stop();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       still.removeEventListener("change", paint);
