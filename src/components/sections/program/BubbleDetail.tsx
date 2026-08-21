@@ -112,7 +112,13 @@ export function BubbleDetail({
       </div>
 
       {/* Line-up and booking on one line, wrapping to two when the bubble is too narrow to
-          hold both — which at 440px is most of them. */}
+          hold both — which at 440px is most of them.
+
+          Held 20px in from the prose above it on both sides. This is the last row in the
+          bubble, and the bubble is a hand-cut blob: its bottom corners bow inward, so a row
+          set flush to the column's edge — the button's raised slab especially — runs at the
+          part of the outline that is closing in on it. The inset is the shape's, not the
+          grid's, which is why it is a flat 20 rather than a share of the padding clamp. */}
       <div
         style={{
           display: "flex",
@@ -120,7 +126,8 @@ export function BubbleDetail({
           justifyContent: "space-between",
           flexWrap: "wrap",
           gap: 18,
-          marginTop: 14,
+          margin: "14px 0 0",
+          padding: "0 8px",
         }}
       >
         <p

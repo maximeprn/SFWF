@@ -2,21 +2,20 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { DayPick } from "@/components/sections/program/DayFilter";
+import { glide } from "@/lib/chrome/glide";
 
 /** The gap kept between the sticky header's own bottom edge and the landed day block. */
 const PICK_GAP = 10;
-/** The pull is ignored this long after a pick, while `land()`'s own scroll is still settling. */
-const PEEK_GRACE_MS = 450;
+/**
+ * The pull is ignored this long after a pick, while `land()`'s own scroll is still settling.
+ * It has to outlast the glide, which is now the longer half of the choreography rather than
+ * the browser's own quick one — see `glide`'s ceiling.
+ */
+const PEEK_GRACE_MS = 1100;
 /** How hard an upward wheel has to move to count as a pull. */
 const WHEEL_THRESHOLD = -10;
 /** How far a finger has to travel downward to count as a pull. */
 const TOUCH_THRESHOLD = 26;
-/**
- * When the safety check runs — past the 340ms fold and past the smooth scroll it rides with,
- * so it reads a settled page rather than one still in motion.
- */
-const LAND_VERIFY_MS = 520;
-
 /**
  * The day pick, the hero's open/folded state, and the scroll choreography around both.
  *
@@ -38,7 +37,7 @@ export function useDayHero() {
   const railRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const pickAtRef = useRef(0);
-  const landTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const glideRef = useRef<(() => void) | undefined>(undefined);
 
   const heroOpen = !chosen || heroPeek;
 
@@ -68,29 +67,29 @@ export function useDayHero() {
    * first frame — so the page travels straight there while the hero folds, instead of
    * chasing a target that is still moving and visibly overshooting on the way.
    *
-   * The delayed pass is a safety net rather than a second animation: on a short document the
-   * browser clamps the scroll while the page shrinks, and that is the one case where the aim
-   * cannot be honoured. Normally it re-measures the same number and does nothing.
+   * The second pass is a safety net rather than a second animation: on a short document the
+   * scroll is clamped while the page shrinks, and that is the one case where the aim cannot be
+   * honoured. It is hung off the first glide's arrival rather than off a timer, so it reads a
+   * page that has genuinely settled instead of one guessed to have settled by now — and it
+   * never runs at all if the reader interrupted the glide, because then the page is where they
+   * put it and not where we aimed it.
    */
   const land = useCallback(() => {
-    clearTimeout(landTimerRef.current);
+    glideRef.current?.();
 
     const shrink = heroRef.current?.getBoundingClientRect().height ?? 0;
     const target = restingTarget(shrink);
     if (target === null) return;
-    if (Math.abs(window.scrollY - target) > 2) {
-      window.scrollTo({ top: target, behavior: "smooth" });
-    }
 
-    landTimerRef.current = setTimeout(() => {
+    glideRef.current = glide(target, () => {
       const settled = restingTarget(0);
       if (settled !== null && Math.abs(window.scrollY - settled) > 2) {
-        window.scrollTo({ top: settled, behavior: "smooth" });
+        glideRef.current = glide(settled);
       }
-    }, LAND_VERIFY_MS);
+    });
   }, [restingTarget]);
 
-  useEffect(() => () => clearTimeout(landTimerRef.current), []);
+  useEffect(() => () => glideRef.current?.(), []);
 
   /* Every pick lands the same way, "all six days" included: it is the top of the list that is
      being asked for either way. `land` reads the hero's height before React has committed the
@@ -125,8 +124,10 @@ export function useDayHero() {
       if (window.scrollY > 2 || Date.now() - pickAtRef.current < PEEK_GRACE_MS) return;
       setHeroPeek(true);
       /* Land on the top rather than wherever the pull happened to stop. The hero opens above
-         the reading position, and a couple of pixels of offset is enough to cut its first line. */
-      window.scrollTo({ top: 0, behavior: "smooth" });
+         the reading position, and a couple of pixels of offset is enough to cut its first line.
+         On the same glide as a pick: it is the same choreography read backwards. */
+      glideRef.current?.();
+      glideRef.current = glide(0);
     };
     const onWheel = (e: WheelEvent) => {
       if (e.deltaY < WHEEL_THRESHOLD) peek();

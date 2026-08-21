@@ -195,6 +195,46 @@ describe("the event bubble's state machine", () => {
     expect(bubble).toMatch(/gridTemplateColumns: grown \? "0fr" : "1fr"/);
   });
 
+/**
+ * The day swap has one rule and it is the whole point of it: nothing that *replaces content*
+ * may happen on the frame of the click. The chip, the fold and the scroll answer immediately;
+ * the list, the open bubbles and the page height all wait until the list is invisible. Wire
+ * any one of them back to `pick` and the flash comes straight back.
+ */
+describe("the day swap", () => {
+  const program = stripComments(
+    readFileSync(join(SRC, "components/sections/program/ProgramSection.tsx"), "utf8"),
+  );
+  const swap = stripComments(readFileSync(join(SRC, "lib/program/useDaySwap.ts"), "utf8"));
+
+  it("renders the day the list is showing, never the day the rail is set to", () => {
+    expect(program).toMatch(/const shown = showing === "all"/);
+    expect(program).toMatch(/showing === "all"\n\s+\? `\$\{ALL_EVENTS\.length\}/);
+    expect(program, "`pick` may reach the rail and nothing else").not.toMatch(/DAYS\[pick\]/);
+  });
+
+  it("keeps the click handler to what answers the click", () => {
+    const body = program.match(/const onPick = \(day: DayPick\) => \{([\s\S]*?)\n {2}\};/)?.[1];
+    expect(body, "the handler moved or was renamed").toBeTruthy();
+    expect(body).not.toMatch(/showOpen|DAYS\[/);
+    expect(program.match(/showOpen\(/g), "one caller, inside the swap").toHaveLength(1);
+  });
+
+  it("leaves faster than it arrives", () => {
+    const out = Number(swap.match(/OUT_MS = (\d+)/)?.[1]);
+    const enter = Number(swap.match(/IN = "opacity \.(\d+)s/)?.[1]) * 10;
+    expect(out).toBeGreaterThan(0);
+    /* The exit is dead time the reader is waiting through; the entrance is the thing they
+       came for. Inverting the two makes the rail feel slow to answer. */
+    expect(out).toBeLessThan(enter);
+  });
+
+  it("stands down entirely under prefers-reduced-motion", () => {
+    expect(swap).toMatch(/transition: reduced \? "none"/);
+    expect(swap).toMatch(/if \(reduced\) \{\n\s+commit\(\);/);
+  });
+});
+
   it("grows the title rather than swapping it for a bigger one", () => {
     expect(bubble).toMatch(/fontSize: grown/);
     expect(bubble.match(/className="bubble-title"/g), "one title, not two").toHaveLength(1);
