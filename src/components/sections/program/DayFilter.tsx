@@ -13,21 +13,27 @@ export type DayPick = "all" | number;
 interface Tab {
   readonly key: DayPick;
   readonly date: string;
+  readonly weekday: string;
   readonly short: string;
-  readonly name: string;
 }
 
 /* The mobile chip carries the weekday whole — `WED 26`, not `WE 26`. The two-letter cut was
    how seven chips used to fit a 320px phone; the room now comes from the padding and tracking
    clamps instead, which buys back more than the extra glyph costs and leaves every chip wider
-   than it was. `short` differs from `date` on the summary chip alone. */
+   than it was. `short` differs from `date` on the summary chip alone.
+
+   The desktop chip stacks the same two facts mono instead of pairing a kicker date with a
+   script name: `date` on top, the weekday spelled out in full below. `longWeekday` already
+   exists for the sticky day header and carries the month too (`Thursday 27 August`); only its
+   first word is wanted here. The summary chip has no second fact to stack, so `weekday` is
+   empty there and the chip stays one line. */
 const TABS: readonly Tab[] = [
-  { key: "all", date: "ALL SIX DAYS", short: "ALL", name: "" },
+  { key: "all", date: "ALL SIX DAYS", weekday: "", short: "ALL" },
   ...DAYS.map((day, i) => ({
     key: i as DayPick,
-    date: day.weekday,
+    date: day.date,
+    weekday: day.longWeekday.split(" ")[0]!.toUpperCase(),
     short: day.weekday,
-    name: day.name,
   })),
 ];
 
@@ -156,47 +162,38 @@ export function DayFilter({
                       boxSizing: "border-box",
                       width: "100%",
                       background: on ? "var(--orange)" : "var(--beige)",
-                      padding: on ? "6px clamp(6px,1vw,13px) 8px" : "6px clamp(5px,0.8vw,10px) 8px",
+                      padding: on ? "6px clamp(11px,1.8vw,22px) 8px" : "6px clamp(10px,1.6vw,19px) 8px",
                       clipPath: soft(i),
                     }}
                   >
+                    {tab.weekday && (
+                      <span
+                        className="mono day-chip-n"
+                        style={{
+                          fontSize: "clamp(7.4px,0.9vw,10.5px)",
+                          letterSpacing: "clamp(.06em,0.09vw,.14em)",
+                          whiteSpace: "nowrap",
+                          color: on ? "var(--button-ink)" : "var(--ink-body)",
+                          transition: "color var(--hover)",
+                        }}
+                      >
+                        {tab.weekday}
+                      </span>
+                    )}
                     <span
                       className="mono day-chip-d"
                       style={{
-                        /* The ceilings were set where the row was tight and stayed there once
-                           it no longer was: past ~1150px the rail's own width stops growing at
-                           `--sw` while the type had already stopped at 8.5px, leaving 256px of
-                           the row unused at 1600. Both lines climb together — the date is the
-                           only thing in the summary chip, so it has to keep pace with the names
-                           beside it or that chip shrinks away from the row. */
-                        fontSize: tab.key === "all" ? "clamp(9.5px,1.15vw,13px)" : "clamp(7.4px,0.9vw,10.5px)",
-                        letterSpacing: "clamp(.06em,0.09vw,.14em)",
+                        marginTop: tab.weekday ? 1 : 0,
+                        fontSize: "clamp(11px,1.3vw,15px)",
+                        fontWeight: 700,
+                        letterSpacing: "clamp(.02em,0.05vw,.06em)",
                         whiteSpace: "nowrap",
-                        color: on ? "var(--button-ink)" : "var(--ink-body)",
+                        color: on ? "var(--button-ink)" : "var(--ink-title)",
                         transition: "color var(--hover)",
                       }}
                     >
                       {tab.date}
                     </span>
-                    {tab.name && (
-                      <span
-                        className="day-chip-n"
-                        style={{
-                          marginTop: 1,
-                          /* `nowrap` above and below is what makes this safe to grow: a name
-                             too big for its chip cannot wrap and quietly deepen the row — it
-                             widens it, and the row is measured across the whole desktop range
-                             so that never reaches the column's edge. `closing celebration` is
-                             the one that decides the ceiling; every other name has slack. */
-                          font: "400 clamp(11.5px,1.4vw,18.5px)/1.1 var(--font-display)",
-                          whiteSpace: "nowrap",
-                          color: on ? "var(--button-ink)" : "var(--ink-title)",
-                          transition: "color var(--hover)",
-                        }}
-                      >
-                        {tab.name}
-                      </span>
-                    )}
                     <Ring shapeIndex={i} weight="calc(var(--bubble-edge) / 2)" />
                   </span>
                 </button>
