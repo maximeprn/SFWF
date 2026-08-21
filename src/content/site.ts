@@ -94,10 +94,10 @@ export const SPONSORS = [
  * artwork — a uniform height leaves the wide wordmarks shouting and the round marks lost.
  *
  * Nine of these are the prototype's own numbers, unchanged, and they were good: measured
- * against an equal-ink baseline they sit within a few px. Six were nudged after looking at
- * the rendered row — wild, bravo and cev up, lokal-lab, roots and lamari down. The three
- * coming down carry the heaviest ink in the set; the three going up are line-art marks with
- * small type beneath, which a bounding box flatters and the eye does not.
+ * against an equal-ink baseline they sit within a few px. Five were nudged after looking at
+ * the rendered row — wild, bravo and cev up, roots and lamari down. The pair coming down
+ * carry the heaviest ink in the set; the three going up are line-art marks with small type
+ * beneath, which a bounding box flatters and the eye does not.
  *
  * Marks only. The prototype set two further hosts in type because they have no artwork;
  * that pair is out, so the row is a wall of logos with nothing lettered among them.
@@ -105,7 +105,6 @@ export const SPONSORS = [
 export const HOST_LOGOS = [
   { name: "Wild Siargao", src: "/venues/beige/wild.png", width: 43, intrinsic: [114, 174] },
   { name: "Alma", src: "/venues/beige/alma.png", width: 107, intrinsic: [318, 141] },
-  { name: "Lokal Lab", src: "/venues/beige/lokal-lab.png", width: 76, intrinsic: [249, 147] },
   { name: "Lyma", src: "/venues/beige/lyma.png", width: 81, intrinsic: [246, 147] },
   { name: "Kermit Siargao", src: "/venues/beige/kermit.png", width: 76, intrinsic: [228, 147] },
   { name: "Bravo Beach Resort", src: "/venues/beige/bravo.png", width: 58, intrinsic: [156, 165] },

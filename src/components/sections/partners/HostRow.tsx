@@ -20,7 +20,7 @@ export function HostRow() {
       <p
         className="mono"
         style={{
-          /* A touch more than the sponsors' — fifteen marks over three lines is a denser
+          /* A touch more than the sponsors' — fourteen marks over three lines is a denser
              block, and the label has to clear it. */
           margin: "0 0 clamp(28px,3.4vw,40px)",
           fontSize: 11,
