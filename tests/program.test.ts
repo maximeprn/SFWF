@@ -71,13 +71,17 @@ describe("access", () => {
   });
 
   it("falls back to the festival's own account only where no handle is on record", () => {
-    // Two venues have none. Sagana was the one that mattered — a ₱2,000 dinner whose booking
+    // One venue has none. Sagana was the first to matter — a ₱2,000 dinner whose booking
     // pointed at the festival's own account — and the festival confirmed @saganasiargao on
-    // 19 Aug 2026. Of the two left, Siargao Corner Café is free and so costs nothing; Lunares
-    // Café still shows RESERVE, because its price is TBD rather than confirmed free. If that
-    // price lands as a real figure it needs a real handle with it.
+    // 19 Aug 2026. Lunares Café was the second, and the one this test was written to keep an
+    // eye on: it shows RESERVE, so its booking went somewhere, and that somewhere was the
+    // wrong account. @lunarescafe came in on 21 Aug 2026.
+    //
+    // Siargao Corner Café is the only one left, and it is the harmless case — free, WALK IN,
+    // so no reservation is being misdirected. Anything joining it here needs checking against
+    // its access word before it is left alone.
     const unhandled = Object.entries(VENUES).filter(([, v]) => v.handle === null);
-    expect(unhandled.map(([key]) => key).sort()).toEqual(["LUNARES CAFÉ", "SIARGAO CORNER CAFÉ"]);
+    expect(unhandled.map(([key]) => key).sort()).toEqual(["SIARGAO CORNER CAFÉ"]);
     expect(access(ALL_EVENTS.find((e) => e.venue === "SIARGAO CORNER CAFÉ")!).word).toBe("WALK IN");
     for (const [key] of unhandled) {
       expect(instagramUrl(key as keyof typeof VENUES)).toContain(FALLBACK_HANDLE);

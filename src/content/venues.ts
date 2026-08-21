@@ -4,9 +4,14 @@ import type { Venue, VenueKey } from "./types";
  * Where a reservation actually goes. The festival sells nothing — every booking is a DM to
  * the venue hosting that event, so this table is the whole booking system.
  *
- * Three venues have no handle on record and fall back to the festival's own account.
- * Corner Café and Lunares are walk-in, so it costs nothing there; Sagana is a ₱2,000
- * dinner, and the festival still owes us a real handle for it before launch.
+ * Two venues have no handle on record and fall back to the festival's own account. Corner
+ * Café is walk-in, so it costs nothing there; Sagana is a ₱2,000 dinner, and the festival
+ * still owes us a real handle for it before launch.
+ *
+ * The fallback is the reason a missing handle is worth chasing rather than leaving: it does
+ * not read as missing. The button still says "Message Lunares Café" and still opens an
+ * Instagram profile, so nothing looks broken — it just sends the booking to the wrong
+ * account. Lunares was exactly that until its own handle came in.
  */
 export const FALLBACK_HANDLE = "siargaofoodandwinefestival";
 
@@ -19,7 +24,7 @@ export const VENUES: Readonly<Record<VenueKey, Venue>> = {
     bookName: "Roots",
   },
   ALMA: { place: "Alma", handle: "almasiargao" },
-  "LUNARES CAFÉ": { place: "Lunares Café", handle: null },
+  "LUNARES CAFÉ": { place: "Lunares Café", handle: "lunarescafe" },
   "ISLA PANCITERIA": { place: "Isla Panciteria", handle: "islapanciteria.siargao" },
   "LOKAL HUB": { place: "Lokal Hub", handle: "lokallab" },
   LYMA: { place: "Lyma", handle: "lymasiargao" },
