@@ -9,15 +9,16 @@ const NEAR = 2;
  * cannot count for everything, or the long travel from the top of the programme takes as long
  * as the reader would have taken to scroll it themselves.
  *
- * The base is the site's own `--open`, so the shortest landing and the hero's fold are the
- * same length and read as one movement; everything longer than that stretches past it. There
- * is deliberately no floor above it — the second, correcting pass in `useDayHero` is usually a
- * few dozen pixels, and a floor is what turns that into a visible crawl at the end of a
- * landing that had already arrived.
+ * The base outlasts the 340ms fold on purpose. The fold is a thing changing; the scroll is the
+ * page coming to rest around it, and letting the travel run on past the change is what reads
+ * as settling rather than as two animations that stopped together. There is deliberately no
+ * floor above it — the second, correcting pass in `useDayHero` is usually a few dozen pixels,
+ * and a floor is what turns that into a visible crawl at the end of a landing that had already
+ * arrived.
  */
-const BASE_MS = 340;
-const PER_PX = 0.75;
-const MAX_MS = 1000;
+const BASE_MS = 470;
+const PER_PX = 1;
+const MAX_MS = 1300;
 
 /**
  * Sine in and out, which is the gentlest curve that starts and ends at rest: its acceleration

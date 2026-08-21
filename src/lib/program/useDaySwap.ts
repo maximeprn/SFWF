@@ -8,7 +8,7 @@ import type { DayPick } from "@/components/sections/program/DayFilter";
  * click on the frame it happens — the chip lights, the hero folds, the page starts moving —
  * so this is the one part of the response nobody is waiting on. It clears rather than lingers.
  */
-const OUT_MS = 220;
+const OUT_MS = 300;
 
 /** Leaving runs on the site's own curve, which drops away immediately and settles late. */
 const OUT = `opacity ${OUT_MS}ms var(--ease)`;
@@ -22,7 +22,7 @@ const OUT = `opacity ${OUT_MS}ms var(--ease)`;
  *
  * The number to tune if it still reads fast is this one; `OUT_MS` should stay well under it.
  */
-const IN = "opacity .48s cubic-bezier(.25,.5,.2,1)";
+const IN = "opacity .68s cubic-bezier(.25,.5,.2,1)";
 
 /** The list's own fade, written the way `foldStyle` is — a function, not a class. */
 export function swapStyle(lit: boolean, reduced: boolean): CSSProperties {
@@ -93,8 +93,8 @@ export function useDaySwap(
       }
       setLit(false);
       /* A second pick mid-fade restarts the wait rather than shortening it. The list is already
-         dark, so another 220ms costs only the wait, where cutting the fade short to catch up
-         would put the flash back. */
+         dark, so another `OUT_MS` costs only the wait, where cutting the fade short to catch
+         up would put the flash back. */
       timer.current = setTimeout(commit, OUT_MS);
     },
     [reduced],

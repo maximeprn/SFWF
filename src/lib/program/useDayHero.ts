@@ -11,7 +11,7 @@ const PICK_GAP = 10;
  * It has to outlast the glide, which is now the longer half of the choreography rather than
  * the browser's own quick one — see `glide`'s ceiling.
  */
-const PEEK_GRACE_MS = 1100;
+const PEEK_GRACE_MS = 1400;
 /** How hard an upward wheel has to move to count as a pull. */
 const WHEEL_THRESHOLD = -10;
 /** How far a finger has to travel downward to count as a pull. */
