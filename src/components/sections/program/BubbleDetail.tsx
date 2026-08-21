@@ -7,8 +7,17 @@ import { access, hintRest } from "@/lib/program/eventCopy";
 import { soft } from "@/lib/design/shapes";
 import type { StyleWithVars } from "@/lib/ui/cssVars";
 
+/* The one meta size the bubble's small lines share. Kept apart from the face below because
+   two faces now set it. */
+const META_SIZE = "clamp(13.5px,0.3vw + 12.8px,14.5px)";
 /* Size and face only — every use below prefixes its own weight and style. */
-const META = "clamp(13.5px,0.3vw + 12.8px,14.5px)/1.45 var(--font-body)";
+const META = `${META_SIZE}/1.45 var(--font-body)`;
+/* The hint line's mono, complete with its weight, for the line-up. `.92` is the same optical
+   correction the venue makes a few lines down and for the same reason — Menlo's x-height runs
+   large, so mono set at the shared size outweighs the Arimo around it. It bottoms out at
+   12.4px, well clear of the scale's 11px floor. Leading is a touch looser than the rest of
+   the meta because mono at 700 sets a denser line. */
+const META_MONO = `700 calc(${META_SIZE} * 0.92)/1.5 var(--font-mono)`;
 const PROSE = "clamp(14.5px,0.5vw + 13.1px,16px)/1.6 var(--font-body)";
 
 /**
@@ -119,8 +128,20 @@ export function BubbleDetail({
             margin: 0,
             flex: 1,
             minWidth: 150,
-            font: event.who ? `400 ${META}` : `italic 400 ${META}`,
+            /* The line-up takes the hint line's mono at 700 — the names of the people
+               cooking are what most readers came into the bubble for, and set in the same
+               regular Arimo as everything else they sank into the paragraph above them.
+               Mono and bold pull them out without adding a colour or a rule.
+
+               Sentence case, unlike the venue: these are names, and you read a name by its
+               word shape. Uppercasing "Chef Jarrod · Chef Marc" would throw that away.
+
+               The absent-copy line stays italic Arimo at 400 — italic is how this file
+               already says a thing is missing, and mono 700 would announce the absence
+               louder than the line-ups it stands in for. */
+            font: event.who ? META_MONO : `italic 400 ${META}`,
             color: "var(--ink-body)",
+            letterSpacing: event.who ? ".01em" : undefined,
           }}
         >
           {event.who ?? "Line-up to be announced"}
