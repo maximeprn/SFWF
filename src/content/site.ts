@@ -73,6 +73,10 @@ export type SocialName = (typeof SOCIALS)[number]["name"];
  * the design of record's own host row sits at once the column is 1180. The nudges are
  * preserved; only the scale moved.
  *
+ * Sunlight Air's 82 is the exception and was measured, not carried over: it came in later, so
+ * its ink was rasterised and matched against the median of the ten already here. At 82 it is
+ * 62px high, between Happy Living's 57 and Masterplan's 65 — the two marks nearest it in shape.
+ *
  * They are our numbers, not the festival's. Anyone with the real brand book should feel
  * free to overrule them.
  */
@@ -86,6 +90,7 @@ export const SPONSORS = [
   { name: "Masterplan Global", src: "/sponsors/masterplan-global.svg", width: 76, intrinsic: [837, 713] },
   { name: "Ripple", src: "/sponsors/ripple.svg", width: 156, intrinsic: [852, 243] },
   { name: "The Henry", src: "/sponsors/the-henry.svg", width: 71, intrinsic: [383, 371] },
+  { name: "Sunlight Air", src: "/sponsors/sunlight-air.svg", width: 82, intrinsic: [1246, 937] },
   { name: "Tropika", src: "/sponsors/tropika.svg", width: 71, intrinsic: [395, 395] },
 ] as const;
 
@@ -94,18 +99,33 @@ export const SPONSORS = [
  * artwork — a uniform height leaves the wide wordmarks shouting and the round marks lost.
  *
  * Nine of these are the prototype's own numbers, unchanged, and they were good: measured
- * against an equal-ink baseline they sit within a few px. Six were nudged after looking at
- * the rendered row — wild, bravo and cev up, lokal-lab, roots and lamari down. The three
- * coming down carry the heaviest ink in the set; the three going up are line-art marks with
- * small type beneath, which a bounding box flatters and the eye does not.
+ * against an equal-ink baseline they sit within a few px. Five were nudged after looking at
+ * the rendered row — wild, bravo and cev up, roots and lamari down. The pair coming down
+ * carry the heaviest ink in the set; the three going up are line-art marks with small type
+ * beneath, which a bounding box flatters and the eye does not.
+ *
+ * Lokal Lab's 63 is ours. Equal ink wants 71, but it is a near-square two-line lockup, and at
+ * 71 it stands taller than anything else in the row. 63 puts it at 61px high — the height the
+ * other two square marks, Lunares and Siargao Corner Café, already sit at.
  *
  * Marks only. The prototype set two further hosts in type because they have no artwork;
  * that pair is out, so the row is a wall of logos with nothing lettered among them.
+ *
+ * Lokal Lab's file carries a year and the others do not, and that is deliberate. The handoff
+ * shipped Loka's wordmark as `lokal-lab.png` — two different businesses, one filename — so this
+ * row credited Loka under Lokal Lab's name until 21 Aug 2026. Correcting it in place left the
+ * URL unchanged, and every browser that had ever loaded the row went on serving Loka's bitmap
+ * out of cache against `Cache-Control: max-age=0, must-revalidate`. The new name is the only
+ * thing that actually reaches a returning visitor. Loka's own file is now `loka.png`, kept and
+ * unreferenced; do not point anything at `lokal-lab.png` again, that URL is poisoned.
+ *
+ * The mark is knocked out of the festival's own beige-on-violet original — flat `--beige`,
+ * coverage in the alpha, the same treatment as every other file in `venues/beige/`.
  */
 export const HOST_LOGOS = [
   { name: "Wild Siargao", src: "/venues/beige/wild.png", width: 43, intrinsic: [114, 174] },
   { name: "Alma", src: "/venues/beige/alma.png", width: 107, intrinsic: [318, 141] },
-  { name: "Lokal Lab", src: "/venues/beige/lokal-lab.png", width: 76, intrinsic: [249, 147] },
+  { name: "Lokal Lab", src: "/venues/beige/lokal-lab-2026.png", width: 63, intrinsic: [224, 216] },
   { name: "Lyma", src: "/venues/beige/lyma.png", width: 81, intrinsic: [246, 147] },
   { name: "Kermit Siargao", src: "/venues/beige/kermit.png", width: 76, intrinsic: [228, 147] },
   { name: "Bravo Beach Resort", src: "/venues/beige/bravo.png", width: 58, intrinsic: [156, 165] },

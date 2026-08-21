@@ -170,3 +170,21 @@ These are §13 items that touch what shipped. None were invented around.
 7. **`CLAUDE-CODE-2026-08-19-content-update.md` §6 offers marks for Dayána, Hapag and Morris
    Danzen.** They are named in programme copy and absent from the hosts row, as the doc describes.
    No decision taken here.
+8. ~~The handoff's `lokal-lab.png` is Loka's wordmark, not Lokal Lab's.~~ **Settled 21 Aug 2026.**
+   The artwork lettered LOKA, and `public/partners/loka.svg` is the same mark traced at the same
+   1.70 aspect — two different businesses under one filename, mislabelled at source in
+   `design_handoff_2026_redesign/assets/` and byte-identical to what we shipped. So the hosts row
+   credited Loka under Lokal Lab's name from the start. Loka is out of `HOST_LOGOS` and its file
+   is renamed `venues/beige/loka.png`, kept but unreferenced. Lokal Lab is in, knocked out of the
+   festival's own beige-on-violet original (`Logos/Venue/Lokal Lab/images.jpeg`). It is filed as
+   **`lokal-lab-2026.png`, not `lokal-lab.png`** — correcting the artwork in place left the URL
+   unchanged, so browsers kept serving Loka's bitmap from cache and the row looked unfixed. The
+   old path is poisoned; nothing should point at it again. **Worth a look at the rest of that
+   folder:** its third file is CEV's logo, so this is not the only misfiling.
+9. ~~Sunlight Air was offered as a sponsor on 21 Aug 2026 and is not in `SPONSORS`.~~ **Settled
+   the same day.** The only artwork available was white script and a yellow sun on flag blue, and
+   the row is a flat beige knock-out, so it could not be used as supplied. The festival provided a
+   single-colour vector trace already set in `#E9E7C2`, which is the convention the other eight
+   sponsor SVGs follow. **It is a trace, not the original vector** — worth swapping for the real
+   one if Sunlight Air ever sends it. Its width, 82, is the only number in `SPONSORS` measured
+   rather than carried over from the 1040px column; the note there says why.

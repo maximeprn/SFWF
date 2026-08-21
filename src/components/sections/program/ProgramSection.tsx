@@ -5,6 +5,7 @@ import { ALL_EVENTS, DAYS } from "@/content/events";
 import { foldInner, foldStyle } from "@/lib/program/heroFold";
 import { useBubbleReveal } from "@/lib/program/useBubbleReveal";
 import { useDayHero } from "@/lib/program/useDayHero";
+import { swapStyle, useDaySwap } from "@/lib/program/useDaySwap";
 import { useProgramContentMask } from "@/lib/program/useProgramContentMask";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import { DayFilter, DayFilterIllustration, type DayPick } from "./DayFilter";
@@ -41,17 +42,26 @@ export function ProgramSection() {
   useProgramContentMask(heroMaskRef);
   useProgramContentMask(maskRef, railRef);
 
+  /* Opening the arriving day's bubbles belongs to the swap, not to the click — it is a change
+     of content, so it waits behind the fade with the rest of them. */
+  const { showing, lit, swapTo } = useDaySwap(reduced, (day) =>
+    showOpen(day === "all" ? [] : DAYS[day]!.events.map((event) => event.id)),
+  );
+
+  /* One click, two clocks. The rail is set to `pick` on the frame of the click and so is
+     everything that answers it; the list below is showing `showing`, the same day one fade
+     later — see `useDaySwap`. */
   const onPick = (day: DayPick) => {
     pickDay(day);
-    showOpen(day === "all" ? [] : DAYS[day]!.events.map((event) => event.id));
+    swapTo(day);
   };
 
-  const shown = pick === "all" ? DAYS : [DAYS[pick]!];
+  const shown = showing === "all" ? DAYS : [DAYS[showing]!];
   /* On a single day the date says enough; the count is a summary of the whole week. */
   const count =
-    pick === "all"
+    showing === "all"
       ? `${ALL_EVENTS.length} GATHERINGS · SIX DAYS`
-      : DAYS[pick]!.longWeekday.toUpperCase();
+      : DAYS[showing]!.longWeekday.toUpperCase();
 
   return (
     <>
@@ -137,15 +147,19 @@ export function ProgramSection() {
               </p>
             </div>
           </div>
-          {shown.map((day) => (
-            <DaySection
-              key={day.id}
-              day={day}
-              dayIndex={DAYS.indexOf(day)}
-              phases={phases}
-              onToggle={toggle}
-            />
-          ))}
+          {/* The one wrapper the swap needs: the days fade as a block, so the closing line
+              below them — which never changes on a pick — is left alone. */}
+          <div style={swapStyle(lit, reduced)}>
+            {shown.map((day) => (
+              <DaySection
+                key={day.id}
+                day={day}
+                dayIndex={DAYS.indexOf(day)}
+                phases={phases}
+                onToggle={toggle}
+              />
+            ))}
+          </div>
         </section>
 
         <section style={{ ...FRAME, padding: "clamp(44px,6vw,72px) var(--gutter) 0", textAlign: "center" }}>
