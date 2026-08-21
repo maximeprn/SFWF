@@ -4,14 +4,15 @@ import type { Venue, VenueKey } from "./types";
  * Where a reservation actually goes. The festival sells nothing — every booking is a DM to
  * the venue hosting that event, so this table is the whole booking system.
  *
- * Two venues have no handle on record and fall back to the festival's own account. Corner
- * Café is walk-in, so it costs nothing there; Sagana is a ₱2,000 dinner, and the festival
- * still owes us a real handle for it before launch.
+ * One venue has no handle on record and falls back to the festival's own account: Siargao
+ * Corner Café, which is walk-in, so there is no reservation to misdirect. Sagana and Lunares
+ * were the two that mattered — both priced, both sending real bookings — and both are now on
+ * their own accounts.
  *
- * The fallback is the reason a missing handle is worth chasing rather than leaving: it does
- * not read as missing. The button still says "Message Lunares Café" and still opens an
- * Instagram profile, so nothing looks broken — it just sends the booking to the wrong
- * account. Lunares was exactly that until its own handle came in.
+ * The fallback is why a missing handle is worth chasing rather than leaving: it does not read
+ * as missing. The button still carries the venue's name and still opens an Instagram profile,
+ * so nothing looks broken — only the destination is wrong. `tests/program.test.ts` pins this
+ * list to exactly the venues above so a third cannot be added quietly.
  */
 export const FALLBACK_HANDLE = "siargaofoodandwinefestival";
 
