@@ -2,10 +2,13 @@
  * Writes the three App Router icons from the festival's favicon symbol.
  *
  * `public/logo/sfwf-favicon-symbol.svg` is the festival's own file — the seal's octopus with
- * its glasses and its catch, already framed square on the violet ground and already cropped
- * of the ring lettering. Nothing here reframes it; this only rasterises it at the sizes
- * Next's file conventions ask for. The one edit made to the original was its ground hex,
- * #4E3F79 → the palette's #4f3f79.
+ * its glasses and its catch, already cropped of the ring lettering. The one edit made to the
+ * original was its ground hex, #4E3F79 → the palette's #4f3f79.
+ *
+ * The tab icons are round: the square ground becomes an inscribed disc and the drawing is
+ * pulled in to sit inside it. `apple-icon.png` is the exception and stays full-bleed square —
+ * iOS masks it to its own squircle and fills any transparency it finds with black, so a disc
+ * would land on the home screen inside a black box.
  *
  * Run after replacing the symbol:  node scripts/make-favicon.mjs
  */
@@ -13,9 +16,12 @@ import { readFile, writeFile } from "node:fs/promises";
 import sharp from "sharp";
 
 const SOURCE = "public/logo/sfwf-favicon-symbol.svg";
+const GROUND = "#4f3f79";
+const BEIGE = "#e9e7c2";
 
-/** The symbol's viewBox, in its own units — the density maths below is relative to it. */
-const ARTBOARD = 2302;
+/** How much of the disc's radius the drawing is allowed to reach. Left at its own size it
+ *  spans 95% of it and the glasses and the antenna kiss the edge; this leaves a ring. */
+const MARK_FILL = 0.88;
 
 /**
  * The drawing is line art at one weight, and below ~64px its thinnest strokes fall under a
@@ -29,18 +35,48 @@ const SMALL_ICON_EDGE = 48;
  *  librsvg for 16 pixels directly. */
 const SUPERSAMPLE = 4;
 
-const symbol = await readFile(SOURCE, "utf8");
-if (!symbol.includes("#4f3f79")) throw new Error(`${SOURCE} is not on the palette's ground`);
+const source = await readFile(SOURCE, "utf8");
+if (!source.includes(GROUND)) throw new Error(`${SOURCE} is not on the palette's ground`);
 
-function render(edge) {
-  const svg =
+const box = source.match(/viewBox="([^"]+)"/)?.[1].split(/\s+/).map(Number);
+const d = source.match(/ d="([^"]+)"/)?.[1];
+if (!box || !d) throw new Error(`${SOURCE} is not the traced symbol any more`);
+
+const centre = { x: box[0] + box[2] / 2, y: box[1] + box[3] / 2 };
+const radius = box[2] / 2;
+
+/** Every point in this path is an absolute M/L, so the extent is just the coordinates. */
+function markRadius() {
+  const nums = d.match(/-?\d+(?:\.\d+)?/g).map(Number);
+  let reach = 0;
+  for (let i = 0; i < nums.length; i += 2) {
+    reach = Math.max(reach, Math.hypot(nums[i] - centre.x, nums[i + 1] - centre.y));
+  }
+  return reach;
+}
+
+const scale = (MARK_FILL * radius) / markRadius();
+
+/** Stroke is applied inside the scaled group, so it has to be divided back out to land at
+ *  the width the artboard means. */
+function markup(edge, { round }) {
+  const stroke =
     edge > SMALL_ICON_EDGE
-      ? symbol
-      : symbol.replace(
-          'fill-rule="evenodd"',
-          `fill-rule="evenodd" stroke="#E9E7C2" stroke-width="${SMALL_ICON_STROKE}" stroke-linejoin="round"`,
-        );
-  return sharp(Buffer.from(svg), { density: (72 * SUPERSAMPLE * edge) / ARTBOARD })
+      ? ""
+      : ` stroke="${BEIGE}" stroke-width="${SMALL_ICON_STROKE / (round ? scale : 1)}" stroke-linejoin="round"`;
+  const path = `<path fill="${BEIGE}" fill-rule="evenodd"${stroke} d="${d}"/>`;
+  if (!round) return Buffer.from(source.replace(/ d="/, `${stroke} d="`));
+
+  return Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box.join(" ")}">` +
+      `<circle cx="${centre.x}" cy="${centre.y}" r="${radius}" fill="${GROUND}"/>` +
+      `<g transform="translate(${centre.x} ${centre.y}) scale(${scale}) translate(${-centre.x} ${-centre.y})">` +
+      `${path}</g></svg>`,
+  );
+}
+
+function render(edge, { round = true } = {}) {
+  return sharp(markup(edge, { round }), { density: (72 * SUPERSAMPLE * edge) / box[2] })
     .resize(edge, edge, { kernel: "lanczos3" })
     .png({ compressionLevel: 9 })
     .toBuffer();
@@ -73,7 +109,7 @@ function ico(slices) {
 
 const [icon, appleIcon, ...icoSlices] = await Promise.all([
   render(512),
-  render(180),
+  render(180, { round: false }),
   ...[16, 32, 48].map((edge) => render(edge).then((png) => ({ edge, png }))),
 ]);
 const bundle = ico(icoSlices);
@@ -85,6 +121,6 @@ await Promise.all([
 ]);
 
 const kb = (bytes) => `${(bytes / 1024).toFixed(0)}K`;
-console.log(`icon.png        512       ${kb(icon.length)}`);
-console.log(`apple-icon.png  180       ${kb(appleIcon.length)}`);
-console.log(`favicon.ico     ${icoSlices.map((s) => s.edge).join("/")}  ${kb(bundle.length)}`);
+console.log(`icon.png        512       round     ${kb(icon.length)}`);
+console.log(`apple-icon.png  180       full-bleed ${kb(appleIcon.length)}`);
+console.log(`favicon.ico     ${icoSlices.map((s) => s.edge).join("/")}  round     ${kb(bundle.length)}`);
