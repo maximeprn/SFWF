@@ -2,7 +2,7 @@ import { Mark } from "@/components/ui/Mark";
 import { WobbleFlourish } from "@/components/ui/Wobble";
 import { SPONSORS } from "@/content/site";
 
-/** The four sponsor marks, beige on the dye. Never boxed, never on a white plate. */
+/** The sponsor marks, beige on the dye. Never boxed, never on a white plate. */
 export function SponsorRow() {
   return (
     <section
@@ -37,9 +37,13 @@ export function SponsorRow() {
           justifyContent: "center",
           alignItems: "center",
           gap: "clamp(22px,3.6vw,40px)",
-          /* Same measure as the host row directly above. Left at the full column the ten
-             marks pack 8 + 2 at desktop and the last two read as stragglers. */
-          maxWidth: 980,
+          /* The full column, unlike the host row above it, which is held at 980. That cap
+             was this row's too while it carried eleven marks: at the full column those
+             eleven packed 8 + 2 and the last two read as stragglers. Fifteen marks invert
+             it — 980 now packs 6 + 7 + 2 and strands the same two, where the full column
+             packs 7 + 8, two filled rows answering the host row's 8 + 7. The measures no
+             longer match; the shape of the two blocks does, which is what was being
+             protected. */
           margin: "clamp(4px,1vw,10px) auto 0",
         }}
       >

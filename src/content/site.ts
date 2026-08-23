@@ -63,7 +63,7 @@ export type SocialName = (typeof SOCIALS)[number]["name"];
  * next/image needs it to reserve the box — and `width` is what it actually renders at.
  *
  * Widths are hand-tuned for optical weight, the same way `HOST_LOGOS` below is, because a
- * common height cannot serve both shapes here: four of these are square badges and one
+ * common height cannot serve both shapes here: several of these are square badges and one
  * (Destileria) is nearly five times as wide as it is tall, so equal height leaves the
  * badges reading as dots. Equal *area* overcorrects the other way and lets a badge tower
  * over the wordmarks, since a wordmark's bounding box is mostly the whitespace between
@@ -76,6 +76,13 @@ export type SocialName = (typeof SOCIALS)[number]["name"];
  * Sunlight Air's 82 is the exception and was measured, not carried over: it came in later, so
  * its ink was rasterised and matched against the median of the ten already here. At 82 it is
  * 62px high, between Happy Living's 57 and Masterplan's 65 — the two marks nearest it in shape.
+ *
+ * The four resorts came in later still (23 Aug 2026) and were measured the same way, against
+ * the mark each one is nearest in shape rather than against the median alone — equal ink on its
+ * own wanted Sunyata at 79px high, taller than anything else in the row. Harana sits with
+ * Sunlight Air; Jungle Nest with Galatea; Sunyata takes The Henry's height, the other line-art
+ * mark of its density; The Ronin sits just above Destileria and stays under its 175, which is
+ * the widest this row goes.
  *
  * They are our numbers, not the festival's. Anyone with the real brand book should feel
  * free to overrule them.
@@ -92,6 +99,10 @@ export const SPONSORS = [
   { name: "The Henry", src: "/sponsors/the-henry.svg", width: 71, intrinsic: [383, 371] },
   { name: "Sunlight Air", src: "/sponsors/sunlight-air.svg", width: 82, intrinsic: [1246, 937] },
   { name: "Tropika", src: "/sponsors/tropika.svg", width: 71, intrinsic: [395, 395] },
+  { name: "Harana Surf Resort", src: "/sponsors/harana-surf.svg", width: 84, intrinsic: [1295, 965] },
+  { name: "Jungle Nest Resort", src: "/sponsors/jungle-nest.svg", width: 126, intrinsic: [1552, 650] },
+  { name: "Sunyata Resort", src: "/sponsors/sunyata.svg", width: 78, intrinsic: [667, 593] },
+  { name: "The Ronin Siargao", src: "/sponsors/the-ronin.svg", width: 172, intrinsic: [1574, 339] },
 ] as const;
 
 /**
