@@ -26,12 +26,23 @@ export function track(name: string, params: Readonly<Record<string, string>>): v
 }
 
 /**
- * A visitor left for a venue's Instagram to book. The festival sells nothing, so this click
- * is the closest thing the site has to a conversion — it is the end of the only funnel here.
+ * The programme's two-step funnel, and the reason both halves carry the same two parameters:
+ * the interesting number is the gap between them, per gathering. `programme_open` says a
+ * bubble was worth reading; `booking_click` says it was worth going to.
  *
- * `venue` and `event_title` are GA4 custom parameters: they reach the property immediately
+ * `venue` and `event_title` are GA4 custom parameters. They reach the property immediately
  * and show up in DebugView and Realtime, but they only appear in the standard reports once
  * someone registers them in Admin → Custom definitions.
+ */
+
+/** A visitor opened a bubble to read it. The soft half — interest, not intent. */
+export function trackProgrammeOpen(venue: string, eventTitle: string): void {
+  track("programme_open", { venue, event_title: eventTitle });
+}
+
+/**
+ * A visitor left for a venue's Instagram to book. The festival sells nothing, so this click
+ * is the closest thing the site has to a conversion — it is the end of the only funnel here.
  */
 export function trackBookingClick(venue: string, eventTitle: string): void {
   track("booking_click", { venue, event_title: eventTitle });

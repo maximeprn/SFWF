@@ -4,6 +4,8 @@ import { Fragment } from "react";
 
 import { Ring } from "@/components/ui/Ring";
 import type { FestivalEvent } from "@/content/types";
+import { placeOf } from "@/content/venues";
+import { trackProgrammeOpen } from "@/lib/analytics";
 import { soft } from "@/lib/design/shapes";
 import type { Phase } from "@/lib/program/useBubbleReveal";
 import { AccessMark } from "./AccessMark";
@@ -49,17 +51,36 @@ export function EventBubble({
   const open = phase !== undefined;
   const grown = phase === "open";
 
+  /**
+   * The soft half of the programme's funnel: a bubble opened is a gathering someone wanted
+   * to read about, whether or not they went on to book it.
+   *
+   * Only the opening half is a signal. Closing is how you get to the next bubble, not an
+   * opinion about this one, so it sends nothing. The predicate is `useBubbleReveal`'s own —
+   * a tap during the close animation re-opens, and is counted.
+   *
+   * Two things it deliberately does not catch. The booking button stops its click short of
+   * here, so following a link never also reports an open; and picking a day drives `showOpen`
+   * rather than this, which is right — that is a change of view, not sixteen decisions.
+   */
+  const toggle = () => {
+    if (phase === undefined || phase === "closing") {
+      trackProgrammeOpen(placeOf(event.venue), event.title);
+    }
+    onToggle();
+  };
+
   return (
     <div
       role="button"
       tabIndex={0}
       aria-expanded={open}
-      onClick={onToggle}
+      onClick={toggle}
       onKeyDown={(e) => {
         if (e.key !== "Enter" && e.key !== " ") return;
         /* Space would scroll the page and Enter would submit anything wrapping this. */
         e.preventDefault();
-        onToggle();
+        toggle();
       }}
       className="bubble on-beige"
       style={{

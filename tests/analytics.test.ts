@@ -38,8 +38,9 @@ const load = () => import("@/lib/analytics");
 describe("the booking event", () => {
   it("sends nothing at all when the measurement ID is unset", async () => {
     delete process.env.NEXT_PUBLIC_GA_ID;
-    const { trackBookingClick } = await load();
+    const { trackProgrammeOpen, trackBookingClick } = await load();
 
+    trackProgrammeOpen("Lyma", "Chef Jarrod Moore × Lyma collaboration dinner");
     trackBookingClick("Lyma", "Chef Jarrod Moore × Lyma collaboration dinner");
 
     // Local dev and every preview deployment. No tag, no queue, no console warning.
@@ -59,6 +60,21 @@ describe("the booking event", () => {
         "booking_click",
         { venue: "Lyma", event_title: "Chef Jarrod Moore × Lyma collaboration dinner" },
       ],
+    ]);
+  });
+
+  it("carries the same two parameters on both halves of the funnel", async () => {
+    process.env.NEXT_PUBLIC_GA_ID = "G-TESTONLY00";
+    const { trackProgrammeOpen, trackBookingClick } = await load();
+
+    trackProgrammeOpen("Bravo", "Siargao Mercado");
+    trackBookingClick("Bravo", "Siargao Mercado");
+
+    // Opens and bookings only divide by gathering if they are dimensioned the same way.
+    expect(sent.map(([, name]) => name)).toEqual(["programme_open", "booking_click"]);
+    expect(sent.map(([, , params]) => params)).toEqual([
+      { venue: "Bravo", event_title: "Siargao Mercado" },
+      { venue: "Bravo", event_title: "Siargao Mercado" },
     ]);
   });
 

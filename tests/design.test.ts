@@ -532,6 +532,25 @@ describe("analytics", () => {
     expect(bubble).toMatch(/trackBookingClick\(placeOf\(event\.venue\), event\.title\)/);
   });
 
+  it("reports an open only when the bubble is actually opening", () => {
+    const bubbleSrc =
+      sources.find(([path]) => path === "components/sections/program/EventBubble.tsx")?.[1] ?? "";
+    // `useBubbleReveal`'s own predicate. Closing is not a signal, and a tap during the close
+    // animation re-opens — anything looser double-counts, anything tighter misses that tap.
+    expect(bubbleSrc).toMatch(/phase === undefined \|\| phase === "closing"/);
+    expect(bubbleSrc).toMatch(/trackProgrammeOpen\(placeOf\(event\.venue\), event\.title\)/);
+    // Both ways in go through the same wrapper, or the keyboard path reports nothing.
+    expect(bubbleSrc).toMatch(/onClick=\{toggle\}/);
+    expect(bubbleSrc).not.toMatch(/onClick=\{onToggle\}/);
+  });
+
+  it("leaves the day filter's bulk open unreported", () => {
+    const reveal = sources.find(([path]) => path === "lib/program/useBubbleReveal.ts")?.[1] ?? "";
+    // Picking a day drives `showOpen`, not the toggle — a change of view, not sixteen taps.
+    expect(reveal).toMatch(/const showOpen = useCallback/);
+    expect(reveal).not.toMatch(/track/);
+  });
+
   it("still stops the tap short of the bubble", () => {
     // The tracking call moved this into a block. Losing the `stopPropagation` would collapse
     // the bubble under the visitor the moment they book.
