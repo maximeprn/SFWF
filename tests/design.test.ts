@@ -196,6 +196,47 @@ describe("the event bubble's state machine", () => {
   });
 
 /**
+ * The programme's fade mask was reported as unusable on a phone: the fade line blinked and
+ * swam while scrolling. The cause was compensation, not lag — a speed-derived slack widened
+ * the hidden band by up to 200px, in 50px steps, on downward travel only, so the line sat
+ * 200px lower going down than going up and snapped the whole way on every direction change.
+ * Measured on a phone-width flick before the fix: 200px of swing, in single-frame jumps of
+ * 200. After: the edge holds its exact position, every frame, in both directions.
+ */
+describe("the programme's fade mask", () => {
+  const mask = stripComments(
+    readFileSync(join(SRC, "lib/program/useProgramContentMask.ts"), "utf8"),
+  );
+
+  it("never widens its band to chase the scroll", () => {
+    expect(mask, "the slack is the blink").not.toMatch(/createScrollSlack|scrollSlack/);
+  });
+
+  it("hides everything above the band with one stop rather than bounding it", () => {
+    /* A gradient is its first stop's colour all the way above it, so the hidden region needs
+       no top edge — and an edge computed there is one more number that can be wrong. */
+    const stops = mask.match(/rgba\(0,0,0,0\)|#000/g) ?? [];
+    expect(stops, "two stops: hidden, then the ramp").toHaveLength(2);
+  });
+
+  it("paints straight from the scroll listener, not a frame later", () => {
+    expect(mask).toMatch(/addEventListener\("scroll", paint/);
+    expect(mask, "a rAF hop here is a frame of lag on iOS").not.toMatch(
+      /requestAnimationFrame\(paint\)/,
+    );
+  });
+
+  it("keeps the search for the chrome off the scroll path", () => {
+    /* `querySelector` on every scroll frame was the real cost; the element's own rect is one
+       cached read and has to stay, because caching it instead drifts after a route change. */
+    const paint = mask.match(/const paint = \(\) => \{([\s\S]*?)\n {4}\};/)?.[1];
+    expect(paint, "the paint moved or was renamed").toBeTruthy();
+    expect(paint).not.toMatch(/querySelector/);
+    expect(paint).toMatch(/getBoundingClientRect/);
+  });
+});
+
+/**
  * The day swap has one rule and it is the whole point of it: nothing that *replaces content*
  * may happen on the frame of the click. The chip, the fold and the scroll answer immediately;
  * the list, the open bubbles and the page height all wait until the list is invisible. Wire

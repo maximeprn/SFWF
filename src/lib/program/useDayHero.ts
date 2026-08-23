@@ -12,10 +12,27 @@ const PICK_GAP = 10;
  * the browser's own quick one — see `glide`'s ceiling.
  */
 const PEEK_GRACE_MS = 1400;
-/** How hard an upward wheel has to move to count as a pull. */
-const WHEEL_THRESHOLD = -10;
-/** How far a finger has to travel downward to count as a pull. */
-const TOUCH_THRESHOLD = 26;
+/**
+ * How much upward travel, with the page already sitting at the top, adds up to asking for the
+ * week back.
+ *
+ * It used to be a threshold on a single event — 26px of finger, one wheel notch — which is
+ * less than an ordinary scroll delivers. So scrolling up to re-read the top of the list threw
+ * 280px of hero open under the reader's thumb, and the page appeared to take itself over. A
+ * budget instead of a threshold makes the gesture the deliberate one the design asks for: the
+ * page has to be at the top *and* the reader has to keep pulling against a page that has
+ * nowhere left to go, which is the same thing every pull-to-refresh in the world asks for.
+ */
+const PULL_BUDGET = 120;
+/** A gap this long with nothing pulled starts the budget over. */
+const PULL_RESET_MS = 400;
+/**
+ * How long the page has to have been at the top before a pull counts at all.
+ *
+ * A flick that ends at the top keeps delivering momentum after it arrives, and that momentum
+ * is not the reader asking for anything — without this it spends the whole budget on its own.
+ */
+const PULL_SETTLE_MS = 250;
 /**
  * The day pick, the hero's open/folded state, and the scroll choreography around both.
  *
@@ -25,8 +42,9 @@ const TOUCH_THRESHOLD = 26;
  * the headline back in the way of the list they are reading. So `heroOpen` keys off *whether*
  * a choice has been made, never off which one.
  *
- * Once it is gone the only way back is the deliberate pull at the top of the page, which is
- * what `heroPeek` records. A pick clears that again, and a route change clears everything for
+ * Once it is gone the only way back is the deliberate pull at the top of the page — a
+ * budget of travel spent against a page that has nowhere left to go, not a threshold an
+ * ordinary scroll crosses by accident — which is what `heroPeek` records. A pick clears that again, and a route change clears everything for
  * free — `Chrome` keys the page on the route, so this hook's state unmounts with it.
  */
 export function useDayHero() {
@@ -119,26 +137,51 @@ export function useDayHero() {
      reveal could not be read without fighting it. A pick is the thing that folds the hero, so a
      pick is the only thing that folds it. */
   useEffect(() => {
-    const peek = () => {
+    let pulled = 0;
+    let pulledAt = 0;
+    /* When the page was last seen anywhere but the top. */
+    let leftTopAt = Date.now();
+
+    const pull = (travelled: number) => {
       if (heroOpen) return;
-      if (window.scrollY > 2 || Date.now() - pickAtRef.current < PEEK_GRACE_MS) return;
+      /* Not at the top, or the landing glide from a pick is still settling: neither is a pull,
+         and both start the budget over. */
+      if (window.scrollY > 2) {
+        leftTopAt = Date.now();
+        pulled = 0;
+        return;
+      }
+      const now = Date.now();
+      if (now - pickAtRef.current < PEEK_GRACE_MS || now - leftTopAt < PULL_SETTLE_MS) return;
+      if (now - pulledAt > PULL_RESET_MS) pulled = 0;
+      pulledAt = now;
+      pulled += travelled;
+      if (pulled < PULL_BUDGET) return;
+
+      pulled = 0;
       setHeroPeek(true);
       /* Land on the top rather than wherever the pull happened to stop. The hero opens above
-         the reading position, and a couple of pixels of offset is enough to cut its first line.
-         On the same glide as a pick: it is the same choreography read backwards. */
+         the reading position, and a couple of pixels of offset is enough to cut its first
+         line. At most two of them, since a pull only counts at the top at all. */
       glideRef.current?.();
       glideRef.current = glide(0);
     };
+
     const onWheel = (e: WheelEvent) => {
-      if (e.deltaY < WHEEL_THRESHOLD) peek();
+      if (e.deltaY < 0) pull(-e.deltaY);
     };
     let touchY = 0;
     const onTouchStart = (e: TouchEvent) => {
       touchY = e.touches[0]?.clientY ?? 0;
+      /* One pull is one gesture. Lifting off and starting again starts the budget again. */
+      pulled = 0;
     };
     const onTouchMove = (e: TouchEvent) => {
       const y = e.touches[0]?.clientY ?? touchY;
-      if (y - touchY > TOUCH_THRESHOLD) peek();
+      const travelled = y - touchY;
+      touchY = y;
+      /* A finger moving *down* the screen is the page moving up. */
+      if (travelled > 0) pull(travelled);
     };
 
     window.addEventListener("wheel", onWheel, { passive: true });
