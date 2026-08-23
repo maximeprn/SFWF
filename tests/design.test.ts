@@ -516,3 +516,44 @@ describe("the button press system", () => {
     expect(src).toMatch(/let bound = false/);
   });
 });
+
+/**
+ * The festival sells nothing, so the booking button is the end of the only funnel on this
+ * site. These pin the two things that would quietly cost the festival its numbers: the
+ * button losing its handler, and a measurement call growing somewhere outside the one file
+ * that is allowed to make them.
+ */
+describe("analytics", () => {
+  const bubble =
+    sources.find(([path]) => path === "components/sections/program/BubbleDetail.tsx")?.[1] ?? "";
+
+  it("sends the booking click from the Instagram button", () => {
+    expect(bubble).toMatch(/href=\{instagramUrl\(event\.venue\)\}/);
+    expect(bubble).toMatch(/trackBookingClick\(placeOf\(event\.venue\), event\.title\)/);
+  });
+
+  it("still stops the tap short of the bubble", () => {
+    // The tracking call moved this into a block. Losing the `stopPropagation` would collapse
+    // the bubble under the visitor the moment they book.
+    expect(bubble).toMatch(/e\.stopPropagation\(\)/);
+  });
+
+  it("keeps every measurement call in `lib/analytics.ts`", () => {
+    for (const [path, text] of sources) {
+      if (path === "lib/analytics.ts") continue;
+      expect(text, `${path} talks to GA directly — go through \`track\` instead`).not.toMatch(
+        /sendGAEvent|dataLayer|\bgtag\(/,
+      );
+    }
+  });
+
+  it("loads no tag at all when the measurement ID is unset", () => {
+    const analytics = sources.find(([path]) => path === "lib/analytics.ts")?.[1] ?? "";
+    const layout = sources.find(([path]) => path === "app/layout.tsx")?.[1] ?? "";
+    // Written out in full in both files — `NEXT_PUBLIC_` values are inlined at build time,
+    // so a destructure would read undefined.
+    expect(analytics).toMatch(/process\.env\.NEXT_PUBLIC_GA_ID/);
+    expect(analytics).toMatch(/if \(!GA_ID/);
+    expect(layout).toMatch(/GA_ID \? <GoogleAnalytics/);
+  });
+});

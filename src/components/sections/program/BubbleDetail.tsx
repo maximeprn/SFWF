@@ -4,6 +4,7 @@ import { WobbleRule } from "@/components/ui/Wobble";
 import type { FestivalEvent } from "@/content/types";
 import { bookNameOf, instagramUrl, placeOf } from "@/content/venues";
 import { access, hintRest } from "@/lib/program/eventCopy";
+import { trackBookingClick } from "@/lib/analytics";
 import { soft } from "@/lib/design/shapes";
 import type { StyleWithVars } from "@/lib/ui/cssVars";
 
@@ -154,15 +155,22 @@ export function BubbleDetail({
           {event.who ?? "Line-up to be announced"}
         </p>
 
-        {/* Only on bookable events, and it stops the tap short of the bubble so following
-            the link never collapses what you were reading. */}
+        {/* Only on bookable events. */}
         {access(event).dot && (
           <Slab shapeIndex={buttonShapeIndex} style={{ display: "inline-block", flex: "none" }}>
             <a
               href={instagramUrl(event.venue)}
               target="_blank"
               rel="noopener"
-              onClick={(e) => e.stopPropagation()}
+              /* Two things at once, and the order matters: stop the tap short of the bubble
+                 so following the link never collapses what you were reading, then send the
+                 one event this site measures. The link opens in a new tab, so the page is
+                 still here when the beacon goes — no `sendBeacon` dance needed. Untagged
+                 builds (local, previews) drop it on the floor. */
+              onClick={(e) => {
+                e.stopPropagation();
+                trackBookingClick(placeOf(event.venue), event.title);
+              }}
               className="press-btn on-beige"
               /* On a light card, orange+beige inverts to the page ground, not the card's
                  own colour — inverting to the card would erase the ink standing on it. */
