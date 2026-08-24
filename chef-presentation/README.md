@@ -38,7 +38,7 @@ Keep the distinction visible in each file, so nobody has to guess what is cleare
 | Venue | Instagram | Source found | Chef | Food | Venue |
 |---|---|---|---|---|---|
 | Alma *(+ [Morris Danzen](chefs/morris-danzen.md))* | @almasiargao | [website](https://www.almaphilippines.com/) — all 4 pages → [alma.md](venues/alma.md) | 4 | 9 | 3 |
-| Wild | @wild.siargao | [wildsiargao.ph](https://wildsiargao.ph) — 12 pages → [wild.md](venues/wild.md) | 8 | 9 | 7 |
+| Wild *(+ [Andrew Malarky](chefs/andrew-malarky.md))* | @wild.siargao | [wildsiargao.ph](https://wildsiargao.ph) — 12 pages → [wild.md](venues/wild.md) | 8 | 9 | 7 |
 | Siargao Corner Café | *none on record* | — | — | — | — |
 | Roots (GL public market) | @roots.siargao | — | — | — | — |
 | Lunares Café | @lunarescafe | — | — | — | — |

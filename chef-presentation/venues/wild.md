@@ -4,7 +4,10 @@
 festival.
 
 Progressive Filipino cooking they call **"glocal"** — global technique, local soul.
-Chefs **Andrew Malarky** and **Jove Schrottman**, of Rude Boys Hospitality.
+Chefs **Andrew Malarky** and **Jove Schrottman**, of Rude Boys Hospitality. Malarky has his own
+entry from a published interview: [andrew-malarky.md](../chefs/andrew-malarky.md) — thirteen
+years running Dos Mestizos in Boracay before this, and the chef who butchered a 60-pound tuna at
+the **first festival in 2025**.
 
 - Instagram [@wild.siargao](https://www.instagram.com/wild.siargao/) · [wildsiargao.ph](https://wildsiargao.ph)
 - Catangnan Backroad, General Luna, Siargao Island
@@ -35,10 +38,11 @@ Wild's photography is a genuine editorial shoot, and far stronger than anything 
 | `chef-team-lineup-inara.jpg` | The full crew lined up outside the venue before service — front of house and kitchen together. The only whole-team frame. | 2048×1365 |
 | `chef-crab-farm-harvest.jpg` | Two men crouched over a basin of mud crabs at the farm. Sourcing rather than kitchen. | 1365×2048 |
 
-> **Do not caption these with names.** The Tip to Tail dinners featured **Belgian guest chefs,
-> brothers Glenn and Ceasar Vandenberghe**, alongside Wild's own team, and the site captions
-> nobody. Which face is Malarky, which is Schrottman and which is a visiting brother is not
-> stated anywhere — ask the venue before printing a name under any of them.
+> **Careful with names — one is now known, the rest are not.** A captioned photograph in the
+> Simpol.ph interview identifies **Andrew Malarky**: shaved head, beard, striped denim apron. The
+> same man is `chef-portrait-with-tuna.jpg` above. Everyone else is unidentified, and the Tip to
+> Tail dinners featured **Belgian guest chefs, brothers Glenn and Ceasar Vandenberghe**, alongside
+> Wild's own team. Confirm with the venue before printing any name, Malarky's included.
 
 ## Food shots — 9
 
@@ -118,8 +122,10 @@ Two of the festival's venues share that spine, and neither tells it as a hardshi
   nothing needs unlocking the way Squarespace does.
 - 147 unique images across 12 pages, gathered by fetching each page rather than scrolling it.
   Roughly a third are menus, logos and mural documentation from the artist residency.
-- Wild's own spelling wobbles: "Malarky" and "Andre Malarky", "Schrottman" and "Schrottmann".
-  Confirm before printing.
+- **The spelling is a genuine mess.** Wild's site: "Malarky" and "Andre Malarky", "Schrottman"
+  and "Schrottmann". The Simpol article: "Malarky" in the headline, "Malarkey" in its caption and
+  tags. Three spellings of his surname across two sources. Ask him.
+- **Jove Schrottman remains undocumented** — named on the site, nothing behind him anywhere.
 - These are Wild's photographs. Credit them, and message @wild.siargao before publishing.
 
 Sources, read 24 Aug 2026: `wildsiargao.ph` — `/`, `/our-story`, `/events` and 9 event pages.
