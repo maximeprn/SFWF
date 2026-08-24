@@ -1,0 +1,4 @@
+# Source material for the chef presentation — 44MB of venue photography that the site never
+# reads. It lives in the repo so the library is backed up and shared, but shipping it in every
+# production build would upload it again on every deploy for nothing.
+chef-presentation
