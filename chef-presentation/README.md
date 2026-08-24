@@ -3,7 +3,9 @@
 Source material for the chef presentation built in Claude Design. **Nothing here feeds the
 festival site** — `src/content/` remains the only content the site reads.
 
-One file per venue in `venues/`, each split the same three ways:
+One file per venue in `venues/`, plus `chefs/` for people who are not tied to one venue — a
+visiting collaborator cooking one dinner needs a page, not a venue entry. Each file splits the
+same three ways:
 
 - **Chef shots** — the people. Faces, kitchen, service, portraits.
 - **Food shots** — plates and dishes.
@@ -12,6 +14,17 @@ One file per venue in `venues/`, each split the same three ways:
 Each entry carries a written description, a direct image URL and the real pixel size, so a shot
 can be chosen without opening sixteen tabs. Where a category is empty it says so — an empty
 heading is a finding, not an omission.
+
+## Two kinds of source
+
+- **Scraped** — everything under `venues/`. Gathered from the venue's own public site. Usable
+  for an internal presentation with credit; **message the venue before anything is published or
+  printed.**
+- **Supplied and team-validated** — currently `chefs/jarrod-moore.md`. Cleared copy and images,
+  no permission chase. Where a supplied bio exists it beats anything scraped, and it is also the
+  channel to ask for high-resolution files.
+
+Keep the distinction visible in each file, so nobody has to guess what is cleared.
 
 ## Conventions
 
@@ -58,6 +71,16 @@ list of these sixteen that is kept current.
 5. **Check the real pixel size** before committing to a shot, and **look at each one** before
    describing it — filenames lie.
 6. **Never caption a face with a name the site doesn't state.** Guest chefs are common.
+
+## What the Jarrod bio proved
+
+The single most useful document so far did not come from a website. It carried a full biography,
+four cleared images, two media links — and the only cross-venue connection in the library:
+**Morris Danzen**, who cooks at Alma on Aug 27 and appears nowhere on Alma's site, has a
+sold-out Melbourne collaboration with **Jarrod Moore**, who cooks at Lyma on Aug 28.
+
+**Ask the festival for supplied bios before scraping the next site.** One cleared PDF outranks a
+day of triage.
 
 ## What Alma proved
 

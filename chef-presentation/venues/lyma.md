@@ -3,6 +3,7 @@
 **Festival event:** Chef Jarrod Moore × Lyma collaboration dinner · Aug 28 (coconut day) ·
 **₱2,400 / head** — one of the few confirmed prices. **Chef Jarrod · Chef Marc · Chef Jose**,
 cooking a coconut-themed, **zero-waste five-course** dinner.
+Jarrod has his own entry: [jarrod-moore.md](../chefs/jarrod-moore.md).
 
 That brief is not a coincidence: zero-waste is Chef Marc's stated method, and *five* is the
 restaurant's own founding number. The festival booked the dinner Lyma was already built to cook.
@@ -87,7 +88,8 @@ everything else — worth a line if the presentation touches access.
   screen size — the portrait holds up well — but there is no larger original on the site, so
   a full-bleed print would need files from the venue.
 - Three chefs cook the festival dinner. The site documents **Marc** thoroughly; **Chef Jose** is
-  not named or pictured anywhere on it, and **Chef Jarrod Moore** is the visiting collaborator.
+  not named or pictured anywhere on it. **Chef Jarrod Moore**, the visiting collaborator, has his
+  own entry from a festival-supplied bio — [jarrod-moore.md](../chefs/jarrod-moore.md).
 - These are Lyma's photographs. Credit them, and message @lymasiargao before publishing.
 
 Sources, read 24 Aug 2026: `lymasiargao.com` — `/`, `/chef`, `/about`, `/gallery`, `/menu`,
