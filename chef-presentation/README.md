@@ -37,7 +37,7 @@ Keep the distinction visible in each file, so nobody has to guess what is cleare
 
 | Venue | Instagram | Source found | Chef | Food | Venue |
 |---|---|---|---|---|---|
-| Alma | @almasiargao | [website](https://www.almaphilippines.com/) — all 4 pages → [alma.md](venues/alma.md) | 4 | 9 | 3 |
+| Alma *(+ [Morris Danzen](chefs/morris-danzen.md))* | @almasiargao | [website](https://www.almaphilippines.com/) — all 4 pages → [alma.md](venues/alma.md) | 4 | 9 | 3 |
 | Wild | @wild.siargao | [wildsiargao.ph](https://wildsiargao.ph) — 12 pages → [wild.md](venues/wild.md) | 8 | 9 | 7 |
 | Siargao Corner Café | *none on record* | — | — | — | — |
 | Roots (GL public market) | @roots.siargao | — | — | — | — |
@@ -79,8 +79,12 @@ four cleared images, two media links — and the only cross-venue connection in 
 **Morris Danzen**, who cooks at Alma on Aug 27 and appears nowhere on Alma's site, has a
 sold-out Melbourne collaboration with **Jarrod Moore**, who cooks at Lyma on Aug 28.
 
-**Ask the festival for supplied bios before scraping the next site.** One cleared PDF outranks a
-day of triage.
+**Ask the festival for supplied bios and photo folders before scraping the next site.** One
+cleared PDF outranked a day of triage — and the Morris Danzen folder that followed it is better
+than every venue site put together: 14 professional images, two shoots, plus a published
+interview carrying the best story in the festival.
+
+Scraping is the fallback, not the method.
 
 ## What Alma proved
 

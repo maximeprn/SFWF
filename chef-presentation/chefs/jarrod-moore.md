@@ -57,7 +57,7 @@ and by making every menu and event fun, memorable and boundary-pushing.
   Botanical, Lagotto), native Australian produce meeting Southern American technique
 - **Boodle Brunch** at Nine Yards Melbourne — with food media personality **Abby Marquez** and
   chef **Morris Danzen**, a Filipino boodle fight lunch blending Filipino and native Australian
-  technique
+  technique — 180 covers, and Abi Marquez's first service in a professional kitchen
 
 **Television** — guest appearances on **My Market Kitchen** (Channel 10), **The Project** and the
 **Today Show**, where he famously introduced the hosts to one of the world's hottest chillies live
@@ -81,10 +81,9 @@ events worldwide.
 **1. He has already cooked with a festival chef, in Melbourne.**
 The Boodle Brunch collaboration was with **Morris Danzen** — who cooks the **Alma × CMD Supper
 Club** dinner on Aug 27, the night before Jarrod's dinner at Lyma. Two chefs on consecutive
-nights of this festival have a sold-out Melbourne collaboration behind them. That is the only
-cross-venue connection found anywhere in this library, and it came from the one document the
-team supplied rather than from any venue site — where Morris is otherwise invisible. Worth
-confirming with the festival, then building a slide on.
+nights of this festival have a sold-out Melbourne collaboration behind them. **Confirmed from
+both sides**: Morris was interviewed at that same Boodle Brunch — Nine Yards, Melbourne Food &
+Wine Festival, 180 covers — see [morris-danzen.md](morris-danzen.md). Build the slide.
 
 **2. Boodle, twice.**
 The Melbourne event was a **Filipino boodle fight**. *Boodle* is festival vocabulary. A

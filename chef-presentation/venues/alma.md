@@ -108,11 +108,12 @@ tuile) · `food-profiteroles.jpg`
   read.** There is no gallery and no press kit.
 - `?format=2500w` returns the largest stored version, identical to `?format=original`. The pages
   themselves serve 248–382px versions, so scraping what the page displays gets you thumbnails.
-- **Morris Danzen appears nowhere on this site.** Half the festival's Alma billing has no photo
-  and no biography here — but he is *not* undocumented. He cooked the **Boodle Brunch**
-  collaboration at Nine Yards Melbourne with **Chef Jarrod Moore**, who cooks at Lyma the
-  following night. See [jarrod-moore.md](../chefs/jarrod-moore.md); the festival supplied that
-  bio, so it is the place to ask for a photo of Morris too.
+- **Morris Danzen appears nowhere on this site**, but he is now the best-documented chef in the
+  library: [morris-danzen.md](../chefs/morris-danzen.md) — 14 supplied photographs and a full
+  published biography. **Do not build the Alma slide from Alma's site alone.**
+- **"CMD" is Morris.** Catanghal Morris Danzen. The Aug 27 booking is not a restaurant
+  collaboration in the ordinary sense — it is Morris bringing **his own supper club** into Luis's
+  dining room for a night. Alma's site says nothing about this.
 - These are Alma's photographs. Fine to present with credit as a festival venue; message
   @almasiargao before anything is published or printed.
 
