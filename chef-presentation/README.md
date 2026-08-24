@@ -31,7 +31,7 @@ heading is a finding, not an omission.
 | Lunares Café | @lunarescafe | — | — | — | — |
 | Isla Panciteria | @islapanciteria.siargao | — | — | — | — |
 | Lokal Hub | @lokallab | — | — | — | — |
-| Lyma | @lymasiargao | — | — | — | — |
+| Lyma | @lymasiargao | [lymasiargao.com](https://www.lymasiargao.com) — 6 pages → [lyma.md](venues/lyma.md) | 6 | 6 | 2 |
 | Tropical Academy, San Isidro | @tropicalacademyiao *(unverified)* | — | — | — | — |
 | Kermit | @kermitsiargao | — | — | — | — |
 | Lamari | @lamarisiargao | — | — | — | — |
@@ -50,7 +50,9 @@ list of these sixteen that is kept current.
 2. **Read `/sitemap.xml` first**, then every page on it. The chef is rarely on the venue page —
    Alma's portrait and Wild's whole tuna series both sat on `/our-story`.
 3. **Gather, then triage.** Fetch every page and collect image URLs, then lay them out as one
-   contact sheet and pick from that. Wild was 147 images; 16 were worth keeping.
+   contact sheet and pick from that. Wild was 147 images; 24 were worth keeping.
+   If fetching the HTML returns no images, the site is client-side rendered (Lyma) — load each
+   page in a same-origin iframe and read `document.images` instead.
 4. **Select, don't hoard.** Menus, logo marks, mural documentation and the fourth near-identical
    buffet spread are not presentation material.
 5. **Check the real pixel size** before committing to a shot, and **look at each one** before
