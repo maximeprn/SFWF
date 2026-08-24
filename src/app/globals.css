@@ -285,9 +285,6 @@ a {
   .press-btn[data-press="cream"]:hover {
     background: var(--cream);
   }
-  .day-chip-off:hover {
-    opacity: 1;
-  }
   /* The control bar's ink, on its beige plate — the same orange every other mark on a light
      ground takes. Colour only, like every hover in this product. */
   .media-key:hover {
