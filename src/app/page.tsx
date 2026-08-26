@@ -6,6 +6,7 @@ import { Acknowledgement } from "@/components/sections/home/Acknowledgement";
 import { Purpose } from "@/components/sections/home/Purpose";
 import { LastYear } from "@/components/sections/home/LastYear";
 import { SponsorRow } from "@/components/sections/partners/SponsorRow";
+import { AppPartner } from "@/components/sections/partners/AppPartner";
 import { HostRow } from "@/components/sections/partners/HostRow";
 
 /**
@@ -16,6 +17,9 @@ import { HostRow } from "@/components/sections/partners/HostRow";
  * two walls read as one long list of marks when they are adjacent, and the strip breaks
  * them apart with the only thing on the page that moves. That puts "why we do this" ahead
  * of all three, where the README has it ahead of the host row.
+ *
+ * The app partner closes the page under the sponsor row — its own tier of the same list,
+ * and the one mark that keeps its own colours.
  */
 export default function HomePage() {
   return (
@@ -29,6 +33,7 @@ export default function HomePage() {
       <HostRow />
       <LastYear />
       <SponsorRow />
+      <AppPartner />
     </>
   );
 }

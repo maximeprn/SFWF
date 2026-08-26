@@ -304,6 +304,18 @@ a {
     color 0.2s ease;
 }
 
+/* The footer's partner mark. It keeps its own colours, so it cannot take the colour half of
+   the social hover — the step forward is the whole affordance, on the same curve. */
+.partner-mark {
+  transition: transform 0.22s var(--spring);
+}
+
+@media (hover: hover) {
+  .partner-mark:hover {
+    transform: scale(1.08);
+  }
+}
+
 /* The signature reveal. Animating grid-template-rows is what lets the detail grow to its
    natural height with no measured pixel value — and the shell's padding rides the same
    curve so the bubble does not snap taller before its contents arrive. */
@@ -538,6 +550,7 @@ a {
   .mark-slot,
   .bubble-title,
   .social-mark,
+  .partner-mark,
   .media-key,
   .video-controls,
   .press-btn,

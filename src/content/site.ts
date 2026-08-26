@@ -43,6 +43,32 @@ export const SITE = {
 export const CONTACT_EMAIL = "info@siargaofoodfest.com";
 
 /**
+ * The app partner, credited on its own under the sponsor row, and the only outbound link on
+ * the site that is not a social account or a `mailto:`.
+ *
+ * It is also the only mark in the product that keeps its own colours: everything else — the
+ * sponsor row, the host row, the social glyphs — is the beige knockout on the dye. This is the
+ * partner's artwork as they supplied it, at the festival's request, so it is a deliberate
+ * exception rather than a mark that was prepared wrong. Recorded in
+ * `project-docs/phase-1-deviations.md`.
+ */
+export const APP_PARTNER = {
+  name: "TravelGO Siargao",
+  /* The mono register, like every other label on the page — set here because it is copy the
+     festival may want to reword, not a string a component gets to own. */
+  label: "OFFICIAL DIGITAL APP PARTNER",
+  href: "https://travelgo.ph/",
+  src: "/partners/travelgo.png",
+  intrinsic: [262, 242] as readonly [number, number],
+  /* 52px, and it rides `--mark-scale` like the sponsor marks above it so the two tiers stay
+     in proportion at every width. It stands alone on its line rather than in a wrap-flow of
+     fifteen, so it can afford to be a shade larger than the marks it follows — and it needs
+     to be: this is a filled four-tile badge, and below about 44px the pin, taxi, bag and sail
+     close up and stop reading, which is the point of crediting the partner at all. */
+  width: 52,
+} as const;
+
+/**
  * The three marks in the footer. Each rests at its own slight angle so the row reads
  * hand-placed rather than aligned, and stands upright on hover.
  */

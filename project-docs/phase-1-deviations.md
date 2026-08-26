@@ -83,6 +83,29 @@ Nothing on the page is now under 11px.
 | Hero CTA "View the Program" | Dropped | `PHASE-1-PROGRAM.md`: the programme starts immediately below, so there is nothing to link to. Returns with phase 2's Home. |
 | Programme h1 *"the six-day journey"* | Dropped | It is the Program *page's* headline, and on one page it lands directly under "ani sang Siargao" — two script headlines in a row, and a second `h1` on a document that already has one. The standfirst carries the instruction alone. It stays in the `<title>` and meta description, which is where §"Content and code notes" asks for it. Returns with phase 2's Program route. |
 
+## The app partner credit (26 Aug 2026)
+
+Requested by the festival, so it is on the record rather than in the handoff.
+
+TravelGO is credited under the sponsor row as **OFFICIAL DIGITAL APP PARTNER** — the mono label,
+then the mark, the row's own structure — and it is the only outbound link on the site that is not
+a social account or a `mailto:`.
+
+| Rule it departs from | What was built | Why |
+|---|---|---|
+| Every mark is the beige knockout on the dye (`--beige`, "logo colourway") | TravelGO's own four-colour artwork, unaltered | The festival asked for the actual logo. The mark carries no wordmark — it is four colour-coded tiles (pin, taxi, bag, sail) and nothing else — so a beige flatten costs it the only thing that identifies it. A knockout was cut and rejected for this: the dark taxi glyph survived the flatten and left one tile blank, and even repaired it read as an anonymous badge. |
+| The sponsor and host rows are where partners appear | Its own tier below the sponsor row | The row is fifteen beige wordmarks; a single colour badge inside it reads as a mark that was prepared wrong, and the mono label naming the relationship has nowhere to sit in a wrap-flow. Below the row it is plainly the next tier of the same list — same label register (11.5px, `.2em`, `--beige`), no flourish and no heading of its own, just more air above it. |
+
+The mark hovers with the footer marks' step forward (`.partner-mark`, `scale(1.08)` on the same
+spring) and takes no colour hover, having colours of its own. It rides `--mark-scale` like the
+sponsor marks, so the two tiers stay in proportion at every width. The link is `rel="noopener"` — not
+`sponsored` — which is correct for a partnership rather than a paid placement. **If money changed
+hands for it, it needs `rel="sponsored"`.**
+
+Artwork is `public/partners/travelgo.png`, cropped from the file at
+`travelgo.ph/images/logos/travelgo-logo.png` to its content bounds and served locally. It is never
+hotlinked: their outage would otherwise be our broken logo.
+
 ## Not built yet, on purpose
 
 The island intro, the stats row, the acknowledgement and "why we do this" are still to come. The
