@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
   /* /pulo proxies the Pulo Residency micro-site hosted on tabletalks.studio, so the URL stays
      on siargaofoodfest.com while the page itself is served from Table Talks' own project. */
   async rewrites() {
-    return [{ source: "/pulo", destination: "https://tabletalks.studio/pulo-residency" }];
+    return [{ source: "/pulo", destination: "https://tabletalks.studio/pulo-siargao-2026-sfwf" }];
   },
 
   images: {
