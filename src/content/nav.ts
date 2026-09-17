@@ -15,7 +15,7 @@ export const NAV_LINKS: readonly NavLink[] = [
   { href: "/", label: "Home" },
   { href: "/program", label: "Program" },
   { href: "/press", label: "Press" },
-  { href: "/pulo", label: "PULO" },
+  { href: "/pulo", label: "Pulo" },
 ];
 
 export const NAV_CTA = { href: "/program", label: "View Program", shape: 2 } as const;
