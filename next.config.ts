@@ -24,6 +24,12 @@ const nextConfig: NextConfig = {
     return [...home, { source: "/media-center", destination: "/press", statusCode: 301 as const }];
   },
 
+  /* /pulo proxies the Pulo Residency micro-site hosted on tabletalks.studio, so the URL stays
+     on siargaofoodfest.com while the page itself is served from Table Talks' own project. */
+  async rewrites() {
+    return [{ source: "/pulo", destination: "https://tabletalks.studio/pulo-residency" }];
+  },
+
   images: {
     /* WebP only — deliberately no AVIF, although it is ~35% smaller here.
 
