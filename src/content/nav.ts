@@ -7,7 +7,7 @@
  * are brainstorming sheets rather than the design.
  */
 export interface NavLink {
-  readonly href: "/" | "/program" | "/press";
+  readonly href: "/" | "/program" | "/press" | "/pulo";
   readonly label: string;
 }
 
@@ -15,6 +15,7 @@ export const NAV_LINKS: readonly NavLink[] = [
   { href: "/", label: "Home" },
   { href: "/program", label: "Program" },
   { href: "/press", label: "Press" },
+  { href: "/pulo", label: "PULO" },
 ];
 
 export const NAV_CTA = { href: "/program", label: "View Program", shape: 2 } as const;
